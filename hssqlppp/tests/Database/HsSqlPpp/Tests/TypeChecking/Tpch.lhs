@@ -80,8 +80,8 @@ moment.
 >           ,("value", mkTypeExtra typeNumeric)]
 >          ,--q12
 >           [("l_shipmode", mkTypeExtra typeChar)
->           ,("high_line_count", mkTypeExtraNN typeBigInt)
->           ,("low_line_count", mkTypeExtraNN typeBigInt)]
+>           ,("high_line_count", mkTypeExtra typeBigInt)
+>           ,("low_line_count", mkTypeExtra typeBigInt)]
 >          ,--q13
 >           [("c_count", mkTypeExtraNN typeBigInt)
 >           ,("custdist", mkTypeExtraNN typeBigInt)]

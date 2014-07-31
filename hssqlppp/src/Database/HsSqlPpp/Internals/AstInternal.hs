@@ -2973,7 +2973,7 @@ sem_InList_InList ann_ exprs_  =
               _lhsOlistType =
                   ({-# LINE 482 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/ScalarExprs.ag" #-}
                    mapM (maybe (Left []) Right) _exprsIupTypes
-                   >>= resolveResultSetTypeExtra _lhsIcat
+                   >>= resolveResultSetTypeExtra _lhsIcat UnionResolitionFlavor
                    {-# LINE 2962 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
               -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/ScalarExprs.ag"(line 484, column 9)
@@ -5150,7 +5150,7 @@ sem_QueryExpr_CombineQueryExpr ann_ cqType_ cqQe0_ cqQe1_  =
                    do
                    a <- maybe (Left []) Right _cqQe0IupType
                    b <- maybe (Left []) Right _cqQe1IupType
-                   let uts = zipWithM (\(_,te1) (_,te2) -> resolveResultSetTypeExtra _lhsIcat [te1,te2])
+                   let uts = zipWithM (\(_,te1) (_,te2) -> resolveResultSetTypeExtra _lhsIcat UnionResolitionFlavor [te1,te2])
                                  a b
                    case uts of
                      Left{} -> Left [IncompatibleUnionTypes (CompositeType a) (CompositeType b)]
@@ -8205,7 +8205,7 @@ sem_ScalarExpr_Case ann_ cases_ els_  =
                    when (any ((/= typeBool) . teType) wt)
                        $ Left [WrongTypes typeBool $ map teType wt]
                    tt <- mapM (maybe (Left []) Right) _thenTypes
-                   resolveResultSetTypeExtra _lhsIcat tt
+                   resolveResultSetTypeExtra _lhsIcat UnionResolitionFlavor tt
                    {-# LINE 8168 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
               -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/ScalarExprs.ag"(line 376, column 9)
@@ -8213,7 +8213,7 @@ sem_ScalarExpr_Case ann_ cases_ els_  =
                   ({-# LINE 376 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/ScalarExprs.ag" #-}
                    do
                    ws <- sequence $ concat _whenTypes
-                   w <- either (const Nothing) Just $ resolveResultSetTypeExtra _lhsIcat ws
+                   w <- either (const Nothing) Just $ resolveResultSetTypeExtra _lhsIcat ComparisonResolutionFlavor ws
                    Just $ TypeExtra typeBool Nothing Nothing $ teNullable w
                    {-# LINE 8177 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -8446,7 +8446,7 @@ sem_ScalarExpr_CaseSimple ann_ value_ cases_ els_  =
                    do
                    wt <- mapM (maybe (Left []) Right) $ concat _whenTypes
                    vt <- maybe (Left []) Right _valueIupType
-                   resolveResultSetTypeExtra _lhsIcat (vt : wt)
+                   resolveResultSetTypeExtra _lhsIcat ComparisonResolutionFlavor (vt : wt)
                    {-# LINE 8409 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
               -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/ScalarExprs.ag"(line 390, column 9)
@@ -8455,7 +8455,7 @@ sem_ScalarExpr_CaseSimple ann_ value_ cases_ els_  =
                    do
                    _ <- _whent
                    tt <- mapM (maybe (Left []) Right) _thenTypes
-                   resolveResultSetTypeExtra _lhsIcat tt
+                   resolveResultSetTypeExtra _lhsIcat UnionResolitionFlavor tt
                    {-# LINE 8418 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
               -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/ScalarExprs.ag"(line 395, column 9)
@@ -9554,7 +9554,7 @@ sem_ScalarExpr_InPredicate ann_ expr_ i_ list_  =
                    do
                    lt <- _listIlistType
                    expt <- maybe (Left []) Right _exprIupType
-                   resolveResultSetTypeExtra _lhsIcat [expt, lt]
+                   resolveResultSetTypeExtra _lhsIcat ComparisonResolutionFlavor [expt, lt]
                    {-# LINE 9517 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
               -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/ScalarExprs.ag"(line 474, column 9)
@@ -12769,7 +12769,7 @@ sem_ScalarExprListList_Cons hd_ tl_  =
                      then return $ zip [T.pack ("values%" ++ show k) | k <- [0..]] a
                      else
                        do
-                       let uts = zipWithM (\te1 (_,te2) -> resolveResultSetTypeExtra _lhsIcat [te1,te2])
+                       let uts = zipWithM (\te1 (_,te2) -> resolveResultSetTypeExtra _lhsIcat UnionResolitionFlavor [te1,te2])
                                      a b
                        case uts of
                          Left{} -> itError

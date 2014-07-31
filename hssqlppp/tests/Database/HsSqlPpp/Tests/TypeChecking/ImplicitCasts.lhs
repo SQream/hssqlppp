@@ -19,7 +19,7 @@
 >   ,e p "'aa'::text = 'bb'"
 >        "'aa'::text = 'bb'::text"
 >   ,e s "cast(1 as int4) + cast('2' as varchar)"
->        "cast(1 as int4) + cast(cast('2' as varchar) as int4)"
+>        "cast(cast(1 as int4) as float8) + cast(cast('2' as varchar) as float8)"
 >   ]
 >   where
 >     e = ImpCastsScalar

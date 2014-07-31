@@ -162,7 +162,7 @@ TODO: remove the create prefixes
 >                     LeftOuter -> t0
 >                     RightOuter -> t1
 >                     FullOuter -> mkNullable te
->            fmap ((i,) . adjustTypeExtra) $ resolveResultSetTypeExtra cat [t0,t1]
+>            fmap ((i,) . adjustTypeExtra) $ resolveResultSetTypeExtra cat ComparisonResolutionFlavor [t0,t1]
 >            -- ImplicitCastToDo: remove or restore
 >            --fmap (i,) $ resolveResultSetTypeExtra cat [t0,t1]
 >   -- todo: check type compatibility

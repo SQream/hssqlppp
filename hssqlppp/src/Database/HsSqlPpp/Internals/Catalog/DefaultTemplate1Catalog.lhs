@@ -840,12 +840,25 @@ installed to do this.
 >         CatCreateBinaryOp "|>>" "circle" "circle" "bool",
 >         CatCreateBinaryOp "||" "bytea" "bytea" "bytea",
 >         CatCreateBinaryOp "||" "text" "text" "text",
->         CatCreateBinaryOp "||" "text" "anynonarray" "text",
+
+I had to disable these these two cases; otherwise, with the new implementation of
+  overloaded function call resolution, there would be no implicit cast in cases like
+      xvarchar6 || xint.
+An alternative might be to introduce a notion of priority of a type set in type set
+  resolution. If a type set is obtained as a result of type template expansion, it has
+  lower priority. But this approach is questionable. What, then, is better:
+              xvarchar6 || xint
+  , because there is no cast
+          or  xvarchar6 || cast(xint as varchar)
+  , bacause it picks a type set of higher priority?
+I think the disabled signatures were not healthy in the first place.
+
+>         --CatCreateBinaryOp "||" "text" "anynonarray" "text",
 >         CatCreateBinaryOp "||" "varbit" "varbit" "varbit",
 >         CatCreateBinaryOp "||" "anyarray" "anyarray" "anyarray",
 >         CatCreateBinaryOp "||" "anyarray" "anyelement" "anyarray",
 >         CatCreateBinaryOp "||" "anyelement" "anyarray" "anyarray",
->         CatCreateBinaryOp "||" "anynonarray" "text" "text",
+>         --CatCreateBinaryOp "||" "anynonarray" "text" "text",
 >         CatCreateBinaryOp "||" "tsvector" "tsvector" "tsvector",
 >         CatCreateBinaryOp "||" "tsquery" "tsquery" "tsquery",
 >         CatCreateBinaryOp "~" "name" "text" "bool",

@@ -5,6 +5,7 @@ This file contains some generic utility stuff
 > {-# LANGUAGE FlexibleContexts #-}
 > module Database.HsSqlPpp.Utils.Utils where
 >
+> import Control.Monad
 > import Control.Arrow
 > import Control.Applicative
 > import Data.List
@@ -21,11 +22,28 @@ This file contains some generic utility stuff
 >          f a -> f [a] -> f [a]
 > (<:>) a b = (:) <$> a <*> b
 
+> vectorPartialOrder:: [Maybe Ordering] -> Maybe Ordering
+> vectorPartialOrder = flip foldr (Just EQ) $ \ mx my -> do
+>     x <- mx
+>     y <- my
+>     guard $ sort [x,y] /= [LT,GT]
+>     return $ head $ [x,y] \\ [EQ] -- [EQ,EQ] \\ [EQ] gives [EQ]
+
+> groupSortedBy:: (a -> a-> Ordering) -> [a] -> [[a]]
+> groupSortedBy f = groupBy (((EQ==).) . f) . sortBy f
+
 > firstM :: Functor f => (t -> f a) -> (t, t1) -> f (a, t1)
 > firstM f (a,b) = (,b) <$> f a
 
 > secondM :: Functor f => (t -> f a) -> (t1, t) -> f (t1, a)
 > secondM f (a,b) = (a,) <$> f b
+
+> fst3:: (a,b,c) -> a
+> fst3 (x,_,_) = x
+> snd3:: (a,b,c) -> b
+> snd3 (_,x,_) = x
+> trd3:: (a,b,c) -> c
+> trd3 (_,_,x) = x
 
 > replace :: (Eq a) => [a] -> [a] -> [a] -> [a]
 > replace _ _ [] = []

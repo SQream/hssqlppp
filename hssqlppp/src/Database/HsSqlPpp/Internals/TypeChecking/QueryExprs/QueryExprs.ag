@@ -90,7 +90,7 @@ sem QueryExpr
           do
           a <- maybe (Left []) Right @cqQe0.upType
           b <- maybe (Left []) Right @cqQe1.upType
-          let uts = zipWithM (\(_,te1) (_,te2) -> resolveResultSetTypeExtra @lhs.cat [te1,te2])
+          let uts = zipWithM (\(_,te1) (_,te2) -> resolveResultSetTypeExtra @lhs.cat UnionResolitionFlavor [te1,te2])
                         a b
           case uts of
             Left{} -> Left [IncompatibleUnionTypes (CompositeType a) (CompositeType b)]
@@ -129,7 +129,7 @@ sem ScalarExprListList
             then return $ zip [T.pack ("values%" ++ show k) | k <- [0..]] a
             else
               do
-              let uts = zipWithM (\te1 (_,te2) -> resolveResultSetTypeExtra @lhs.cat [te1,te2])
+              let uts = zipWithM (\te1 (_,te2) -> resolveResultSetTypeExtra @lhs.cat UnionResolitionFlavor [te1,te2])
                             a b
               case uts of
                 Left{} -> itError

@@ -372,11 +372,11 @@ sem ScalarExpr
                   when (any ((/= typeBool) . teType) wt)
                       $ Left [WrongTypes typeBool $ map teType wt]
                   tt <- mapM (maybe (Left []) Right) @loc.thenTypes
-                  resolveResultSetTypeExtra @lhs.cat tt
+                  resolveResultSetTypeExtra @lhs.cat UnionResolitionFlavor tt
         cases.whenExpectedType =
             do
             ws <- sequence $ concat @loc.whenTypes
-            w <- either (const Nothing) Just $ resolveResultSetTypeExtra @lhs.cat ws
+            w <- either (const Nothing) Just $ resolveResultSetTypeExtra @lhs.cat ComparisonResolutionFlavor ws
             Just $ TypeExtra typeBool Nothing Nothing $ teNullable w
         cases.thenExpectedType = either (const Nothing) Just @loc.tpe
         els.expectedType = either (const Nothing) Just @loc.tpe
@@ -386,12 +386,12 @@ sem ScalarExpr
           do
           wt <- mapM (maybe (Left []) Right) $ concat @loc.whenTypes
           vt <- maybe (Left []) Right @value.upType
-          resolveResultSetTypeExtra @lhs.cat (vt : wt)
+          resolveResultSetTypeExtra @lhs.cat ComparisonResolutionFlavor (vt : wt)
         loc.tpe =
           do
           _ <- @loc.whent
           tt <- mapM (maybe (Left []) Right) @loc.thenTypes
-          resolveResultSetTypeExtra @lhs.cat tt
+          resolveResultSetTypeExtra @lhs.cat UnionResolitionFlavor tt
         cases.whenExpectedType = either (const Nothing) Just @loc.whent
         value.expectedType = either (const Nothing) Just @loc.whent
         value.expectedCast = False
@@ -470,7 +470,7 @@ sem ScalarExpr
         loc.rt = do
                  lt <- @list.listType
                  expt <- maybe (Left []) Right @expr.upType
-                 resolveResultSetTypeExtra @lhs.cat [expt, lt]
+                 resolveResultSetTypeExtra @lhs.cat ComparisonResolutionFlavor [expt, lt]
         loc.tpe = do
                   r <- @loc.rt
                   return $ TypeExtra typeBool Nothing Nothing $ teNullable r
@@ -480,7 +480,7 @@ sem ScalarExpr
 sem InList
     | InList
         lhs.listType = mapM (maybe (Left []) Right) @exprs.upTypes
-                       >>= resolveResultSetTypeExtra @lhs.cat
+                       >>= resolveResultSetTypeExtra @lhs.cat UnionResolitionFlavor
         exprs.expectedTypes = maybe [] repeat @lhs.expectedType
         -- ImplicitCastToDo: not sure; but this is comparison semantics
         exprs.expectedCast = False

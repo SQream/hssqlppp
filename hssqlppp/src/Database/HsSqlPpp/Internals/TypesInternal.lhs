@@ -145,7 +145,9 @@ added.
 
 type conversion errors
 
->                | -} NoMatchingOperator Text [Type]
+>                | -}
+>                NoOperator Text
+>                | NoMatchingOperator Text [Type]
 >                | TypelessEmptyArray
 >                | IncompatibleTypeSet [Type]
 >                | IncompatibleTypes Type Type

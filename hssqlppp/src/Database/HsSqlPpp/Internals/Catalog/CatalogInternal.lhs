@@ -77,6 +77,8 @@ sequences
 >     ,isOperatorName
 >     ,catTypeCategory
 >     ,catCast
+>     ,catCastsFrom
+>     ,catBaseType
 >     ,catCompositePublicAttrs
 >     ,catDomainBaseType
 >     ) where
@@ -90,6 +92,7 @@ sequences
 
 > import qualified Data.Map as M
 > import qualified Data.Set as S
+> import Database.HsSqlPpp.Utils.Utils
 > import Database.HsSqlPpp.Internals.TypesInternal
 > --import Database.HsSqlPpp.Utils.Utils
 > import Data.Text (Text)
@@ -551,7 +554,18 @@ to new code or deleted as typeconversion is rewritten
 >                 return $ (baseType == to) ||
 >                                (cc || S.member (from, to, ctx) (catCasts cat))
 >       _ -> Right $ S.member (from, to, ctx) (catCasts cat)
->
+
+> catCastsFrom:: Catalog -> CastContext -> Type -> Either [TypeError] [Type]
+> catCastsFrom cat ctx t = do
+>   t' <- catBaseType cat t
+>   return  $ map snd3
+>           $ S.toList $ S.filter (\(from,_,c) -> t==from && ctx==c) $ catCasts cat
+
+> catBaseType:: Catalog -> Type -> Either [TypeError] Type
+> catBaseType cat t = case t of
+>   DomainType _ -> catDomainBaseType cat t
+>   _ -> return t
+
 > catDomainBaseType :: Catalog -> Type -> Either [TypeError] Type
 > catDomainBaseType cat (ScalarType ty) =
 >   case M.lookup ty $ catDomainTypes cat of
