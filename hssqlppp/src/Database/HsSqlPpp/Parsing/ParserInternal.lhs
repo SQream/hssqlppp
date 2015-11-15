@@ -2295,7 +2295,7 @@ http://msdn.microsoft.com/en-us/library/ms189822.aspx
 >        ,"print"
 >        ,"proc"
 >        ,"procedure"
->        ,"public"
+>        -- ,"public"
 >        ,"raiserror"
 >        ,"read"
 >        ,"readtext"

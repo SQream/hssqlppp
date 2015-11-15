@@ -373,6 +373,7 @@ use listBindingsTypes to implement expandstar and lookupid
 >   then Left []
 >   else do
 >     k <- case nmc of
+>                [a,b,c] -> Right (Just $ nmcString a, nmcString b)
 >                [a,b] -> Right (Just $ nmcString a, nmcString b)
 >                [b] -> Right (Nothing, nmcString b)
 >                _ -> Left [InternalError "too many nmc components in envlookupiden"]
