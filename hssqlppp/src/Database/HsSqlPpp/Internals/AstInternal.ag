@@ -60,6 +60,8 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,Volatility (..)
    ,Language (..)
    ,TypeName (..)
+   ,PrecMultiplier(..)
+   ,PrecUnits(..)
    ,DropType (..)
    ,Cascade (..)
    ,Direction (..)
@@ -394,7 +396,17 @@ nameComponents (AntiName _) = error "tried to get namecomponents of antiname"
 }
 
 data TypeName | SimpleTypeName ann::Annotation tn::Name
-              | PrecTypeName ann::Annotation tn::Name prec::Integer
+              -- Precision, Precision units
+              | PrecTypeName ann::Annotation tn::Name
+                                    prec::Integer
+                                    precMultiplier:: (Maybe PrecMultiplier)
+                                    precUnits::(Maybe PrecUnits)
+              -- Precision, Character set, Collation
+              | CharTypeName ann::Annotation tn::Name
+                                    prec::Integer
+                                    precUnits::(Maybe PrecUnits)
+                                    ctCharset::{[Name]}
+                                    ctCollation::{[Name]}
               | Prec2TypeName ann::Annotation tn::Name prec::Integer prec1::Integer
               | ArrayTypeName ann::Annotation typ::TypeName
               | SetOfTypeName ann::Annotation typ::TypeName
@@ -408,6 +420,11 @@ data InList | InList ann::Annotation exprs :: ScalarExprList
 
 {
 
+data PrecMultiplier = PrecK | PrecM | PrecG | PrecT | PrecP
+                      deriving (Eq,Show,Read,Data,Typeable)
+data PrecUnits = PrecCharacters
+               | PrecOctets
+                 deriving (Eq,Show,Read,Data,Typeable)
 
 data LiftFlavour = LiftAny | LiftAll
                    deriving (Show,Eq,Typeable,Data)
@@ -1220,7 +1237,7 @@ canonicalizeTypeNames =
    . (transformBi $ \x ->
        case x of
          SimpleTypeName a tn -> SimpleTypeName a (c tn)
-         PrecTypeName a tn i -> PrecTypeName a (c tn) i
+         PrecTypeName a tn i j k -> PrecTypeName a (c tn) i j k
          Prec2TypeName a tn i i1 -> Prec2TypeName a (c tn) i i1
          x' -> x')
    where

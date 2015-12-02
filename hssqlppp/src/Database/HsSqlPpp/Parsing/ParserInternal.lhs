@@ -41,7 +41,7 @@ right choice, but it seems to do the job pretty well at the moment.
 >
 > import Data.Maybe
 > import Data.Char hiding (Format)
->
+
 > import Data.Generics.Uniplate.Data
 > import Data.Data hiding (Prefix,Infix)
 >
@@ -56,7 +56,7 @@ right choice, but it seems to do the job pretty well at the moment.
 > --import qualified Data.Text.Lazy as LT
 > import Text.Parsec.Text ()
 > --import Database.HsSqlPpp.Catalog
-> --import Debug.Trace
+> import Debug.Trace
 > import qualified Data.Text.Lazy as L
 > --import Database.HsSqlPpp.Internals.StringLike
 
@@ -1117,7 +1117,7 @@ that can left factor the 'name component . '  part and avoid the try
 >
 > columnNameList :: SParser [NameComponent]
 > columnNameList = parens $ commaSep1 nameComponent
->
+
 > typeName :: SParser TypeName
 > typeName =
 >   choice [
@@ -1130,7 +1130,11 @@ that can left factor the 'name component . '  part and avoid the try
 >        choice [try (Prec2TypeName p s
 >                     <$> (symbol "(" *> integer)
 >                     <*> (symbol "," *> integer <* symbol ")"))
->               ,PrecTypeName p s <$> parens integer
+>               ,try $ charTypeName p s
+>               ,PrecTypeName p s <$> (symbol "(" *> integer)
+>                                 <*> optionMaybe lobPrecSuffix
+>                                 <*> optionMaybe lobUnits
+>                                 <* symbol ")"
 >               ,arrayTypeName p s
 >               ,return $ SimpleTypeName p s]
 >     arrayTypeName p s = ArrayTypeName p (SimpleTypeName p s)
@@ -1143,8 +1147,23 @@ that can left factor the 'name component . '  part and avoid the try
 >                                   ,[Nmc "character varying"]
 >                                    <$ try (keyword "character"
 >                                            <* keyword "varying")])
->                       <|> name
->
+>                        <|> name
+>     charTypeName p s = do
+>         prec <- symbol "(" *> integer
+>         precunit <- optionMaybe lobUnits <* symbol ")"
+>         (charset,collate) <- choice [(,) <$> charSet <*> option [] tcollate
+>                                     ,(,) <$> option [] charSet <*> tcollate]
+>         return $ CharTypeName p s prec precunit charset collate
+>     charSet = trace "chr" $ (keyword "character" *> keyword "set") *> names
+>     tcollate = trace "col" $ keyword "collate" *> names
+>     lobPrecSuffix = PrecK <$ keyword "k"
+>                     <|> PrecM <$ keyword "m"
+>                     <|> PrecG <$ keyword "g"
+>                     <|> PrecT <$ keyword "t"
+>                     <|> PrecP <$ keyword "p"
+>     lobUnits = PrecCharacters <$ keyword "characters"
+>                <|> PrecOctets <$ keyword "octets"
+
 > cascade :: SParser Cascade
 > cascade = option Restrict (choice [
 >                             Restrict <$ keyword "restrict"
@@ -2378,6 +2397,17 @@ parse a complete name
 >               ,Name <$> pos <*> ncs
 >               ]
 
+> names :: SParser [Name]
+> names = reverse <$> (((:[]) <$> name) <??*> anotherName)
+>   -- can't use a simple chain here since we
+>   -- want to wrap the . + name in a try
+>   -- this will change when this is left factored
+>   where
+>     anotherName :: SParser ([Name] -> [Name])
+>     anotherName = try ((:) <$> (symbol "." *> name))
+>     p <??*> q = foldr ($) <$> p <*> (reverse <$> many q)
+
+
 > nameComponent :: SParser NameComponent
 > nameComponent = nameComponentAllows []
 
@@ -2431,7 +2461,6 @@ Utility parsers
 >                       where
 >                         lcase = T.map toLower
 
->
 > idString :: SParser String
 > idString = mytoken (\tok -> case tok of
 >                                      Lex.Identifier Nothing i -> Just $ T.unpack i
@@ -2657,3 +2686,4 @@ be an array or subselect, etc)
 >                                  _ -> Nothing
 >                -> LiftApp an op flav ([expr1,expr2s] ++ expr3s)
 >              x1 -> x1
+

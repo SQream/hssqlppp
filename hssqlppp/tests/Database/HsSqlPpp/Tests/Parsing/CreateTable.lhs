@@ -6,6 +6,8 @@
 
 > import Database.HsSqlPpp.Tests.Parsing.Utils
 > import Database.HsSqlPpp.Tests.TestTypes
+> import qualified Data.Text as T
+> import Data.Text (Text)
 
 > createTable:: Item
 > createTable =
@@ -283,9 +285,44 @@ quick sanity check
 >          [ReferenceConstraint ea "" [Nmc "x", Nmc "y"] (name "t2") []
 >           Cascade Cascade] Nothing]
 >
+>      ,s "create table t1 (\n\
+>         \ x int,\n\
+>         \ v varchar (30 m characters) \n\
+>         \);"
+>         [CreateTable ea (name "t1") [att "x" "int"
+>                                     ,vcatt "v" "varchar" 30 (Just PrecM) (Just PrecCharacters)]
+>          []
+>          Nothing]
+>
+>      ,s "create table t1 (\n\
+>         \ x int,\n\
+>         \ v varchar (128) \n\
+>         \);"
+>         [CreateTable ea (name "t1") [att "x" "int"
+>                                     ,vcatt "v" "varchar" 128 Nothing Nothing]
+>          []
+>          Nothing]
+>
+>      ,s "create table t1 (\n\
+>         \ x int,\n\
+>         \ v varchar (128) character set utf8 collate utf8_unicode_ci\n\
+>         \);"
+>         [CreateTable ea (name "t1") [att "x" "int"
+>                                     ,ctn "v" "varchar" 128 Nothing [(name "utf8")] [(name "utf8_unicode_ci")]]
+>          []
+>          Nothing]
 >      ]
 >      ]
 >      ]
 
 >  where
 >    s = Stmt
+>    vcatt :: Text -> Text -> Integer -> Maybe PrecMultiplier -> Maybe PrecUnits -> AttributeDef
+>    vcatt n t len precscale precunits = AttributeDef ea (Nmc $ T.unpack n)
+>                                        (PrecTypeName ea (name t) len precscale precunits)
+>                                        Nothing
+>                                        []
+>    ctn n t len precunits charset collation = AttributeDef ea (Nmc $ T.unpack n)
+>                            (CharTypeName ea (name t) len precunits charset collation)
+>                            Nothing
+>                            []

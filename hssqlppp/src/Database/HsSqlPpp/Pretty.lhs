@@ -868,7 +868,17 @@ syntax maybe should error instead of silently breaking
 >
 > typeName :: TypeName -> Doc
 > typeName (SimpleTypeName _ s) = name s
-> typeName (PrecTypeName _ s i) = name s <> parens(integer i)
+> typeName (PrecTypeName _ s i m u) = name s <> parens (integer i
+>                                                      <> me (\x -> case x of
+>                                                                   PrecK -> text "K"
+>                                                                   PrecM -> text "M"
+>                                                                   PrecG -> text "G"
+>                                                                   PrecT -> text "T"
+>                                                                   PrecP -> text "P") m
+>                                                       <+> me (\x -> case x of
+>                                                                     PrecCharacters -> text "CHARACTERS"
+>                                                                     PrecOctets -> text "OCTETS") u
+>                                                      )
 > typeName (Prec2TypeName _ s i i1) = name s <> parens (sepCsv [integer i, integer i1])
 > typeName (ArrayTypeName _ t) = typeName t <> text "[]"
 > typeName (SetOfTypeName _ t) = text "setof" <+> typeName t
@@ -1218,3 +1228,6 @@ util: to be removed when outputting names is fixed
 
 > tltext :: String -> Doc
 > tltext = text
+
+> me :: (a -> Doc) -> Maybe a -> Doc
+> me = maybe empty

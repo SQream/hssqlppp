@@ -30,8 +30,8 @@ shortcuts for constructing test data and asts
 >
 > sl :: SelectItemList -> SelectList
 > sl = SelectList ea
->
->
+
+
 > att :: Text -> Text -> AttributeDef
 > att n t = AttributeDef ea (Nmc $ T.unpack n) (SimpleTypeName ea $ name t) Nothing []
 

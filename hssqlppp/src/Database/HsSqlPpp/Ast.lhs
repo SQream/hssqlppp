@@ -17,6 +17,8 @@
 >     ,nameComponents
 >     ,ncStr
 >     ,TypeName(..)
+>     ,PrecMultiplier(..)
+>     ,PrecUnits(..)
 >      -- * Scalar expressions
 >     ,ScalarExpr(..)
 >     ,InList(..)

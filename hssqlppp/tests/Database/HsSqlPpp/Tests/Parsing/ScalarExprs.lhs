@@ -79,13 +79,13 @@ test some more really basic expressions
 >                                 (ei "tst1"))
 >      ,e "'stuff'::text"
 >       (Cast ea (stringQ "stuff") (st "text"))
->      ,e "245::float(24)" (Cast ea (num "245") (PrecTypeName ea (name "float") 24))
+>      ,e "245::float(24)" (Cast ea (num "245") (PrecTypeName ea (name "float") 24 Nothing Nothing))
 >      ,e "245.1::numeric(5,3)"
 >       (Cast ea (num "245.1") (Prec2TypeName ea (name "numeric") 5 3))
 >      ,e "245::double precision"
 >       (Cast ea (num "245") (st "double precision"))
 >      ,e "'test'::character varying(6)"
->       (Cast ea (StringLit ea "test") (PrecTypeName ea (name "character varying") 6))
+>       (Cast ea (StringLit ea "test") (PrecTypeName ea (name "character varying") 6 Nothing Nothing))
 >      ,e "date '1998-12-01'"
 >       (TypedStringLit ea (st "date") "1998-12-01")
 >      ,e "interval '63' day" (Interval ea "63" IntervalDay Nothing)
