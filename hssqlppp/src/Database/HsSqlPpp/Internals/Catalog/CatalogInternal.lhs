@@ -266,6 +266,7 @@ postgresql catalog
 >    ,("like",("like", [ScalarType "text", ScalarType "text"], typeBool, False))
 >    ,("like",("like", [ScalarType "char", ScalarType "char"], typeBool, False))
 >    ,("like",("like", [ScalarType "varchar", ScalarType "varchar"], typeBool, False))
+>    ,("like",("like", [ScalarType "nvarchar", ScalarType "nvarchar"], typeBool, False))
 >    ,("notlike",("notlike", [ScalarType "text", ScalarType "text"], typeBool, False))
 >    ,("notlike",("notlike", [ScalarType "char", ScalarType "char"], typeBool, False))
 >    ,("notlike",("notlike", [ScalarType "varchar", ScalarType "varchar"], typeBool, False))
@@ -281,6 +282,7 @@ postgresql catalog
 >                                  ,Pseudo AnyElement], typeBool, False))
 >    ,("substring",("substring",[ScalarType "text",typeInt,typeInt],ScalarType "text",False))
 >    ,("substring",("substring",[ScalarType "varchar",typeInt,typeInt],ScalarType "varchar",False))
+>    ,("substring",("substring",[ScalarType "nvarchar",typeInt,typeInt],ScalarType "nvarchar",False))
 >    ,("substring",("substring",[ScalarType "char",typeInt,typeInt],ScalarType "char",False))
 >    ,("arraysub",("arraysub", [Pseudo AnyArray,typeInt], Pseudo AnyElement, False))
 >    ]
