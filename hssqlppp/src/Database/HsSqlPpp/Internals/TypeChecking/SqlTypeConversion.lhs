@@ -71,6 +71,6 @@ match an exact operator itself with two args the same numeric type
 >                ,typeNumeric,typeFloat4,typeFloat8]
 >     --isNumber _ = False
 >     isText x =
->       x `elem` [typeVarChar,typeChar, ScalarType "text"]
+>       x `elem` [typeVarChar,typeNVarChar,typeChar, ScalarType "text"]
 >     --isText _ = False
 > checkOperator _ _ _ = Nothing

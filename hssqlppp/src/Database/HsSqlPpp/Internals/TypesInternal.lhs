@@ -185,7 +185,7 @@ gutted and rewritten
 > -- types, which have multiple names in postgres and SQL. The names which
 > -- hssqlppp uses as canonical are the names that postgres uses in a pg_dump.
 > typeSmallInt,typeBigInt,typeInt,typeNumeric,typeFloat4,
->   typeFloat8,typeVarChar,typeChar,typeBool,typeDate,
+>   typeFloat8,typeVarChar,typeNVarChar,typeChar,typeBool,typeDate,
 >   typeTime,typeTimestamp, typeInterval :: Type
 > typeSmallInt = ScalarType "int2"
 > typeBigInt = ScalarType "int8"
@@ -194,6 +194,7 @@ gutted and rewritten
 > typeFloat4 = ScalarType "float4"
 > typeFloat8 = ScalarType "float8"
 > typeVarChar = ScalarType "varchar"
+> typeNVarChar = ScalarType "nvarchar"
 > typeChar = ScalarType "char"
 > typeBool = ScalarType "bool"
 > typeDate = ScalarType "date"
@@ -235,7 +236,7 @@ added for mssql
 >       numericNames = ["numeric", "decimal"]
 >       float4Names = ["real", "float4"]
 >       float8Names = ["double precision", "float", "double"]
->       varcharNames = ["character varying", "varchar"]
+>       varcharNames = ["character varying", "varchar","nvarchar"]
 >       charNames = ["character", "char"]
 >       boolNames = ["boolean", "bool"]
 >       s = T.map toLower s'

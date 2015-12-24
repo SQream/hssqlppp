@@ -414,7 +414,7 @@ It is theoretically possible that types belong to different precision classes,
 >
 > precisionClass:: Type -> Maybe PrecisionClass
 > precisionClass (ScalarType tn)
->   | tn `elem` ["text","varchar","char"] = Just String
+>   | tn `elem` ["text","varchar","nvarchar","char"] = Just String
 >   | tn `elem` ["int1","int2","int4","int8","float4","float8","numeric"] = Just Number
 >   | otherwise = Nothing
 > precisionClass UnknownType = Just FlexiblePrecisionClass
