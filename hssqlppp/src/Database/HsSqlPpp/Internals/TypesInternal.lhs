@@ -236,7 +236,7 @@ added for mssql
 >       numericNames = ["numeric", "decimal"]
 >       float4Names = ["real", "float4"]
 >       float8Names = ["double precision", "float", "double"]
->       varcharNames = ["character varying", "varchar","nvarchar"]
+>       varcharNames = ["character varying", "varchar"]
 >       charNames = ["character", "char"]
 >       boolNames = ["boolean", "bool"]
 >       s = T.map toLower s'
