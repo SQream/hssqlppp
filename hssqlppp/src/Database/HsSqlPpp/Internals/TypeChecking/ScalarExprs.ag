@@ -575,7 +575,10 @@ sem ScalarExpr
                   when (any ((/= typeBool) . teType) wt)
                       $ Left [WrongTypes typeBool $ map teType wt]
                   tt <- mapM (maybe (Left []) Right) @loc.thenTypes
-                  resolveResultSetTypeExtra @lhs.cat tt
+                  tse <- resolveResultSetTypeExtra @lhs.cat tt
+                  return $ if isNothing @els.originalTree
+                           then tse{teNullable=True}
+                           else tse
         cases.whenExpectedType =
             do
             ws <- sequence $ concat @loc.whenTypes
