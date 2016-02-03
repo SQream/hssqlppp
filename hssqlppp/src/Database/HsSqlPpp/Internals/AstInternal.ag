@@ -706,6 +706,7 @@ data Statement
                   atts :: AttributeDefList
                   cons :: ConstraintList
                   partition :: MaybeTablePartitionDef
+                  rep :: Replace
     | AlterTable ann::Annotation
                  name :: Name
                  operation :: AlterTableOperation

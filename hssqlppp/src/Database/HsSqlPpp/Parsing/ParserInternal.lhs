@@ -609,14 +609,17 @@ ddl
 > createTable :: SParser Statement
 > createTable = do
 >   p <- pos
->   keyword "table"
+>   rep <- choice [NoReplace <$ keyword "table"
+>                 ,Replace <$ mapM_ keyword ["or", "replace", "table"]
+>                 ]   
+> --  keyword "table"
 >   tname <- name
 >   choice [
 >      CreateTableAs p tname <$> (keyword "as" *> pQueryExpr)
 >     ,do
 >      (atts,cons) <- readAttsAndCons
 >      pdata <- readPartition
->      return $ CreateTable p tname atts cons pdata
+>      return $ CreateTable p tname atts cons pdata rep
 >     ]
 >   where
 >     --parse the unordered list of attribute defs or constraints, for
