@@ -489,11 +489,11 @@ Conversion routines - convert Sql asts into Docs
 >     <+> text "from"
 >     <+> case src of
 >                  CopyFilename s -> (quotes $ ttext s)
->                                    <+> copyOpts opts
+>                                    <+> copyFromOpts opts
 >                                    <> statementEnd se
 
 >                  Stdin -> text "stdin"
->                           <+> copyOpts opts
+>                           <+> copyFromOpts opts
 >                           -- put statement end without new line
 >                           -- so that the copydata follows immediately after
 >                           -- without an extra blank line inbetween
@@ -504,7 +504,7 @@ Conversion routines - convert Sql asts into Docs
 >     text "copy" <+> s src
 >     <+> text "to"
 >     <+> quotes (ttext fn)
->     <+> copyOpts opts
+>     <+> copyToOpts opts
 >     <> statementEnd se
 >     where
 >       s (CopyTable tb cols) = name tb
@@ -777,15 +777,29 @@ syntax maybe should error instead of silently breaking
 >                                  Cascade -> "cascade"
 >                                  Restrict -> "restrict"
 
-> copyOpts :: [CopyOption] -> Doc
-> copyOpts opts =
+> copyToOpts :: [CopyToOption] -> Doc
+> copyToOpts opts =
 >   ifNotEmpty (const $ "with" <+> sep (map po opts)) opts
 >   where
->       po (CopyFormat s) = text "format" <+> text s
->       po (CopyDelimiter s) = text "delimiter" <+> quotes (text s)
->       po (CopyErrorLog s) = text "error_log" <+> quotes (text s)
->       po (CopyErrorVerbosity s) = text "error_verbosity" <+> int s
->       po (CopyParsers s) = text "parsers" <+> quotes (text s)
+>       po (CopyToFormat s) = text "format" <+> text s
+>       po (CopyToDelimiter s) = text "delimiter" <+> quotes (text s)
+>       po (CopyToErrorLog s) = text "error_log" <+> quotes (text s)
+>       po (CopyToErrorVerbosity s) = text "error_verbosity" <+> int s
+
+> copyFromOpts :: [CopyFromOption] -> Doc
+> copyFromOpts opts =
+>   ifNotEmpty (const $ "with" <+> sep (map po opts)) opts
+>   where
+>       po (CopyFromFormat s) = text "format" <+> text s
+>       po (CopyFromDelimiter s) = text "delimiter" <+> quotes (text s)
+>       po (CopyFromErrorLog s) = text "error_log" <+> quotes (text s)
+>       po (CopyFromErrorVerbosity s) = text "error_verbosity" <+> int s
+>       po (CopyFromParsers s) = text "parsers" <+> quotes (text s)
+>       po (CopyFromDirectory) = text "directory"
+>       po (CopyFromOffset i) = text "offset" <+> integer i
+>       po (CopyFromLimit i) = text "limit" <+> integer i
+>       po (CopyFromErrorThreshold i) = text "stop after" <+> int i <+> text "errors"
+>       po (CopyFromNewlineFormat n) = text "record delimiter" <+> text n
 > -- ddl
 >
 > constraint :: PrettyPrintFlags -> Constraint -> Doc

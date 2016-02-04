@@ -545,7 +545,8 @@ other dml-type stuff
 >        src <- choice [
 >                CopyFilename <$> extrStr <$> stringLit
 >               ,Stdin <$ keyword "stdin"]
->        opts <- copts False
+>        opts <- option [] $ do
+>                  keyword "with" *> copyFromOptions
 >        return $ CopyFrom p tableName cols src opts
 >     to p = do
 >        src <- choice
@@ -555,24 +556,48 @@ other dml-type stuff
 >                <*> option [] (parens $ commaSep1 nameComponent)]
 >        keyword "to"
 >        fn <- extrStr <$> stringLit
->        opts <- copts True
+>        opts <- option [] $ do
+>                  keyword "with" *> copyToOptions
 >        return $ CopyTo p src fn opts
->     -- isTo differentiates between COPY .. TO and COPY .. FROM
->     copts isTo = option [] $ do
->                  keyword "with"
->                  many1 $ if isTo then coptTo
->                                  else coptFrom
->     -- Base copy options
->     baseCopt = [CopyFormat <$> (keyword "format" *> idString)
->                ,CopyDelimiter <$> (keyword "delimiter" *> stringN)
->                ,try $ CopyErrorLog <$> (keyword "error_log" *> stringN)
->                ,CopyErrorVerbosity <$> (keyword "error_verbosity" *> (fromIntegral <$> integer))
->                ]
->     -- In COPY .. FROM we also have a "parsers" clause
->     coptFrom = choice $ baseCopt ++ [CopyParsers <$> (keyword "parsers" *> stringN)]
->     -- That we don't have in COPY .. TO
->     coptTo = choice baseCopt
->
+
+>     copyToOptions = do
+>       (a,b,c,d) <- permute ((,,,)
+>                             <$?> (Nothing,Just <$> CopyToFormat <$>
+>                                              (keyword "format" *> idString))
+>                             <|?> (Nothing,Just <$> CopyToDelimiter <$>
+>                                              (keyword "delimiter" *> stringN))
+>                             <|?> (Nothing,Just <$> CopyToErrorLog <$>
+>                                              (keyword "error_log" *> stringN))
+>                             <|?> (Nothing,Just <$> CopyToErrorVerbosity <$>
+>                                              (keyword "error_verbosity" *> (fromIntegral <$> integer)))
+>                            )
+>       return $ catMaybes [a,b,c,d]
+
+>     copyFromOptions = do
+>       (a,b,c,d,e,f,g,h,i,j) <- permute ((,,,,,,,,,)
+>                          <$?> (Nothing,Just <$> CopyFromFormat <$>
+>                                           (keyword "format" *> idString))
+>                          <|?> (Nothing,Just <$> CopyFromDelimiter <$>
+>                                           (keyword "delimiter" *> stringN))
+>                          <|?> (Nothing,Just <$> CopyFromErrorLog <$>
+>                                           (keyword "error_log" *> stringN))
+>                          <|?> (Nothing,Just <$> CopyFromErrorVerbosity <$>
+>                                           (keyword "error_verbosity" *> (fromIntegral <$> integer)))
+>                          <|?> (Nothing,Just <$> CopyFromParsers <$>
+>                                           (keyword "parsers" *> stringN) <?> "list of parsers")
+>                          <|?> (Nothing,Just <$> (CopyFromDirectory <$ keyword "directory"))
+>                          <|?> (Nothing,Just <$> CopyFromOffset <$>
+>                                           (keyword "offset" *> integer) <?> "offset with integer")
+>                          <|?> (Nothing,Just <$> CopyFromLimit <$>
+>                                           (keyword "limit" *> integer) <?> "limit with integer")
+>                          <|?> (Nothing,Just <$> CopyFromErrorThreshold <$>
+>                                           (keyword "stop" *> keyword "after" *> (fromIntegral <$> integer) <* keyword "errors"))
+>                          <|?> (Nothing,Just <$> CopyFromNewlineFormat <$>
+>                                           (keyword "record" *> keyword "delimiter" *> stringN))
+>                          )
+>       return $ catMaybes [a,b,c,d,e,f,g,h,i,j]
+
+
 > copyData :: SParser Statement
 > copyData = CopyData <$> pos <*> mytoken (\tok ->
 >                                         case tok of

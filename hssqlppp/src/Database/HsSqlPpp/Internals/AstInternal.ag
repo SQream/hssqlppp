@@ -41,7 +41,8 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,SelectItem (..)
    ,CopyFromSource (..)
    ,CopyToSource(..)
-   ,CopyOption(..)
+   ,CopyToOption(..)
+   ,CopyFromOption(..)
    ,TablePartitionDef(..)
    ,TablePartitionDateTimeInterval(..)
    ,AttributeDef (..)
@@ -687,13 +688,13 @@ data Statement
                table :: Name
                targetCols :: {[NameComponent]}
                source :: CopyFromSource
-               opts :: {[CopyOption]}
+               opts :: {[CopyFromOption]}
     --represents inline data for copy statement
     | CopyData ann::Annotation insData :: String
     | CopyTo ann :: Annotation
              cp :: CopyToSource
              fn :: String
-             opts :: {[CopyOption]}
+             opts :: {[CopyToOption]}
     | Truncate ann::Annotation
                tables:: {[Name]}
                restartIdentity :: RestartIdentity
@@ -895,11 +896,23 @@ data CopyFromSource = CopyFilename String
 data CopyToSource = CopyTable Name [NameComponent]
                   | CopyQuery QueryExpr
                     deriving (Show,Eq,Typeable,Data)
-data CopyOption = CopyFormat String
-                | CopyDelimiter String
-                | CopyErrorLog String
-                | CopyErrorVerbosity Int
-                | CopyParsers String
+
+data CopyFromOption = CopyFromFormat String
+                    | CopyFromDelimiter String
+                    | CopyFromErrorLog String
+                    | CopyFromErrorVerbosity Int
+                    | CopyFromParsers String
+                    | CopyFromDirectory
+                    | CopyFromOffset Integer
+                    | CopyFromLimit Integer
+                    | CopyFromErrorThreshold Int
+                    | CopyFromNewlineFormat String
+                  deriving (Show,Eq,Typeable,Data)
+
+data CopyToOption = CopyToFormat String
+                  | CopyToDelimiter String
+                  | CopyToErrorLog String
+                  | CopyToErrorVerbosity Int
                   deriving (Show,Eq,Typeable,Data)
 
 }
