@@ -2006,7 +2006,7 @@ date, time, and timestamp literals, and scalar function calls
 
 > odbcExpr :: SParser ScalarExpr
 > odbcExpr = between (symbol "{") (symbol "}")
->            (odbcTimeLit <|> odbcFunc)
+>            (odbcTimeLit <|> odbcFunc <|> odbcInterval)
 >   where
 >     odbcTimeLit =
 >         OdbcLiteral <$> pos
@@ -2017,6 +2017,7 @@ date, time, and timestamp literals, and scalar function calls
 >     odbcFunc = OdbcFunc
 >                <$> pos
 >                <*> (keyword "fn" *> expr) -- TODO: should limit this to function call or extract
+>     odbcInterval = interval
 
 
 
