@@ -707,6 +707,7 @@ data Statement
                   atts :: AttributeDefList
                   cons :: ConstraintList
                   partition :: MaybeTablePartitionDef
+                  rep :: Replace
     | AlterTable ann::Annotation
                  name :: Name
                  operation :: AlterTableOperation
@@ -725,6 +726,7 @@ data Statement
                     ownedBy:: Name
     | CreateTableAs ann::Annotation
                     name :: Name
+                    rep :: Replace
                     expr :: QueryExpr
     | CreateView ann::Annotation
                  name :: Name

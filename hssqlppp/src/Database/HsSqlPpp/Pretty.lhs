@@ -148,9 +148,11 @@ Conversion routines - convert Sql asts into Docs
 >
 > -- ddl
 >
-> statement flg se ca (CreateTable ann tbl atts cns partition) =
+> statement flg se ca (CreateTable ann tbl atts cns partition rep) =
 >     annot ca ann <+>
->     text "create table"
+>     text ("create " ++ (case rep of
+>                          Replace -> "or replace "
+>                          _ -> "") ++ "table")
 >     <+> name tbl <+> lparen
 >     $+$ nest 2 (vcat (csv (map (attrDef flg) atts ++ map (constraint flg) cns)))
 >     $+$ rparen 
@@ -202,9 +204,11 @@ Conversion routines - convert Sql asts into Docs
 >     text "alter sequence" <+> name nm
 >     <+> text "owned by" <+> name o <> statementEnd se
 >
-> statement flg se ca (CreateTableAs ann t sel) =
+> statement flg se ca (CreateTableAs ann t rep sel) =
 >     annot ca ann <+>
->     text "create table"
+>     text ("create " ++ (case rep of
+>                          Replace -> "or replace "
+>                          _ -> "") ++ "table")
 >     <+> name t <+> text "as"
 >     $+$ queryExpr flg True True Nothing sel
 >     <> statementEnd se
