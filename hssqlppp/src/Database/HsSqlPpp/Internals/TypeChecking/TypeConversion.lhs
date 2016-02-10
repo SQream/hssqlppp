@@ -211,11 +211,15 @@ precision and nullability of the result
 >            -- start and length as literals, we can figure out the resulting precision
 >            -- Otherwise, treat as before with joinPrecision
 >            let totalLen = joinPrecision $ map tePrecision tesr
->            in case lits of
->               (Nothing:(Just startPos):(Just len):_) -> do
->                 totalLen' <- totalLen
->                 return $ if startPos + len > totalLen' then totalLen' - startPos else len
->               _ -> totalLen
+>            in case (map teType tesr) of
+>              [ScalarType "nvarchar"] -> totalLen
+>              _ ->
+>                  case lits of
+>                    (Nothing:(Just startPos):(Just len):_) -> do
+>                       totalLen' <- totalLen
+>                       return $ if startPos + len > totalLen' then totalLen' - startPos else len
+>                    _ -> totalLen
+
 >         -- precision of the result is unknown
 >       | appName `elem` ["replace"] -- is actually known for 2-argument "replace"
 >         -> Nothing

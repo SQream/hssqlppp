@@ -132,7 +132,7 @@
 
 >       ,TSQLQueryExpr [CatCreateTable ("public","t") [("tv", CatNameExtra "nvarchar" (Just 15) Nothing False)]]
 >        "select substring(tv,0,2) from t"
->        $ Right $ CompositeType  [("substring",TypeExtra typeNvc (Just 2) Nothing False)]
+>        $ Right $ CompositeType  [("substring",TypeExtra typeNvc (Just 15) Nothing False)]
 
 >       ,TSQLQueryExpr [CatCreateTable ("public","t") [("tv", CatNameExtra "nvarchar" (Just 15) Nothing False)]]
 >        "select len(tv) from t"
