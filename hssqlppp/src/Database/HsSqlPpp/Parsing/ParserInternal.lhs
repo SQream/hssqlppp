@@ -202,7 +202,7 @@ Parsing top level statements
 >     ,notify
 >     ,keyword "create" *>
 >              choice [
->                 createTable
+>                 try createTable
 >                ,createSequence
 >                ,createType
 >                ,createFunction
