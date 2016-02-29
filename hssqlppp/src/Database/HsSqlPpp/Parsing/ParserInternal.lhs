@@ -1125,7 +1125,7 @@ or after the whole list
 >     selectItem = pos >>= \p ->
 >                  optionalSuffix
 >                    (SelExp p) (starExpr <|> expr)
->                    (SelectItem p) (keyword "as" *> asAlias)
+>                    (SelectItem p) (optional (keyword "as") *> asAlias)
 
 should try to factor this into the standard expr parse (use a flag) so
 that can left factor the 'name component . '  part and avoid the try
