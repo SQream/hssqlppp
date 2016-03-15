@@ -61,6 +61,7 @@ sequences
 >     ,CatNameExtra(..)
 >     ,mkCatNameExtra
 >     ,mkCatNameExtraNN
+>     ,typeToCatName
 >      -- catalog updates
 >     ,CatalogUpdate(..)
 >     ,updateCatalog
@@ -179,6 +180,12 @@ catalog values
 > mkCatNameExtra cn = CatNameExtra cn Nothing Nothing True
 > mkCatNameExtraNN:: CatName -> CatNameExtra
 > mkCatNameExtraNN cn = CatNameExtra cn Nothing Nothing False
+
+> typeToCatName :: TypeExtra -> Either [TypeError] CatNameExtra
+> typeToCatName te = case teType te of
+>   ScalarType t -> return
+>       $ CatNameExtra t (tePrecision te) (teScale te) (teNullable te)
+>   _ -> Left [InternalError "typeToCatName on a non scalar type"]
 
 > data CompositeFlavour = Composite | TableComposite | ViewComposite
 >                         deriving (Eq,Ord,Show)
