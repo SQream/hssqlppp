@@ -170,6 +170,7 @@ gutted and rewritten
 >                | UnrecognisedIdentifier Text
 >                | UnrecognisedCorrelationName Text
 >                | SchemadColumnName Text
+>                | DbSchemadColumnName Text
 >                | BadStarExpand
 >                | InternalError String
 >                | AmbiguousIdentifier Text
