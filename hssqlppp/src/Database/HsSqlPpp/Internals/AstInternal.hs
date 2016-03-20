@@ -225,7 +225,7 @@ convertJoinType FullOuter = E.FullOuter
 convertJoinType _ = E.Inner
 {-# LINE 227 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
 
-{-# LINE 83 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+{-# LINE 82 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
 
 secondM :: Functor f => (t -> f a) -> (t1, t) -> f (t1, a)
 secondM f (a,b) = (a,) <$> f b
@@ -4449,9 +4449,9 @@ _sem_InList_InList ann_ exprs_ =
               _exprsIannotatedTree :: ScalarExprList
               _exprsIoriginalTree :: ScalarExprList
               _exprsIupTypes :: ([Maybe TypeExtra])
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 219, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 218, column 9)
               _tpe =
-                  ({-# LINE 219 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 218 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Left []
                    {-# LINE 4441 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -4585,15 +4585,15 @@ _sem_InList_InQueryExpr ann_ sel_ =
               _selIannotatedTree :: QueryExpr
               _selIoriginalTree :: QueryExpr
               _selIupType :: (Maybe [(Text,TypeExtra)])
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 98, column 17)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 97, column 17)
               _selOouterDownEnv =
-                  ({-# LINE 98 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 97 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Nothing
                    {-# LINE 4577 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 219, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 218, column 9)
               _tpe =
-                  ({-# LINE 219 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 218 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Left []
                    {-# LINE 4583 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -4772,9 +4772,9 @@ _sem_JoinExpr_JoinOn ann_ expr_ =
               _exprIcolExprs :: ([(NameComponent,Maybe TypeExtra,ScalarExpr)])
               _exprIoriginalTree :: ScalarExpr
               _exprIupType :: (Maybe TypeExtra)
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 223, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 222, column 9)
               _tpe =
-                  ({-# LINE 223 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 222 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Left []
                    {-# LINE 4764 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -4896,9 +4896,9 @@ _sem_JoinExpr_JoinUsing ann_ x_ =
               _annOtpe :: (Either [TypeError] TypeExtra)
               _annIannotatedTree :: Annotation
               _annIoriginalTree :: Annotation
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 223, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 222, column 9)
               _tpe =
-                  ({-# LINE 223 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 222 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Left []
                    {-# LINE 4888 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -6410,7 +6410,7 @@ _sem_OnExpr_Just just_ =
                    )
               -- copy rule (down)
               _justOdownEnv =
-                  ({-# LINE 215 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 214 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIdownEnv
                    {-# LINE 6400 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -7104,59 +7104,59 @@ _sem_QueryExpr_Select ann_ selDistinct_ selSelectList_ selTref_ selWhere_ selGro
                    False
                    {-# LINE 7063 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 107, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 106, column 9)
               _selSelectListOdownEnv =
-                  ({-# LINE 107 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 106 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _selTrefIupEnv
                    {-# LINE 7069 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 108, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 107, column 9)
               _selGroupByOdownEnv =
-                  ({-# LINE 108 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 107 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _selTrefIupEnv
                    {-# LINE 7075 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 109, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 108, column 9)
               _selHavingOdownEnv =
-                  ({-# LINE 109 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 108 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _selTrefIupEnv
                    {-# LINE 7081 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 129, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 128, column 9)
               _selOrderByOdownEnv =
-                  ({-# LINE 129 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 128 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    E.orderByEnvironment _selSelectListIupEnv _selTrefIupEnv
                    {-# LINE 7087 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 130, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 129, column 9)
               _tpee =
-                  ({-# LINE 130 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 129 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    maybe (Left []) Right _selSelectListIupType
                    {-# LINE 7093 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 133, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 132, column 9)
               _selWhereOdownEnv =
-                  ({-# LINE 133 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 132 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    maybe _selTrefIupEnv
                     (\e -> E.createCorrelatedSubqueryEnvironment e _selTrefIupEnv)
                     _lhsIouterDownEnv
                    {-# LINE 7101 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 143, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 142, column 9)
               _tpe =
-                  ({-# LINE 143 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 142 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM (mkTypeExtra . CompositeType) _tpee
                    {-# LINE 7107 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 146, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 145, column 9)
               _lhsOupType =
-                  ({-# LINE 146 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 145 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    either (const Nothing) Just _tpee
                    {-# LINE 7113 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 239, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 238, column 9)
               _selGroupBy =
-                  ({-# LINE 239 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 238 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    case _selGroupByIannotatedTree of
                        [App e nm@(Name _ [Nmc "cube"]) es] ->
                          [App e{anType = (Just (mkTypeExtra $ ScalarType "int4"))
@@ -7165,9 +7165,9 @@ _sem_QueryExpr_Select ann_ selDistinct_ selSelectList_ selTref_ selWhere_ selGro
                        x -> x
                    {-# LINE 7124 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 248, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 247, column 9)
               _lhsOannotatedTree =
-                  ({-# LINE 248 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 247 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Select _annIannotatedTree
                           selDistinct_
                           _selSelectListIannotatedTree
@@ -7475,21 +7475,21 @@ _sem_QueryExpr_CombineQueryExpr ann_ cqType_ cqQe0_ cqQe1_ =
               _cqQe1IannotatedTree :: QueryExpr
               _cqQe1IoriginalTree :: QueryExpr
               _cqQe1IupType :: (Maybe [(Text,TypeExtra)])
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 143, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 142, column 9)
               _tpe =
-                  ({-# LINE 143 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 142 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM (mkTypeExtra . CompositeType) _tpee
                    {-# LINE 7440 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 146, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 145, column 9)
               _lhsOupType =
-                  ({-# LINE 146 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 145 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    either (const Nothing) Just _tpee
                    {-# LINE 7446 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 157, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 156, column 9)
               _tpee =
-                  ({-# LINE 157 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 156 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    do
                    a <- maybe (Left []) Right _cqQe0IupType
                    b <- maybe (Left []) Right _cqQe1IupType
@@ -7580,7 +7580,7 @@ _sem_QueryExpr_CombineQueryExpr ann_ cqType_ cqQe0_ cqQe1_ =
                    )
               -- copy rule (down)
               _cqQe0OouterDownEnv =
-                  ({-# LINE 90 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 89 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIouterDownEnv
                    {-# LINE 7543 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -7616,7 +7616,7 @@ _sem_QueryExpr_CombineQueryExpr ann_ cqType_ cqQe0_ cqQe1_ =
                    )
               -- copy rule (down)
               _cqQe1OouterDownEnv =
-                  ({-# LINE 90 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 89 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIouterDownEnv
                    {-# LINE 7579 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -7664,27 +7664,27 @@ _sem_QueryExpr_Values ann_ qeValues_ =
                    E.emptyEnvironment
                    {-# LINE 7623 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 143, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 142, column 9)
               _tpe =
-                  ({-# LINE 143 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 142 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM (mkTypeExtra . CompositeType) _tpee
                    {-# LINE 7629 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 146, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 145, column 9)
               _lhsOupType =
-                  ({-# LINE 146 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 145 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    either (const Nothing) Just _tpee
                    {-# LINE 7635 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 154, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 153, column 9)
               _tpee =
-                  ({-# LINE 154 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 153 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _qeValuesIupType
                    {-# LINE 7641 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 155, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 154, column 9)
               _qeValuesOexpectedCast =
-                  ({-# LINE 155 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 154 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    True
                    {-# LINE 7647 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -7750,7 +7750,7 @@ _sem_QueryExpr_Values ann_ qeValues_ =
                    )
               -- copy rule (down)
               _qeValuesOexpectedType =
-                  ({-# LINE 186 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 185 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIexpectedType
                    {-# LINE 7713 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -7809,44 +7809,44 @@ _sem_QueryExpr_WithQueryExpr ann_ withs_ withQe_ =
               _withQeIannotatedTree :: QueryExpr
               _withQeIoriginalTree :: QueryExpr
               _withQeIupType :: (Maybe [(Text,TypeExtra)])
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 71, column 8)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 70, column 8)
               _withQeOcat =
-                  ({-# LINE 71 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 70 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    case _withsIcatExtComp of
                      Right catExtComp -> catExtComp
                      Left _ -> _lhsIcat
                    {-# LINE 7776 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 75, column 8)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 74, column 8)
               _withsOcatExtIncomp =
-                  ({-# LINE 75 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 74 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    return _lhsIcat
                    {-# LINE 7782 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 77, column 8)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 76, column 8)
               _lhsOannotatedTree =
-                  ({-# LINE 77 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 76 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    case _withsIcatExtComp of
                      Right _ -> WithQueryExpr (_annIannotatedTree) (_withsIannotatedTree) (_withQeIannotatedTree)
                      Left tyErrs -> WithQueryExpr (emptyAnnotation { anType = Nothing, anErrs = tyErrs })
                        (_withsIannotatedTree) (_withQeIannotatedTree)
                    {-# LINE 7791 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 143, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 142, column 9)
               _tpe =
-                  ({-# LINE 143 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 142 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM (mkTypeExtra . CompositeType) _tpee
                    {-# LINE 7797 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 146, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 145, column 9)
               _lhsOupType =
-                  ({-# LINE 146 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 145 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    either (const Nothing) Just _tpee
                    {-# LINE 7803 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 152, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 151, column 9)
               _tpee =
-                  ({-# LINE 152 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 151 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    maybe (Left []) Right _withQeIupType
                    {-# LINE 7809 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -7936,7 +7936,7 @@ _sem_QueryExpr_WithQueryExpr ann_ withs_ withQe_ =
                    )
               -- copy rule (down)
               _withQeOouterDownEnv =
-                  ({-# LINE 90 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 89 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIouterDownEnv
                    {-# LINE 7899 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -13333,7 +13333,7 @@ _sem_ScalarExpr_AggregateApp ann_ aggDistinct_ fn_ orderBy_ =
                    )
               -- copy rule (down)
               _orderByOdownEnv =
-                  ({-# LINE 215 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 214 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIdownEnv
                    {-# LINE 13296 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -13599,7 +13599,7 @@ _sem_ScalarExpr_WindowApp ann_ fn_ partitionBy_ orderBy_ frm_ =
                    )
               -- copy rule (down)
               _orderByOdownEnv =
-                  ({-# LINE 215 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 214 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIdownEnv
                    {-# LINE 13562 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -13835,7 +13835,7 @@ _sem_ScalarExpr_InPredicate ann_ expr_ i_ list_ =
                    )
               -- copy rule (down)
               _listOdownEnv =
-                  ({-# LINE 215 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 214 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIdownEnv
                    {-# LINE 13798 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -15014,7 +15014,7 @@ _sem_ScalarExprDirectionPairList_Cons hd_ tl_ =
                    )
               -- copy rule (down)
               _hdOdownEnv =
-                  ({-# LINE 215 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 214 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIdownEnv
                    {-# LINE 14977 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -15038,7 +15038,7 @@ _sem_ScalarExprDirectionPairList_Cons hd_ tl_ =
                    )
               -- copy rule (down)
               _tlOdownEnv =
-                  ({-# LINE 215 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 214 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIdownEnv
                    {-# LINE 15001 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -15424,9 +15424,9 @@ _sem_ScalarExprListList_Cons hd_ tl_ =
               _tlIannotatedTree :: ScalarExprListList
               _tlIoriginalTree :: ScalarExprListList
               _tlIupType :: (Either [TypeError] [(Text,TypeExtra)])
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 191, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 190, column 9)
               _lhsOupType =
-                  ({-# LINE 191 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 190 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    do
                    a <- maybe (Left [InternalError "type error in VALUES clause"]) Right _hdIupType
                    b <- _tlIupType
@@ -15445,15 +15445,15 @@ _sem_ScalarExprListList_Cons hd_ tl_ =
                          Right uts' -> return $ zipWith (\(n,_) te -> (n,te)) b uts'
                    {-# LINE 15404 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 209, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 208, column 9)
               _hdOexpectedCast =
-                  ({-# LINE 209 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 208 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIexpectedCast
                    {-# LINE 15410 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 210, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 209, column 9)
               _tlOexpectedCast =
-                  ({-# LINE 210 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 209 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIexpectedCast
                    {-# LINE 15416 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -15489,7 +15489,7 @@ _sem_ScalarExprListList_Cons hd_ tl_ =
                    )
               -- copy rule (down)
               _hdOexpectedType =
-                  ({-# LINE 169 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 168 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIexpectedType
                    {-# LINE 15452 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -15519,13 +15519,13 @@ _sem_ScalarExprListList_Cons hd_ tl_ =
                    )
               -- copy rule (down)
               _tlOdownEnv =
-                  ({-# LINE 183 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 182 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIdownEnv
                    {-# LINE 15482 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
               -- copy rule (down)
               _tlOexpectedType =
-                  ({-# LINE 186 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 185 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIexpectedType
                    {-# LINE 15488 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -15558,9 +15558,9 @@ _sem_ScalarExprListList_Nil =
          (let _lhsOupType :: (Either [TypeError] [(Text,TypeExtra)])
               _lhsOannotatedTree :: ScalarExprListList
               _lhsOoriginalTree :: ScalarExprListList
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 211, column 11)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 210, column 11)
               _lhsOupType =
-                  ({-# LINE 211 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 210 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Right []
                    {-# LINE 15523 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -16427,33 +16427,33 @@ _sem_ScalarExprTransposedList_Cons hd_ tl_ =
                    E.emptyEnvironment
                    {-# LINE 16386 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 174, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 173, column 9)
               _lhsOupType =
-                  ({-# LINE 174 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 173 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM2 (:) _hdIupType _tlIupType
                    {-# LINE 16392 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 175, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 174, column 9)
               _hdOexpectedType =
-                  ({-# LINE 175 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 174 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM fst $ splitTypeExtraList _lhsIexpectedType
                    {-# LINE 16398 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 176, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 175, column 9)
               _tlOexpectedType =
-                  ({-# LINE 176 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 175 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM snd $ splitTypeExtraList _lhsIexpectedType
                    {-# LINE 16404 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 177, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 176, column 9)
               _hdOexpectedCast =
-                  ({-# LINE 177 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 176 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIexpectedCast
                    {-# LINE 16410 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 178, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 177, column 9)
               _tlOexpectedCast =
-                  ({-# LINE 178 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 177 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIexpectedCast
                    {-# LINE 16416 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -16544,9 +16544,9 @@ _sem_ScalarExprTransposedList_Nil =
          (let _lhsOupType :: (Maybe [TypeExtra])
               _lhsOannotatedTree :: ScalarExprTransposedList
               _lhsOoriginalTree :: ScalarExprTransposedList
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 180, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 179, column 9)
               _lhsOupType =
-                  ({-# LINE 180 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 179 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Just []
                    {-# LINE 16509 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -18556,9 +18556,9 @@ _sem_Statement_QueryStatement ann_ ex_ =
                    liftM (map snd) _exIupType
                    {-# LINE 18515 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 92, column 20)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 91, column 20)
               _exOouterDownEnv =
-                  ({-# LINE 92 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 91 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Nothing
                    {-# LINE 18521 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -25918,9 +25918,9 @@ _sem_TableRef_SubTref ann_ sel_ =
                    else Nothing
                    {-# LINE 25877 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 94, column 13)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 93, column 13)
               _selOouterDownEnv =
-                  ({-# LINE 94 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 93 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Nothing
                    {-# LINE 25883 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -28491,57 +28491,57 @@ _sem_WithQuery_WithQuery ann_ name_ colAliases_ ex_ =
               _exIannotatedTree :: QueryExpr
               _exIoriginalTree :: QueryExpr
               _exIupType :: (Maybe [(Text,TypeExtra)])
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 57, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 56, column 9)
               _lhsOname =
-                  ({-# LINE 57 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 56 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    ncStrT name_
                    {-# LINE 28456 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 58, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 57, column 9)
               _lhsOannotatedTree =
-                  ({-# LINE 58 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 57 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    WithQuery _annIannotatedTree name_ colAliases_ _exIannotatedTree
                    {-# LINE 28462 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 59, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 58, column 9)
               _lhsOcolAliases =
-                  ({-# LINE 59 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 58 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    colAliases_
                    {-# LINE 28468 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 63, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 62, column 9)
               _tpee =
-                  ({-# LINE 63 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 62 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    maybe (Left []) Right _exIupType
                    {-# LINE 28474 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 65, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 64, column 9)
               _tpe =
-                  ({-# LINE 65 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 64 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM (mkTypeExtra . CompositeType) _tpee
                    {-# LINE 28480 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 67, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 66, column 9)
               _lhsOupType =
-                  ({-# LINE 67 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 66 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    either (const Nothing) Just _tpee
                    {-# LINE 28486 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 96, column 15)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 95, column 15)
               _exOouterDownEnv =
-                  ({-# LINE 96 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 95 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Nothing
                    {-# LINE 28492 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 102, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 101, column 9)
               _annOtpe =
-                  ({-# LINE 102 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 101 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    Left []
                    {-# LINE 28498 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 103, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 102, column 9)
               _exOexpectedType =
-                  ({-# LINE 103 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 102 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    liftM (map snd) _exIupType
                    {-# LINE 28504 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -28698,9 +28698,9 @@ _sem_WithQueryList_Cons hd_ tl_ =
                    updateCatalog [CatCreateTable ("public", _hdIname ) colTyPairs'] =<< _lhsIcatExtIncomp
                    {-# LINE 28657 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 48, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 47, column 9)
               _hdOcat =
-                  ({-# LINE 48 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 47 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    case _lhsIcatExtIncomp of
                      Right catExtIncomp -> catExtIncomp
                      Left _ -> _lhsIcat
@@ -28786,9 +28786,9 @@ _sem_WithQueryList_Nil =
          (let _lhsOcatExtComp :: (Either [TypeError] Catalog)
               _lhsOannotatedTree :: WithQueryList
               _lhsOoriginalTree :: WithQueryList
-              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 53, column 9)
+              -- "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag"(line 52, column 9)
               _lhsOcatExtComp =
-                  ({-# LINE 53 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
+                  ({-# LINE 52 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/QueryExprs/QueryExprs.ag" #-}
                    _lhsIcatExtIncomp
                    {-# LINE 28751 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
