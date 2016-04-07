@@ -157,6 +157,7 @@ sem QueryExpr
           do
           a <- maybe (Left []) Right @cqQe0.upType
           b <- maybe (Left []) Right @cqQe1.upType
+          unless (length a == length b) $ Left [IncompatibleUnionTypes (CompositeType a) (CompositeType b)]
           let uts = zipWithM (\(_,te1) (_,te2) -> resolveResultSetTypeExtra @lhs.cat [te1,te2])
                         a b
           case uts of
