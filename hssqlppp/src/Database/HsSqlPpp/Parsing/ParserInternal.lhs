@@ -3,7 +3,7 @@ The main file for parsing sql, uses parsec. Not sure if parsec is the
 right choice, but it seems to do the job pretty well at the moment.
 
 > {-# LANGUAGE FlexibleContexts,ExplicitForAll,TupleSections,
->              NoMonomorphismRestriction,OverloadedStrings #-}
+>              NoMonomorphismRestriction,OverloadedStrings, LambdaCase #-}
 > -- | Functions to parse SQL.
 > module Database.HsSqlPpp.Parsing.ParserInternal
 >     (-- * Main
@@ -56,9 +56,11 @@ right choice, but it seems to do the job pretty well at the moment.
 > --import qualified Data.Text.Lazy as LT
 > import Text.Parsec.Text ()
 > --import Database.HsSqlPpp.Catalog
-> --import Debug.Trace
+
 > import qualified Data.Text.Lazy as L
 > --import Database.HsSqlPpp.Internals.StringLike
+
+  import Debug.Trace
 
 --------------------------------------------------------------------------------
 
@@ -536,11 +538,18 @@ other dml-type stuff
 >        p <- pos
 >        keyword "copy"
 >        -- todo: factor this a bit better
->        choice [try $ from p, to p]
+
+>        choice -- left factoring to preserve error messages
+>          [ parens pQueryExpr >>= to p . CopyQuery
+>          , do (tblName, cols) <- liftA2 (,) name (option [] (parens $ commaSep1 nameComponent))
+>               choice
+>                 [ from p tblName cols
+>                 , to p (CopyTable tblName cols)
+>                 ]
+>          ]
+
 >   where
->     from p = do
->        tableName <- name
->        cols <- option [] (parens $ commaSep1 nameComponent)
+>     from p tableName cols = do
 >        keyword "from"
 >        src <- choice [
 >                CopyFilename <$> extrStr <$> stringLit
@@ -548,12 +557,7 @@ other dml-type stuff
 >        opts <- option [] $ do
 >                  keyword "with" *> copyFromOptions
 >        return $ CopyFrom p tableName cols src opts
->     to p = do
->        src <- choice
->               [CopyQuery <$> try pQueryExpr
->               ,CopyTable
->                <$> name
->                <*> option [] (parens $ commaSep1 nameComponent)]
+>     to p src = do
 >        keyword "to"
 >        fn <- extrStr <$> stringLit
 >        opts <- option [] $ do
@@ -587,9 +591,9 @@ other dml-type stuff
 >                                           (keyword "parsers" *> stringN) <?> "list of parsers")
 >                          <|?> (Nothing,Just <$> (CopyFromDirectory <$ keyword "directory"))
 >                          <|?> (Nothing,Just <$> CopyFromOffset <$>
->                                           (keyword "offset" *> integer) <?> "offset with integer")
+>                                           (keyword "offset" *> integerFailOnMinus "OFFSET") <?> "offset with integer")
 >                          <|?> (Nothing,Just <$> CopyFromLimit <$>
->                                           (keyword "limit" *> integer) <?> "limit with integer")
+>                                           (keyword "limit" *> integerFailOnMinus "LIMIT") <?> "limit with integer")
 >                          <|?> (Nothing,Just <$> CopyFromErrorThreshold <$>
 >                                           (keyword "stop" *> keyword "after" *> (fromIntegral <$> integer) <* keyword "errors"))
 >                          <|?> (Nothing,Just <$> CopyFromNewlineFormat <$>
@@ -597,6 +601,11 @@ other dml-type stuff
 >                          )
 >       return $ catMaybes [a,b,c,d,e,f,g,h,i,j]
 
+>     integerFailOnMinus flag = do
+>        result <- lookAhead (optionMaybe integer)
+>        case result of
+>            Just  _ -> integer
+>            Nothing -> fail (flag ++ " must be a positive >0 integer")
 
 > copyData :: SParser Statement
 > copyData = CopyData <$> pos <*> mytoken (\tok ->
