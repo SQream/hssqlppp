@@ -40,7 +40,7 @@
 >         [CatCreateScalarType "nvarchar"
 >         ,CatCreateTypeCategoryEntry "nvarchar" ("S", False)
 >         ,CatCreateBinaryOp "+" "varchar" "varchar" "varchar"
->         ,CatCreateFunction "getdate" [] False "date"
+>         ,CatCreateFunction "getdate" [] False "timestamp"
 >         ,CatCreateFunction "isnumeric" ["anyelement"] False "int4"
 >         ,CatCreateFunction "grt_lengthconv" ["int4"] False "int4"
 >         ,CatCreateFunction "isnull" ["anyelement","anyelement"] False "anyelement"
