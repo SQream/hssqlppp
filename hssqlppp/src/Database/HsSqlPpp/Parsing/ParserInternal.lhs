@@ -3,7 +3,7 @@ The main file for parsing sql, uses parsec. Not sure if parsec is the
 right choice, but it seems to do the job pretty well at the moment.
 
 > {-# LANGUAGE FlexibleContexts,ExplicitForAll,TupleSections,
->              NoMonomorphismRestriction,OverloadedStrings, LambdaCase #-}
+>              NoMonomorphismRestriction,OverloadedStrings #-}
 > -- | Functions to parse SQL.
 > module Database.HsSqlPpp.Parsing.ParserInternal
 >     (-- * Main
@@ -584,9 +584,9 @@ other dml-type stuff
 >                          <|?> (Nothing,Just <$> CopyFromDelimiter <$>
 >                                           (keyword "delimiter" *> stringN))
 >                          <|?> (Nothing,Just <$> CopyFromErrorLog <$>
->                                           (keyword "error_log" *> stringN))
+>                                           (keyword "error_log" *> file "ERROR_LOG"))
 >                          <|?> (Nothing,Just <$> CopyFromErrorVerbosity <$>
->                                           (keyword "error_verbosity" *> (fromIntegral <$> integer)))
+>                                           (keyword "error_verbosity" *> (fromIntegral <$> errVerbosity)))
 >                          <|?> (Nothing,Just <$> CopyFromParsers <$>
 >                                           (keyword "parsers" *> stringN) <?> "list of parsers")
 >                          <|?> (Nothing,Just <$> (CopyFromDirectory <$ keyword "directory"))
@@ -595,11 +595,28 @@ other dml-type stuff
 >                          <|?> (Nothing,Just <$> CopyFromLimit <$>
 >                                           (keyword "limit" *> integerFailOnMinus "LIMIT") <?> "limit with integer")
 >                          <|?> (Nothing,Just <$> CopyFromErrorThreshold <$>
->                                           (keyword "stop" *> keyword "after" *> (fromIntegral <$> integer) <* keyword "errors"))
+>                                           (keyword "stop" *> keyword "after" *> (fromIntegral <$> integerFailOnMinus "STOP AFTER N ERRORS") <* keyword "errors"))
 >                          <|?> (Nothing,Just <$> CopyFromNewlineFormat <$>
 >                                           (keyword "record" *> keyword "delimiter" *> stringN))
 >                          )
 >       return $ catMaybes [a,b,c,d,e,f,g,h,i,j]
+
+>     errVerbosity = do
+>        result <- lookAhead (optionMaybe integer)
+>        case result of
+>            Just 0 -> integer
+>            Just 1 -> integer
+>            _ -> fail $ unlines
+>                [ "ERROR_VERBOSITY level is set with 0 or 1:"
+>                , " - 0 - only the bad line is printed"
+>                , " - 1 - both bad line and error message are printed"
+>                ]
+
+>     file flag = do
+>        result <- lookAhead (optionMaybe stringN)
+>        case result of
+>            Just _ -> stringN
+>            _ -> fail (flag ++ " must be a path wrapped in apostrophes. for example: 'file.csv'.")
 
 >     integerFailOnMinus flag = do
 >        result <- lookAhead (optionMaybe integer)
