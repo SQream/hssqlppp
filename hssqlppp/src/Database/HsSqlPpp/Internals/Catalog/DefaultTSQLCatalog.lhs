@@ -41,8 +41,6 @@
 >         ,CatCreateTypeCategoryEntry "nvarchar" ("S", False)
 >         ,CatCreateBinaryOp "+" "varchar" "varchar" "varchar"
 >         ,CatCreateFunction "getdate" [] False "timestamp"
->         ,CatCreateFunction "current_timestamp" [] False "timestamp"
->         ,CatCreateFunction "current_date" [] False "date"
 >         ,CatCreateFunction "isnumeric" ["anyelement"] False "int4"
 >         ,CatCreateFunction "grt_lengthconv" ["int4"] False "int4"
 >         ,CatCreateFunction "isnull" ["anyelement","anyelement"] False "anyelement"
