@@ -230,8 +230,7 @@ Parsing top level statements
 >              choice [
 >                 dropSomething
 >                ,dropFunction
->                ,dropTrigger
->                ,dropSchema]]
+>                ,dropTrigger]]
 >     <* stmtEnd (not reqSemi))
 >    <|> copyData
 
@@ -1024,6 +1023,7 @@ variable declarations in a plpgsql function
 >                 ,Database <$ keyword "database"
 >                 ,User <$ keyword "user"
 >                 ,Login <$ keyword "login"
+>                 ,Schema <$ keyword "schema"
 >             ])
 >   (i,e,r) <- parseDrop name
 >   return $ DropSomething p x i e r
@@ -1044,14 +1044,6 @@ variable declarations in a plpgsql function
 >                where
 >                  pFun = (,) <$> name
 >                             <*> parens (commaSep typeName)
-
-> dropSchema :: SParser Statement
-> dropSchema = do
->   p <- pos
->   keyword "schema"
->   sname <- nameComponent
->   casc <- cascade
->   return $ DropSchema p sname casc
 
 > parseDrop :: SParser a
 >           -> SParser (IfExists, [a], Cascade)

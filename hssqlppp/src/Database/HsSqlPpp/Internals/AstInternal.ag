@@ -762,9 +762,6 @@ data Statement
     | AlterSchema ann::Annotation
                   name :: NameComponent
                   operation :: AlterSchemaOperation
-    | DropSchema ann::Annotation
-                 name :: NameComponent
-                 cascade :: Cascade
 
     -- language name args rettype bodyquoteused body vol
     | CreateFunction ann::Annotation
@@ -1069,6 +1066,7 @@ data DropType = Table
               | Database
               | User
               | Login
+              | Schema
                 deriving (Show,Eq,Typeable,Data)
 
 data Cascade = Cascade | Restrict

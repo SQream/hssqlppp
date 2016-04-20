@@ -355,7 +355,8 @@ Conversion routines - convert Sql asts into Docs
 >                 Type -> "type"
 >                 Database -> "database"
 >                 User -> "user"
->                 Login -> "login")
+>                 Login -> "login"
+>                 Schema -> "schema")
 >     <+> ifExists ifE
 >     <+> sepCsvMap name names
 >     <+> case (ppDialect flg) of
@@ -371,14 +372,6 @@ Conversion routines - convert Sql asts into Docs
 >     <+> nmc nam
 >     <+> text "on"
 >     <+> name tbn
->     <+> cascade casc
->     <> statementEnd se
->
-> statement _flg se ca (DropSchema ann nm casc) =
->     annot ca ann <+>
->     text "drop"
->     <+> text "schema"
->     <+> nmc nm
 >     <+> cascade casc
 >     <> statementEnd se
 >
