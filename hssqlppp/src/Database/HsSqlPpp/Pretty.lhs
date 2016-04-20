@@ -190,19 +190,38 @@ Conversion routines - convert Sql asts into Docs
 >       alterColumnAction (DropDefault _) =
 >           text "drop default"
 >
-> statement _flg se ca (CreateSequence ann nm incr _ _ start cache) =
+> statement _flg se ca (CreateSequence ann nm incr minv maxv start cache) =
 >     annot ca ann <+>
 >     text "create sequence" <+> name nm <+>
 >     text "increment" <+> text (show incr) <+>
->     text "no minvalue" <+>
->     text "no maxvalue" <+>
->     text "start" <+> text (show start) <+>
+>     maybe (text "no minvalue") ((text "minvalue" <+>) . (text . show)) minv <+>
+>     maybe (text "no maxvalue") ((text "maxvalue" <+>) . (text . show)) maxv <+>
+>     text "start with" <+> text (show start) <+>
 >     text "cache" <+> text (show cache) <> statementEnd se
 >
-> statement _flg se ca (AlterSequence ann nm o) =
+> statement _flg se ca (AlterSequence ann nm op) =
 >     annot ca ann <+>
 >     text "alter sequence" <+> name nm
->     <+> text "owned by" <+> name o <> statementEnd se
+>     <+> alterOperation op <> statementEnd se
+>     where
+>       alterOperation (AlterSequenceOwned _ o) = 
+>           text "owned by" <+> name o
+>       alterOperation (AlterSequenceRename _ rnm) = 
+>           text "rename to" <+> name rnm
+>       alterOperation (AlterSequenceActions _ actions) = hsep $ map alterAction actions
+>       alterAction (AlterSequenceIncrement _ incr) = 
+>           text "increment by" <+> text (show incr)
+>       alterAction (AlterSequenceMin _ minv) =
+>           maybe (text "no minvalue") ((text "minvalue" <+>) . (text . show)) minv
+>       alterAction (AlterSequenceMax _ maxv) =
+>           maybe (text "no maxvalue") ((text "maxvalue" <+>) . (text . show)) maxv
+>       alterAction (AlterSequenceStart _ start) = 
+>           text "start with" <+> text (show start)
+>       alterAction (AlterSequenceRestart _ restart) = 
+>           text "restart" <+> text (maybe "" (("with " ++) . show) restart)
+>       alterAction (AlterSequenceCache _ cache) = 
+>           text "cache" <+> text (show cache)
+
 >
 > statement flg se ca (CreateTableAs ann t rep sel) =
 >     annot ca ann <+>

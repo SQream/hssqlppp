@@ -61,6 +61,8 @@
 >     ,AlterSchemaOperation(..)
 >     ,AlterTableOperation(..)
 >     ,AlterTableAction(..)
+>     ,AlterSequenceOperation(..)
+>     ,AlterSequenceAction(..)
 >     ,AlterColumnAction(..)
 >     ,TriggerWhen(..)
 >     ,TriggerEvent(..)

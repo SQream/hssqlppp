@@ -830,27 +830,51 @@ ddl
 >   p <- pos
 >   keyword "sequence"
 >   snm <- name
->   (stw, incr, mx, mn, c) <-
+>   (stw, incr, mn, mx, c) <-
 >      permute ((,,,,) <$?> (1,startWith)
 >                      <|?> (1,increment)
->                      <|?> ((2::Integer) ^ (63::Integer) - 1, maxi)
->                      <|?> (1, mini)
+>                      <|?> (Nothing, sequenceMinValue)
+>                      <|?> (Nothing, sequenceMaxValue)
 >                      <|?> (1, cache))
 >   return $ CreateSequence p snm incr mn mx stw c
 >   where
 >     startWith = keyword "start" *> optional (keyword "with") *> integer
 >     increment = keyword "increment" *> optional (keyword "by") *> integer
->     maxi = (2::Integer) ^ (63::Integer) - 1
->            <$ try (keyword "no" <* keyword "maxvalue")
->     mini = 1 <$ try (keyword "no" <* keyword "minvalue")
 >     cache = keyword "cache" *> integer
 >
 > alterSequence :: SParser Statement
 > alterSequence = AlterSequence <$> pos
 >                               <*> (keyword "sequence" *> name)
->                               <*> (keyword "owned"
->                                    *> keyword "by"
->                                    *> name)
+>                               <*> operation
+>   where
+>     operation = choice [try renameSequence,try changeOwner,actions]
+>     renameSequence = AlterSequenceRename <$> (pos <* keyword "rename" <* keyword "to") <*> name
+>     changeOwner  = AlterSequenceOwned <$> (pos <* keyword "owned" <* keyword "by") <*> name
+>     actions = AlterSequenceActions <$> pos <*> many1 action
+>     action = choice [try alterIncrement
+>                     ,try alterMin
+>                     ,try alterMax
+>                     ,try alterStart
+>                     ,try alterRestart
+>                     ,alterCache]
+>     alterIncrement = AlterSequenceIncrement <$> (pos <* keyword "increment" <* optional (keyword "by")) <*> integer
+>     alterMin = AlterSequenceMin <$> pos <*> sequenceMinValue
+>     alterMax = AlterSequenceMax <$> pos <*> sequenceMaxValue
+>     alterStart = AlterSequenceStart <$> (pos <* keyword "start" <* optional (keyword "with")) <*> integer
+>     alterRestart = AlterSequenceRestart <$> (pos <* keyword "restart")
+>                                         <*> optionMaybe (optional (keyword "with") *> integer)
+>     alterCache = AlterSequenceCache <$> (pos <* keyword "cache") <*> integer
+
+> sequenceMinValue :: SParser (Maybe Integer)
+> sequenceMinValue = choice [try (Nothing <$ keyword "no" <* keyword "minvalue")
+>                           ,Just <$> (keyword "minvalue" *> integer)]
+
+> sequenceMaxValue :: SParser (Maybe Integer)
+> sequenceMaxValue = choice [try (Nothing <$ keyword "no" <* keyword "maxvalue")
+>                           ,Just <$> (keyword "maxvalue" *> integer)]
+
+
+
 
 create function, support sql functions and plpgsql functions. Parses
 the body in both cases and provides a statement list for the body

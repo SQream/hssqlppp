@@ -50,6 +50,8 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,AlterDatabaseOperation(..)
    ,AlterTableOperation(..)
    ,AlterTableAction(..)
+   ,AlterSequenceOperation(..)
+   ,AlterSequenceAction(..)
    ,AlterColumnAction(..)
    ,AlterSchemaOperation(..)
    ,Constraint (..)
@@ -717,13 +719,13 @@ data Statement
     | CreateSequence ann::Annotation
                      name::Name
                      incr::Integer
-                     min::Integer
-                     max::Integer
+                     min::{Maybe Integer}
+                     max::{Maybe Integer}
                      start::Integer
                      cache::Integer
     | AlterSequence ann::Annotation
                    name::Name
-                    ownedBy:: Name
+                   operation :: AlterSequenceOperation
     | CreateTableAs ann::Annotation
                     name :: Name
                     rep :: Replace
@@ -1023,6 +1025,27 @@ data AlterSchemaOperation | AlterSchemaName  ann::Annotation
                           | AlterSchemaOwner ann::Annotation
                                        newName :: Name
 
+data AlterSequenceOperation | AlterSequenceOwned ann::Annotation
+                                                 owned :: Name
+                            | AlterSequenceRename ann::Annotation
+                                                  name :: Name
+                            | AlterSequenceActions ann::Annotation
+                                                   actions :: AlterSequenceActionList
+
+
+data AlterSequenceAction | AlterSequenceIncrement ann::Annotation
+                                                  incr :: Integer
+                         | AlterSequenceMin ann::Annotation
+                                            min :: {Maybe Integer}
+                         | AlterSequenceMax ann::Annotation
+                                            max :: {Maybe Integer}
+                         | AlterSequenceStart ann::Annotation
+                                              start :: Integer
+                         | AlterSequenceRestart ann::Annotation
+                                                restart :: {Maybe Integer}
+                         | AlterSequenceCache ann::Annotation
+                                              cache :: Integer
+
 
 {
 data SetValue
@@ -1169,6 +1192,7 @@ type StatementList = [Statement]
 type ScalarExprDirectionPair = (ScalarExpr,Direction, NullsOrder)
 type ScalarExprDirectionPairList = [ScalarExprDirectionPair]
 type AlterTableActionList = [AlterTableAction]
+type AlterSequenceActionList = [AlterSequenceAction]
 type MaybeNameComponentList = maybe NameComponentList
 type NameComponentList = [NameComponent]
 
@@ -1210,6 +1234,7 @@ set AllNodes = Statement QueryExpr FnBody TableRef
                AlterTableOperation AlterTableAction AlterColumnAction
                AlterDatabaseOperation
                AlterSchemaOperation
+               AlterSequenceOperation AlterSequenceAction AlterSequenceActionList
                ScalarExprDirectionPair
                ScalarExprDirectionPairList AlterTableActionList
                WithQueryList WithQuery
