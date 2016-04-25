@@ -311,7 +311,7 @@ Conversion routines - convert Sql asts into Docs
 >     text "create database" <+> name nm <> statementEnd se
 
 > statement _flg se ca (CreateSchema ann nm musr) =
->     annot ca ann <+> text "create schema" <+> nmc nm 
+>     annot ca ann <+> text "create schema" <+> name nm 
 >     <+> case musr of
 >           Nothing -> empty
 >           Just u -> text "authorization" <+> name u
@@ -326,11 +326,11 @@ Conversion routines - convert Sql asts into Docs
 
 > statement _flg se ca (AlterSchema ann snm op) =
 >     annot ca ann <+>
->     text "alter schema" <+> nmc snm
+>     text "alter schema" <+> name snm
 >     <+> alterOperation op <> statementEnd se
 >     where
 >       alterOperation (AlterSchemaName _ nsnm) = 
->           text "rename to" <+> nmc nsnm
+>           text "rename to" <+> name nsnm
 >       alterOperation (AlterSchemaOwner _ nunm) = 
 >           text "owner to" <+> name nunm
 

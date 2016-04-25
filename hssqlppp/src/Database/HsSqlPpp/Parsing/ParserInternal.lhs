@@ -980,13 +980,13 @@ variable declarations in a plpgsql function
 > alterSchema :: SParser Statement
 > alterSchema = AlterSchema
 >                <$> pos <* keyword "schema"
->                <*> nameComponent
+>                <*> name
 >                <*> operation
 >             where
 >                operation = choice [try changeOwner, renameSchema]
 >                renameSchema = AlterSchemaName
 >                              <$> (pos <* keyword "rename" <* keyword "to")
->                              <*> nameComponent
+>                              <*> name
 >                changeOwner  = AlterSchemaOwner
 >                              <$> (pos <* keyword "owner" <* keyword "to")
 >                              <*> name
@@ -1009,7 +1009,7 @@ variable declarations in a plpgsql function
 > createSchema :: SParser Statement
 > createSchema = CreateSchema
 >                <$> pos <* keyword "schema"
->                <*> nameComponent
+>                <*> name
 >                <*> tryOptionMaybe (keyword "authorization" *> name)
 
 > dropSomething :: SParser Statement

@@ -757,10 +757,10 @@ data Statement
 
 -- schemas
     | CreateSchema ann::Annotation
-                   name :: NameComponent
+                   name :: Name
                    owner :: {Maybe Name}
     | AlterSchema ann::Annotation
-                  name :: NameComponent
+                  name :: Name
                   operation :: AlterSchemaOperation
 
     -- language name args rettype bodyquoteused body vol
@@ -1018,7 +1018,7 @@ data AlterDatabaseOperation | RenameDatabase ann :: Annotation
 
 
 data AlterSchemaOperation | AlterSchemaName  ann::Annotation
-                                       newName :: NameComponent
+                                       newName :: Name
                           | AlterSchemaOwner ann::Annotation
                                        newName :: Name
 
