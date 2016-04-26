@@ -155,10 +155,11 @@ Conversion routines - convert Sql asts into Docs
 >                          _ -> "") ++ "table")
 >     <+> name tbl <+> lparen
 >     $+$ nest 2 (vcat (csv (map (attrDef flg) atts ++ map (constraint flg) cns)))
->     $+$ rparen 
+>     $+$ rparen
 >     $+$ case (ppDialect flg) of
 >          SQLServerDialect -> empty
 >          _ -> (tablePartition partition)
+>     $+$ tableOpts flg opts
 >     <> statementEnd se
 >
 > statement flg se ca (AlterTable ann tnm op) =
@@ -873,6 +874,7 @@ syntax maybe should error instead of silently breaking
 >   nmc n <+> typeName t
 >   <+> maybePrint (\e -> text "default" <+> scalExpr flg e) def
 >   <+> hsep (map cCons cons)
+>   <+> tableOpts flg opts
 >   where
 >     cCons (NullConstraint _ cn) =
 >       mname cn <+> text "null"
@@ -889,9 +891,22 @@ syntax maybe should error instead of silently breaking
 >       <+> maybePrint (parens . nmc) att
 >       <+> text "on delete" <+> cascade ondel
 >       <+> text "on update" <+> cascade onupd
->     cCons (IdentityConstraint _ cn si) = 
+>     cCons (IdentityConstraint _ cn si) =
 >       mname cn <+> text "identity" <> text (maybe "" show si)
+
+> tableOpts :: PrettyPrintFlags -> [TableOption] -> Doc
+> tableOpts _ [] = empty
+> tableOpts flg as = text "with" <+> text "options"
+>                    <+> parens (nest 4 $ sep $ map to as)
+>   where
+>     to (TableOptionKeywords ks) = hsep (map text ks)
+>     to (TableOptionStringVal nm v) = tov nm [scalExpr flg (StringLit emptyAnnotation v)]
+>     to (TableOptionNameVal nm v) = tov nm $ map name v
+>     to (TableOptionNumberVal nm v) = tov nm [text v]
+>     tov nm x = hsep (map text nm ++ [text "="] ++ x)
+
 > -- plpgsql
+>
 >
 > nestedStatements :: PrettyPrintFlags -> (Annotation -> String) -> StatementList -> Doc
 > nestedStatements flg pa = nest 2 . vcat . map (statement flg True pa)

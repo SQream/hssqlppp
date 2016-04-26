@@ -153,9 +153,11 @@ new create table stuff
 > setTableReplace (CreateTable a nm atts cs p _ os) r = CreateTable a nm atts cs p r os
 > setTableReplace x _ = error $ "setTableReplace called on wrong ctor " ++ show x
 
-  
- > setTableOpts :: Statement -> [TableOption] -> Statement
- > setTableOpts (CreateTable a nm atts cs p r _) opts = CreateTable a nm atts cs p r opts
- > setTableOpts x _ = error $ "settableopts called on wrong ctor " ++ show x
+> setAttOpts :: AttributeDef -> [TableOption] -> AttributeDef
+> setAttOpts (AttributeDef a nm ty d cs _) opts = AttributeDef a nm ty d cs opts
+
+> setTableOpts :: Statement -> [TableOption] -> Statement
+> setTableOpts (CreateTable a nm atts cs p r _) opts = CreateTable a nm atts cs p r opts
+> setTableOpts x _ = error $ "settableopts called on wrong ctor " ++ show x
 
  > setAttributeOpts :: Statement -> 

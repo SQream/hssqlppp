@@ -645,7 +645,8 @@ ddl
 >     ,do
 >      (atts,cons) <- readAttsAndCons
 >      pdata <- readPartition
->      return $ CreateTable p tname atts cons pdata rep []
+>      ts <- option [] tableOptions
+>      return $ CreateTable p tname atts cons pdata rep ts
 >     ]
 >   where
 >     --parse the unordered list of attribute defs or constraints, for
@@ -668,7 +669,7 @@ ddl
 >                <*> typeName
 >                <*> tryOptionMaybe (keyword "default" *> expr)
 >                <*> many rowConstraint
->                <*> pure []
+>                <*> option [] tableOptions
 >   where
 >     rowConstraint = do
 >        p <- pos
@@ -689,6 +690,20 @@ ddl
 >          <*> onUpdate
 >          ]
 >
+
+> tableOptions :: SParser [TableOption]
+> tableOptions =
+>     keywords ["with","options"]
+>     *> parens (many1 tableOption)
+>   where
+>     tableOption = do
+>         onm <- many1 idString
+>         choice [symbol "=" *> choice
+>                 [TableOptionStringVal onm <$> stringN
+>                 ,TableOptionNameVal onm <$> many1 name
+>                 ,TableOptionNumberVal onm <$> numString]
+>                ,pure $ TableOptionKeywords onm
+>                ]
 
 > tablePartition :: SParser TablePartitionDef
 > tablePartition = do
@@ -2478,6 +2493,10 @@ Utility parsers
 >                                _ -> Nothing)
 >                       where
 >                         lcase = T.map toLower
+
+> keywords :: [Text] -> SParser ()
+> keywords [] = pure ()
+> keywords (x:xs) = keyword x *> keywords xs
 
 >
 > idString :: SParser String

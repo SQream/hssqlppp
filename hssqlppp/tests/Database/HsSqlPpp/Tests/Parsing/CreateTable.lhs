@@ -313,18 +313,43 @@ quick sanity check
 >      ]
 >      ]
 
--- >      ,Group "options"
--- >      [Stmt "create table t (\n\
--- >            \    a int not null with options(test)\n\
--- >            \);"
--- >       [CreateTable ea
--- >        (name "test")
--- >        [att "a" "int"
--- >        ]
--- >        []
--- >        Nothing
--- >        NoReplace]
--- >      ]
+>      ,Group "options"
+>      [Stmt "create table t (\n\
+>            \    a int with options(test)\n\
+>            \);"
+>       [createTable "t" [att "a" "int"
+>                         `setAttOpts` [TableOptionKeywords ["test"]]]]
+>      ,Stmt "create table t (\n\
+>            \    a int with options(test two)\n\
+>            \);"
+>       [createTable "t" [att "a" "int"
+>                         `setAttOpts` [TableOptionKeywords ["test", "two"]]]]
+>      ,Stmt "create table t (\n\
+>            \    a int\n\
+>            \) with options(test two);"
+>       [createTable "t" [att "a" "int"]
+>        `setTableOpts` [TableOptionKeywords ["test", "two"]]]
+>      ,Stmt "create table t (\n\
+>            \    a int\n\
+>            \) with options(yes='no');"
+>       [createTable "t" [att "a" "int"]
+>        `setTableOpts` [TableOptionStringVal ["yes"] "no"]]
+>      ,Stmt "create table t (\n\
+>            \    a int\n\
+>            \) with options(yes=a.b);"
+>       [createTable "t" [att "a" "int"]
+>        `setTableOpts` [TableOptionNameVal ["yes"] [Name ea [Nmc "a", Nmc "b"]]]]
+>      ,Stmt "create table t (\n\
+>            \    a int\n\
+>            \) with options(yes=5.5);"
+>       [createTable "t" [att "a" "int"]
+>        `setTableOpts` [TableOptionNumberVal ["yes"] "5.5"]]
+>      {-,Stmt "create table t (\n\
+>            \    a int\n\
+>            \) with options(yes=5M);" -- TODO
+>       [createTable "t" [att "a" "int"]
+>        `setTableOpts` [TableOptionNumberVal ["yes"] "5.5"]]-}
+>      ]
 
 >      ]
 

@@ -47,6 +47,7 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,TablePartitionDateTimeInterval(..)
    ,AttributeDef (..)
    ,RowConstraint (..)
+   ,TableOption(..)
    ,AlterDatabaseOperation(..)
    ,AlterTableOperation(..)
    ,AlterTableAction(..)
@@ -971,12 +972,10 @@ data Constraint | UniqueConstraint ann::Annotation name::String x::{[NameCompone
                                       onDelete :: Cascade
 {
 data TableOption =
-       TableOptionKeyword [String]
-     | TableOptionStringVal [String] String
-     | TableOptionKeywordVal [String] [String]
+       TableOptionStringVal [String] String
+     | TableOptionNameVal [String] [Name]
      | TableOptionNumberVal [String] String
-     | TableOptionLobSizeVal [String] String
-     | TableOptionName [String] Name
+     | TableOptionKeywords [String]
        deriving (Show,Eq,Typeable,Data)
 
 }
