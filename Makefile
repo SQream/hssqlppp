@@ -37,12 +37,17 @@ all : examples test
 
 .PHONY : test
 test : hssqlppp
-	stack test hssqlppp hssqlppp-th
+	stack test hssqlppp hssqlppp-th --test-arguments --hide-successes
+
+.PHONY : test-hssqlppp
+test-hssqlppp : hssqlppp
+	stack test hssqlppp --test-arguments --hide-successes
+
 
 # if you need some other combination of targets please add them to the
 # makefile
 
-# this does everything, make sure you've done all the sandbox targets
+# this does everything
 .PHONY : really-all
 really-all : test website
 	stack build

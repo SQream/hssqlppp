@@ -10,9 +10,9 @@ typechecks as well as correct queries compared to the old tests.
 > import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
 > import Database.HsSqlPpp.Internals.TypesInternal
 > import Database.HsSqlPpp.Tests.TestTypes
-> import Database.HsSqlPpp.Internals.AstInternal as A
-> import Database.HsSqlPpp.Tests.Parsing.Utils
-> import qualified Data.Text as T
+> --import Database.HsSqlPpp.Internals.AstInternal as A
+> --import Database.HsSqlPpp.Tests.Parsing.Utils
+> --import qualified Data.Text as T
 > import qualified Data.Text.Lazy as L
 
 > queryExprs :: Item

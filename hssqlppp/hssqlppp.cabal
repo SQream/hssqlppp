@@ -159,6 +159,19 @@ Test-Suite Tests
                      Database.HsSqlPpp.Tests.TpchData
                      Database.HsSqlPpp.Tests.TestTypes
                      Database.HsSqlPpp.Utils.Here
+    Database.HsSqlPpp.Internals.Catalog.OdbcCatalog
+    Database.HsSqlPpp.Tests.Parsing.Oracle
+    Database.HsSqlPpp.Tests.Parsing.Schemas
+    Database.HsSqlPpp.Tests.TestUtils
+    Database.HsSqlPpp.Tests.TypeChecking.Aggregates
+    Database.HsSqlPpp.Tests.TypeChecking.DDL
+    Database.HsSqlPpp.Tests.TypeChecking.InsertQueryExprs
+    Database.HsSqlPpp.Tests.TypeChecking.PrecisionAndNullable
+    Database.HsSqlPpp.Tests.TypeChecking.QueryExprs
+    Database.HsSqlPpp.Tests.TypeChecking.TrefSchemas
+    Database.HsSqlPpp.Tests.TypeChecking.TypeConversion
+    Database.HsSqlPpp.Tests.TypeChecking.Updates
+    Database.HsSqlPpp.Tests.TypeChecking.Utils
 
   default-extensions:  TupleSections
                        DeriveDataTypeable,

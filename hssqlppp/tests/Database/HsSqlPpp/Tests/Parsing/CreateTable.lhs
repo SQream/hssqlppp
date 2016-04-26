@@ -1,33 +1,29 @@
 
 > {-# LANGUAGE OverloadedStrings #-}
-> module Database.HsSqlPpp.Tests.Parsing.CreateTable (createTable) where
+> module Database.HsSqlPpp.Tests.Parsing.CreateTable (createTableTests) where
 >
 > import Database.HsSqlPpp.Ast
 
 > import Database.HsSqlPpp.Tests.Parsing.Utils
 > import Database.HsSqlPpp.Tests.TestTypes
 
-> createTable:: Item
-> createTable =
+> createTableTests :: Item
+> createTableTests =
 >   Group "create table" [
 >      Group "simple tables" [
 >       s "create table test (\n\
 >         \  fielda text,\n\
 >         \  fieldb int\n\
 >         \);"
->       [CreateTable ea
->        (name "test")
->        [att "fielda" "text"
->        ,att "fieldb" "int"
->        ]
->        []
->        Nothing
->        NoReplace]
+>       [(createTable "test")
+>         [att "fielda" "text"
+>         ,att "fieldb" "int"]
+>       ]
 >      ,s "create table tbl (\n\
 >         \  fld boolean default false);"
->       [CreateTable ea (name "tbl")
+>       [createTable "tbl"
 >        [AttributeDef ea (Nmc "fld") (st "boolean")
->                          (Just lFalse) []][] Nothing NoReplace]
+>                          (Just lFalse) []]]
 >
 >      ,s "create table tbl as select 1;"
 >       [CreateTableAs ea (name "tbl") NoReplace
@@ -36,24 +32,20 @@
 >
 >      ,s "create table tbl  (\n\
 >         \  fld int not null identity(1,1));"
->       [CreateTable ea (name "tbl")
+>       [createTable "tbl"
 >        [AttributeDef ea (Nmc "fld") (st "int")
->                          Nothing [NotNullConstraint ea "", IdentityConstraint ea "" (Just(1,1))]][] Nothing
->                          NoReplace]
->
+>                          Nothing [NotNullConstraint ea "", IdentityConstraint ea "" (Just(1,1))]]]
 >      ,s "create table tbl  (\n\
 >         \  fld int not null identity(-1,-1));"
->       [CreateTable ea (name "tbl")
+>       [createTable "tbl"
 >        [AttributeDef ea (Nmc "fld") (st "int")
->                          Nothing [NotNullConstraint ea "", IdentityConstraint ea "" (Just(-1,-1))]][] Nothing
->                          NoReplace]
+>                          Nothing [NotNullConstraint ea "", IdentityConstraint ea "" (Just(-1,-1))]]]
 >
 >      ,s "create table tbl  (\n\
 >         \  fld int not null identity);"
->       [CreateTable ea (name "tbl")
+>       [createTable "tbl"
 >        [AttributeDef ea (Nmc "fld") (st "int")
->                          Nothing [NotNullConstraint ea "", IdentityConstraint ea "" Nothing]][] Nothing
->                          NoReplace]
+>                          Nothing [NotNullConstraint ea "", IdentityConstraint ea "" Nothing]]]
 >
 >      ,s "alter table a rename to b;"
 >       [AlterTable ea (name "a") $ RenameTable ea (name "b")]
@@ -96,15 +88,13 @@
 >       s "create table t1 (\n\
 >         \ a text null\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "a") (st "text")
->                            Nothing [NullConstraint ea ""]]
->          [] Nothing NoReplace]
+>         [createTable "t1" [AttributeDef ea (Nmc "a") (st "text")
+>                            Nothing [NullConstraint ea ""]]]
 >      ,s "create table t1 (\n\
 >         \ a text not null\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "a") (st "text")
->                                     Nothing [NotNullConstraint ea ""]]
->          [] Nothing NoReplace]
+>         [createTable "t1" [AttributeDef ea (Nmc "a") (st "text")
+>                                         Nothing [NotNullConstraint ea ""]]]
 >      ]
 >
 >      ,Group "unique" [
@@ -113,9 +103,10 @@
 >         \ y int,\n\
 >         \ unique (x,y)\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
->                                    ,att "y" "int"]
->          [UniqueConstraint ea "" [Nmc "x",Nmc "y"]] Nothing NoReplace]
+>         [createTable "t1" [att "x" "int"
+>                           ,att "y" "int"]
+>          `setTableCons`
+>          [UniqueConstraint ea "" [Nmc "x",Nmc "y"]]]
 
 test arbitrary ordering
 
@@ -124,9 +115,10 @@ test arbitrary ordering
 >         \ unique (x),\n\
 >         \ y int\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
->                                    ,att "y" "int"]
->          [UniqueConstraint ea "" [Nmc "x"]] Nothing NoReplace]
+>         [createTable "t1" [att "x" "int"
+>                           ,att "y" "int"]
+>          `setTableCons`
+>          [UniqueConstraint ea "" [Nmc "x"]]]
 
 
 test partitioning parser
@@ -139,10 +131,10 @@ test partitioning parser
 >         \  (\n\
 >         \   every 5 months\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
->                                     ,att "ts" "datetime"]
->           []
->          (Just (TablePartitionDef ea (Nmc "ts") 5 Month)) NoReplace]
+>         [createTable "t1" [att "x" "int"
+>                           ,att "ts" "datetime"]
+>          `setTablePartition`
+>          (Just (TablePartitionDef ea (Nmc "ts") 5 Month))]
 
 
 unique row
@@ -150,154 +142,154 @@ unique row
 >      ,s "create table t1 (\n\
 >         \ x int unique\n\
 >         \);"
->         [CreateTable ea (name "t1")
+>         [createTable "t1"
 >          [AttributeDef ea (Nmc "x") (st "int") Nothing
->           [RowUniqueConstraint ea ""]][] Nothing NoReplace]
+>           [RowUniqueConstraint ea ""]]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int unique not null\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "x") (st "int") Nothing
->                                     [RowUniqueConstraint ea ""
->                                     ,NotNullConstraint ea ""]][] Nothing NoReplace]
+>         [createTable "t1" [AttributeDef ea (Nmc "x") (st "int") Nothing
+>                            [RowUniqueConstraint ea ""
+>                            ,NotNullConstraint ea ""]]]
 
 quick sanity check
 
 >      ,s "create table t1 (\n\
 >         \ x int not null unique\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "x") (st "int") Nothing
->                                     [NotNullConstraint ea ""
->                                     ,RowUniqueConstraint ea ""]][] Nothing NoReplace]
+>         [createTable "t1" [AttributeDef ea (Nmc "x") (st "int") Nothing
+>                            [NotNullConstraint ea ""
+>                            ,RowUniqueConstraint ea ""]]]
 >      ]
 >
 >      ,Group "primary key" [
 >       s "create table t1 (\n\
 >         \ x int primary key\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "x") (st "int") Nothing
->                            [RowPrimaryKeyConstraint ea ""]][] Nothing NoReplace]
+>         [createTable "t1" [AttributeDef ea (Nmc "x") (st "int") Nothing
+>                            [RowPrimaryKeyConstraint ea ""]]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int,\n\
 >         \ y int,\n\
 >         \ primary key (x,y)\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
+>         [createTable "t1" [att "x" "int"
 >                           ,att "y" "int"]
->          [PrimaryKeyConstraint ea "" [Nmc "x", Nmc "y"]] Nothing NoReplace]
+>          `setTableCons`
+>          [PrimaryKeyConstraint ea "" [Nmc "x", Nmc "y"]]]
 >      ]
 >
 >      ,Group "check" [
 >       s "create table t (\n\
 >         \f text check (f in('a', 'b'))\n\
 >         \);"
->         [CreateTable ea (name "t")
+>         [createTable "t"
 >          [AttributeDef ea (Nmc "f") (st "text") Nothing
 >           [RowCheckConstraint ea "" (InPredicate ea
 >                                   (ei "f") True
->                                   (InList ea [stringQ "a", stringQ "b"]))]] [] Nothing NoReplace]
+>                                   (InList ea [stringQ "a", stringQ "b"]))]]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int,\n\
 >         \ y int,\n\
 >         \ check (x>y)\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
->                                    ,att "y" "int"]
->          [CheckConstraint ea "" (binop ">" (ei "x") (ei "y"))] Nothing NoReplace]
+>         [createTable "t1" [att "x" "int"
+>                           ,att "y" "int"]
+>          `setTableCons`
+>          [CheckConstraint ea "" (binop ">" (ei "x") (ei "y"))]]
 >      ]
 >
 >      ,Group "misc" [
 >       s "create table t (\n\
 >         \f text not null unique check (f in('a', 'b'))\n\
 >         \);"
->         [CreateTable ea (name "t")
+>         [createTable "t"
 >          [AttributeDef ea (Nmc "f") (st "text") Nothing
 >           [NotNullConstraint ea ""
 >            ,RowUniqueConstraint ea ""
 >            ,RowCheckConstraint ea "" (InPredicate ea
 >                                    (ei "f") True
 >                                    (InList ea [stringQ "a"
->                                               ,stringQ "b"]))]] [] Nothing NoReplace]
+>                                               ,stringQ "b"]))]]]
 >      ]
 
 >      ,Group "references" [
 >       s "create table t1 (\n\
 >         \ x int references t2\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "x") (st "int") Nothing
+>         [createTable "t1" [AttributeDef ea (Nmc "x") (st "int") Nothing
 >                            [RowReferenceConstraint ea "" (name "t2") Nothing
->                             Restrict Restrict]][] Nothing NoReplace]
+>                             Restrict Restrict]]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int references t2(y)\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "x") (st "int") Nothing
+>         [createTable "t1" [AttributeDef ea (Nmc "x") (st "int") Nothing
 >                            [RowReferenceConstraint ea "" (name "t2") (Just $ Nmc "y")
->                             Restrict Restrict]][] Nothing NoReplace]
+>                             Restrict Restrict]]]
 >      ,s "create table t1 (\n\
 >         \ x int,\n\
 >         \ y int,\n\
 >         \ foreign key (x,y) references t2\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
->                                    ,att "y" "int"]
+>         [createTable "t1" [att "x" "int"
+>                           ,att "y" "int"]
+>          `setTableCons`
 >          [ReferenceConstraint ea "" [Nmc "x", Nmc "y"] (name "t2") []
->           Restrict Restrict] Nothing NoReplace]
+>           Restrict Restrict]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int,\n\
 >         \ y int,\n\
 >         \ foreign key (x,y) references t2(z,w)\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
+>         [createTable "t1" [att "x" "int"
 >                           ,att "y" "int"]
+>          `setTableCons`
 >          [ReferenceConstraint ea "" [Nmc "x", Nmc "y"] (name "t2") [Nmc "z", Nmc "w"]
->           Restrict Restrict] Nothing NoReplace]
+>           Restrict Restrict]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int references t2 on delete cascade\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "x") (st "int") Nothing
+>         [createTable "t1" [AttributeDef ea (Nmc "x") (st "int") Nothing
 >                            [RowReferenceConstraint ea "" (name "t2") Nothing
->                             Cascade Restrict]][] Nothing NoReplace]
+>                             Cascade Restrict]]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int references t2 on update cascade\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "x") (st "int") Nothing
+>         [createTable "t1" [AttributeDef ea (Nmc "x") (st "int") Nothing
 >                            [RowReferenceConstraint ea "" (name "t2") Nothing
->                             Restrict Cascade]][] Nothing NoReplace]
+>                             Restrict Cascade]]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int references t2 on delete cascade on update cascade\n\
 >         \);"
->         [CreateTable ea (name "t1") [AttributeDef ea (Nmc "x") (st "int") Nothing
->                                     [RowReferenceConstraint ea "" (name "t2") Nothing
->                                      Cascade Cascade]][] Nothing NoReplace]
+>         [createTable "t1" [AttributeDef ea (Nmc "x") (st "int") Nothing
+>                            [RowReferenceConstraint ea "" (name "t2") Nothing
+>                             Cascade Cascade]]]
 >
 >      ,s "create table t1 (\n\
 >         \ x int,\n\
 >         \ y int,\n\
 >         \ foreign key (x,y) references t2 on update cascade on delete cascade\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
->                                    ,att "y" "int"]
+>         [createTable "t1" [att "x" "int"
+>                           ,att "y" "int"]
+>          `setTableCons`
 >          [ReferenceConstraint ea "" [Nmc "x", Nmc "y"] (name "t2") []
->           Cascade Cascade] Nothing NoReplace]
+>           Cascade Cascade]]
 >      ,s "create or replace table test (\n\
 >         \  fielda text,\n\
 >         \  fieldb int\n\
 >         \);"
->       [CreateTable ea
->        (name "test")
->        [att "fielda" "text"
->        ,att "fieldb" "int"
->        ]
->        []
->        Nothing
->        Replace]
+>       [createTable "test" [att "fielda" "text"
+>                           ,att "fieldb" "int"]
+>       `setTableReplace` Replace]
 >
 >      ,s "create or replace table tbl as select 1;"
 >       [CreateTableAs ea (name "tbl") Replace
@@ -309,12 +301,28 @@ quick sanity check
 >         \ y int,\n\
 >         \ foreign key (x,y) references t2(z,w)\n\
 >         \);"
->         [CreateTable ea (name "t1") [att "x" "int"
+>         [createTable "t1" [att "x" "int"
 >                           ,att "y" "int"]
+>          `setTableCons`
 >          [ReferenceConstraint ea "" [Nmc "x", Nmc "y"] (name "t2") [Nmc "z", Nmc "w"]
->           Restrict Restrict] Nothing Replace]
+>           Restrict Restrict]
+>          `setTableReplace` Replace]
 >      ]
 >      ]
+
+-- >      ,Group "options"
+-- >      [Stmt "create table t (\n\
+-- >            \    a int not null with options(test)\n\
+-- >            \);"
+-- >       [CreateTable ea
+-- >        (name "test")
+-- >        [att "a" "int"
+-- >        ]
+-- >        []
+-- >        Nothing
+-- >        NoReplace]
+-- >      ]
+
 >      ]
 
 >  where

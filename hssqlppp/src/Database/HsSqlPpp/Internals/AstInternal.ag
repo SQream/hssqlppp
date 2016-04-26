@@ -710,6 +710,7 @@ data Statement
                   cons :: ConstraintList
                   partition :: MaybeTablePartitionDef
                   rep :: Replace
+                  --options :: {[TableOption]}
     | AlterTable ann::Annotation
                  name :: Name
                  operation :: AlterTableOperation
@@ -939,6 +940,7 @@ data AttributeDef | AttributeDef ann::Annotation
                                  typ :: TypeName
                                  def:: MaybeScalarExpr
                                  cons :: RowConstraintList
+                                 --options :: {[TableOption]}
 
 --Constraints which appear attached to an individual field
 
@@ -967,6 +969,16 @@ data Constraint | UniqueConstraint ann::Annotation name::String x::{[NameCompone
                                       tableAtts :: {[NameComponent]}
                                       onUpdate :: Cascade
                                       onDelete :: Cascade
+{
+data TableOption =
+       TableOptionKeyword [String]
+     | TableOptionStringVal [String] String
+     | TableOptionKeywordVal [String] [String]
+     | TableOptionNumberVal [String] String
+     | TableOptionLobSizeVal [String] String
+       deriving (Show,Eq,Typeable,Data)
+
+}
 
 data TypeAttributeDef | TypeAttDef ann::Annotation
                                    name :: NameComponent

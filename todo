@@ -1,3 +1,16 @@
+
+small fixes:
+
+put examples on website
+make example checking automated
+add record syntax to createtable, check for other likely victims for
+   this treatment
+review replace field in createtable, createtableas, move to correct
+   place (and check for other areas like this)
+
+
+-----
+
 fix website
 refactor tests
 
