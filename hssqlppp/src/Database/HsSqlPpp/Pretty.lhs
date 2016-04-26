@@ -148,7 +148,7 @@ Conversion routines - convert Sql asts into Docs
 >
 > -- ddl
 >
-> statement flg se ca (CreateTable ann tbl atts cns partition rep) =
+> statement flg se ca (CreateTable ann tbl atts cns partition rep opts) =
 >     annot ca ann <+>
 >     text ("create " ++ (case rep of
 >                          Replace -> "or replace "
@@ -869,7 +869,7 @@ syntax maybe should error instead of silently breaking
 >            -- _ -> "unknown type " ++ (show x)
 
 > attrDef :: PrettyPrintFlags -> AttributeDef -> Doc
-> attrDef flg (AttributeDef _ n t def cons) =
+> attrDef flg (AttributeDef _ n t def cons opts) =
 >   nmc n <+> typeName t
 >   <+> maybePrint (\e -> text "default" <+> scalExpr flg e) def
 >   <+> hsep (map cCons cons)

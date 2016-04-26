@@ -33,7 +33,7 @@ shortcuts for constructing test data and asts
 >
 >
 > att :: Text -> Text -> AttributeDef
-> att n t = AttributeDef ea (Nmc $ T.unpack n) (SimpleTypeName ea $ name t) Nothing []
+> att n t = AttributeDef ea (Nmc $ T.unpack n) (SimpleTypeName ea $ name t) Nothing [] []
 
 > ea :: Annotation
 > ea = emptyAnnotation
@@ -139,18 +139,18 @@ shortcuts for constructing test data and asts
 new create table stuff
 
 > createTable :: Text -> [AttributeDef] -> Statement
-> createTable nm atts = CreateTable ea (name nm) atts [] Nothing NoReplace --  []
+> createTable nm atts = CreateTable ea (name nm) atts [] Nothing NoReplace []
 
 > setTableCons :: Statement -> [Constraint] -> Statement
-> setTableCons (CreateTable a nm atts _ p r) cs = CreateTable a nm atts cs p r
+> setTableCons (CreateTable a nm atts _ p r os) cs = CreateTable a nm atts cs p r os
 > setTableCons x _ = error $ "setTableCons called on wrong ctor " ++ show x
 
 > setTablePartition :: Statement -> Maybe TablePartitionDef -> Statement
-> setTablePartition (CreateTable a nm atts cs _ r) p = CreateTable a nm atts cs p r
+> setTablePartition (CreateTable a nm atts cs _ r os) p = CreateTable a nm atts cs p r os
 > setTablePartition x _ = error $ "setTablePartition called on wrong ctor " ++ show x
 
 > setTableReplace :: Statement -> Replace -> Statement
-> setTableReplace (CreateTable a nm atts cs p _) r = CreateTable a nm atts cs p r
+> setTableReplace (CreateTable a nm atts cs p _ os) r = CreateTable a nm atts cs p r os
 > setTableReplace x _ = error $ "setTableReplace called on wrong ctor " ++ show x
 
   

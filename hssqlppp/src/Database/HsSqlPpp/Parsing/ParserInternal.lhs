@@ -642,11 +642,10 @@ ddl
 >   tname <- name
 >   choice [
 >      CreateTableAs p tname rep <$> (keyword "as" *> pQueryExpr)
->                            
 >     ,do
 >      (atts,cons) <- readAttsAndCons
 >      pdata <- readPartition
->      return $ CreateTable p tname atts cons pdata rep
+>      return $ CreateTable p tname atts cons pdata rep []
 >     ]
 >   where
 >     --parse the unordered list of attribute defs or constraints, for
@@ -669,6 +668,7 @@ ddl
 >                <*> typeName
 >                <*> tryOptionMaybe (keyword "default" *> expr)
 >                <*> many rowConstraint
+>                <*> pure []
 >   where
 >     rowConstraint = do
 >        p <- pos

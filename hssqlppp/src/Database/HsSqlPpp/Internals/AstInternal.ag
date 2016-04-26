@@ -710,7 +710,7 @@ data Statement
                   cons :: ConstraintList
                   partition :: MaybeTablePartitionDef
                   rep :: Replace
-                  --options :: {[TableOption]}
+                  options :: {[TableOption]}
     | AlterTable ann::Annotation
                  name :: Name
                  operation :: AlterTableOperation
@@ -940,7 +940,7 @@ data AttributeDef | AttributeDef ann::Annotation
                                  typ :: TypeName
                                  def:: MaybeScalarExpr
                                  cons :: RowConstraintList
-                                 --options :: {[TableOption]}
+                                 options :: {[TableOption]}
 
 --Constraints which appear attached to an individual field
 
@@ -976,6 +976,7 @@ data TableOption =
      | TableOptionKeywordVal [String] [String]
      | TableOptionNumberVal [String] String
      | TableOptionLobSizeVal [String] String
+     | TableOptionName [String] Name
        deriving (Show,Eq,Typeable,Data)
 
 }
