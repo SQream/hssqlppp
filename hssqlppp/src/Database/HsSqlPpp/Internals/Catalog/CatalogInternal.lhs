@@ -84,10 +84,10 @@ sequences
 >     ) where
 
 >
-> import Control.Monad
+> --import Control.Monad
 > --import Data.List
-> import Data.Data
-> import Data.Char
+> --import Data.Data
+> --import Data.Char
 > import Data.Maybe
 
 > import qualified Data.Map as M
@@ -97,6 +97,9 @@ sequences
 > import Data.Text (Text)
 > import qualified Data.Text as T
 > --import qualified Data.Text.Lazy as LT
+> import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+> import Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
+> import Database.HsSqlPpp.Internals.Catalog.CatalogUtils
 
 -----------------------------------
 
@@ -166,7 +169,7 @@ name, parameter types, return type and variadic flag
 catalog values
 
 
-> -- | represents the name of something in the catalog, when schema
+> {- -- | represents the name of something in the catalog, when schema
 > -- support is added then this will change to (String,String)
 > type CatName = Text
 > -- | type name and precision and nullability
@@ -179,7 +182,7 @@ catalog values
 > mkCatNameExtra:: CatName -> CatNameExtra
 > mkCatNameExtra cn = CatNameExtra cn Nothing Nothing True
 > mkCatNameExtraNN:: CatName -> CatNameExtra
-> mkCatNameExtraNN cn = CatNameExtra cn Nothing Nothing False
+> mkCatNameExtraNN cn = CatNameExtra cn Nothing Nothing False-}
 
 > typeToCatName :: TypeExtra -> Either [TypeError] CatNameExtra
 > typeToCatName te = case teType te of
@@ -187,11 +190,11 @@ catalog values
 >       $ CatNameExtra t (tePrecision te) (teScale te) (teNullable te)
 >   _ -> Left [InternalError "typeToCatName on a non scalar type"]
 
-> data CompositeFlavour = Composite | TableComposite | ViewComposite
->                         deriving (Eq,Ord,Show)
+> {-data CompositeFlavour = Composite | TableComposite | ViewComposite
+>                         deriving (Eq,Ord,Show)-}
 
 > -- | name, inparams, outtype, is variadic?
-> type OperatorPrototype = (CatName, [Type], Type, Bool)
+> {-type OperatorPrototype = (CatName, [Type], Type, Bool)
 
 > -- | The main datatype, this holds the catalog and context
 > -- information to type check against.
@@ -221,19 +224,19 @@ catalog values
 >      -- save the updates
 >     ,catUpdates :: [CatalogUpdate]
 >     }
->                deriving Show
+>                deriving Show-}
 
 
 
 
-> -- | Represents an empty catalog. This doesn't contain things
+> {- -- | Represents an empty catalog. This doesn't contain things
 > -- like the \'and\' operator, 'defaultCatalog' contains these.
 > emptyCatalog :: Catalog
 > emptyCatalog = Catalog S.empty S.empty M.empty M.empty M.empty
 >                        M.empty M.empty
 >                        M.empty M.empty M.empty M.empty M.empty
 >                        S.empty M.empty
->                        []
+>                        []-}
 >
 > -- | Represents what you probably want to use as a starting point if
 > -- you are building an catalog from scratch. It contains
@@ -250,13 +253,13 @@ catalog values
 >                ,catFunctions = insertOperators systemFunctions M.empty
 >                ,catScalarTypeNames = rangeTypes}
 
-> insertOperators :: [(CatName,OperatorPrototype)]
+> {-insertOperators :: [(CatName,OperatorPrototype)]
 >                 -> M.Map CatName [OperatorPrototype]
 >                 -> M.Map CatName [OperatorPrototype]
 > insertOperators vs m =
 >   foldr i m vs
 >   where
->     i (k,v) = M.insertWith (++) k [v]
+>     i (k,v) = M.insertWith (++) k [v]-}
 
 -------------------------------------------------------------
 
@@ -313,7 +316,7 @@ postgresql catalog
 
 names to refer to the pseudo types
 
-> pseudoTypes :: M.Map CatName Type
+> {-pseudoTypes :: M.Map CatName Type
 > pseudoTypes = M.fromList
 >     [("any",Pseudo Any)
 >     ,("anyarray",Pseudo AnyArray)
@@ -333,7 +336,7 @@ names to refer to the pseudo types
 >     ,("language_handler", Pseudo LanguageHandler)
 >     ,("opaque", Pseudo Opaque)
 >     ,("fdw_handler", Pseudo FdwHandler)
->     ]
+>     ]-}
 
 built in range types in postgresql
 
@@ -357,7 +360,7 @@ The name components are only used here so that the logic for ignoring
 or respecting case is in one place, these are only used in the query
 functions and not in catalog values themselves.
 
-> data NameComponent = Nmc String
+> {-data NameComponent = Nmc String
 >                    | QNmc String -- quoted
 >                    | AntiNameComponent String
 >                      deriving (Data,Eq,Show,Typeable,Ord)
@@ -374,7 +377,7 @@ functions and not in catalog values themselves.
 > ncStrT (Nmc n) = T.pack $ map toLower n
 > ncStrT (QNmc n) = T.pack n
 > ncStrT (AntiNameComponent _n) =
->   error "tried to get the name component string of an anti name component"
+>   error "tried to get the name component string of an anti name component"-}
 
 
 todo: use left or something instead of error
@@ -383,7 +386,7 @@ todo: use left or something instead of error
 
  updates
 
-> data CatalogUpdate =
+> {-data CatalogUpdate =
 >     -- | register a schema with the given name
 >     CatCreateSchema CatName
 >     -- | register a base scalar type with the given name
@@ -408,9 +411,9 @@ todo: use left or something instead of error
 >   | CatCreateCast CatName CatName CastContext
 >     -- | register a type category for a type (used in the implicit cast resolution)
 >   | CatCreateTypeCategoryEntry CatName (Text,Bool)
->     deriving (Eq,Ord,Typeable,Data,Show)
+>     deriving (Eq,Ord,Typeable,Data,Show)-}
 
-> -- | Applies a list of 'CatalogUpdate's to an 'Catalog' value
+> {- -- | Applies a list of 'CatalogUpdate's to an 'Catalog' value
 > -- to produce a new Catalog value. TODO: there will be a split
 > -- between the individual low level updates which just update
 > -- one 'row' in the catalog type, and the high level updates
@@ -496,16 +499,16 @@ todo: use left or something instead of error
 >         Right $ cat {catTypeCategories = M.insert t (c,p) $ catTypeCategories cat}
 
 > deconstructCatalog :: Catalog -> [CatalogUpdate]
-> deconstructCatalog = catUpdates
+> deconstructCatalog = catUpdates -}
 
 -----------------------------------------------------------
 
 queries
 
-> getCatName :: [NameComponent] -> CatName
+> {-getCatName :: [NameComponent] -> CatName
 > getCatName [] = error "empty name component in catalog code"
 > getCatName [x] = ncStrT x
-> getCatName (_:xs) = getCatName xs
+> getCatName (_:xs) = getCatName xs-}
 
 gets a schema qualified catname, puts in the default 'public' if there
 is only one name component. This will be altered when schema search
@@ -517,7 +520,7 @@ paths are implemented.
 > getCatName2 [a,b] = (ncStrT a, ncStrT b)
 > getCatName2 (_:xs) = getCatName2 xs
 
-> -- | takes a [NameComponent] and returns the type for that name
+> {- -- | takes a [NameComponent] and returns the type for that name
 > -- will return a type not recognised if the type isn't in the catalog
 > catLookupType :: Catalog -> [NameComponent] -> Either [TypeError] Type
 > catLookupType cat ncs =
@@ -529,7 +532,7 @@ paths are implemented.
 >        | M.member cn (catDomainTypes cat) -> Right $ DomainType cn
 >        | M.member cn (catCompositeTypes cat) -> Right $ NamedCompositeType cn
 >        | Just t <- M.lookup cn (catArrayTypes cat) -> Right $ ArrayType $ ScalarType t
->        | otherwise -> Left [UnknownTypeName cn]
+>        | otherwise -> Left [UnknownTypeName cn] -}
 
 TODO: add inverse of this operation, give a type, returns a typename
 
@@ -570,12 +573,12 @@ old stuff chucked in to support the old typeconversion, to be promoted
 to new code or deleted as typeconversion is rewritten
 
 
-> -- | Use to note what the flavour of a cast is, i.e. if/when it can
+> {- -- | Use to note what the flavour of a cast is, i.e. if/when it can
 > -- be used implicitly.
 > data CastContext = ImplicitCastContext
 >                  | AssignmentCastContext
 >                  | ExplicitCastContext
->                    deriving (Eq,Show,Ord,Typeable,Data)
+>                    deriving (Eq,Show,Ord,Typeable,Data) -}
 
 > catCompositePublicAttrs :: Catalog -> [CompositeFlavour] -> Text
 >                   -> Either [TypeError] [(Text,TypeExtra)]

@@ -59,6 +59,9 @@ Library
                      Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
                      Database.HsSqlPpp.Dialects.DefaultTSQLCatalog
                      Database.HsSqlPpp.Internals.Catalog.CatalogInternal
+                     Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+                     Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
+                     Database.HsSqlPpp.Internals.Catalog.CatalogUtils
                      Database.HsSqlPpp.Internals.AstInternal
                      Database.HsSqlPpp.Internals.ParseErrors
                      Database.HsSqlPpp.Internals.Utils
@@ -96,7 +99,8 @@ Test-Suite Tests
                        pretty-show >= 1.6 && < 1.7
 
                      -- rough start:
-                     -- find src-extra/tests -iname '*hs' | sed -e "s@src-extra/tests/@@" | sed -e "s@/@.@g" |sed -e "s/.lhs//" |sed -e "s/.hs//"
+                     -- add the modules from src/ too
+                     -- find tests/ -iname '*hs' | sed -e "s@tests/@@" | sed -e "s@/@.@g" |sed -e "s/.lhs//" |sed -e "s/.hs//"
   Other-Modules:     Database.HsSqlPpp.Annotation
                      Database.HsSqlPpp.Catalog
                      Database.HsSqlPpp.Dialect
@@ -105,6 +109,9 @@ Test-Suite Tests
                      Database.HsSqlPpp.Dialects.OdbcCatalog
                      Database.HsSqlPpp.Internals.AstInternal
                      Database.HsSqlPpp.Internals.Catalog.CatalogInternal
+                     Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+                     Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
+                     Database.HsSqlPpp.Internals.Catalog.CatalogUtils
                      Database.HsSqlPpp.Internals.LexInternal
                      Database.HsSqlPpp.Internals.ParseErrors
                      Database.HsSqlPpp.Internals.ParserInternal
