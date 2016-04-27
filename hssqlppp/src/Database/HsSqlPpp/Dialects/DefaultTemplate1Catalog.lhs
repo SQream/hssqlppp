@@ -6,11 +6,11 @@ make regenDefaultTemplate1Catalog. You will need postgresql
 installed to do this.
 
 > {-# LANGUAGE OverloadedStrings #-}
-> module Database.HsSqlPpp.Internals.Catalog.DefaultTemplate1Catalog
+> module Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
 >      (defaultTemplate1Catalog) where
 >
 > import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
-> import Database.HsSqlPpp.Internals.Catalog.OdbcCatalog
+> import Database.HsSqlPpp.Dialects.OdbcCatalog
 > --import Database.HsSqlPpp.Internals.TypesInternal
 > -- | The catalog from a default template1 database in roughly the
 > -- latest postgres. 'select version()' from the dbms this catalog

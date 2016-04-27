@@ -29,7 +29,7 @@ imports
 {
 import Text.Read
 --import Debug.Trace
-import Database.HsSqlPpp.Internals.Catalog.OdbcCatalog
+import Database.HsSqlPpp.Dialects.OdbcCatalog
 }
 
 

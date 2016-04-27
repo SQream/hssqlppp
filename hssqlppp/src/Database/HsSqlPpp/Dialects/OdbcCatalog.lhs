@@ -6,7 +6,7 @@ https://msdn.microsoft.com/en-us/library/ms711813(v=vs.85).aspx
 TODO: this needs finishing
 
 > {-# LANGUAGE OverloadedStrings #-}
-> module Database.HsSqlPpp.Internals.Catalog.OdbcCatalog
+> module Database.HsSqlPpp.Dialects.OdbcCatalog
 >      (odbcCatalog,odbcConvertTypes,odbcIntervalTypes) where
 >
 > import Database.HsSqlPpp.Internals.Catalog.CatalogInternal

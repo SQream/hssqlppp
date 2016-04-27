@@ -2,11 +2,11 @@
 > -- | Hacky start on a separate catalog for tsql. At the moment, reuses the
 > -- postgresql default template1 catalog and adds a few things.
 > {-# LANGUAGE OverloadedStrings,ScopedTypeVariables #-}
-> module Database.HsSqlPpp.Internals.Catalog.DefaultTSQLCatalog
+> module Database.HsSqlPpp.Dialects.DefaultTSQLCatalog
 >      (defaultTSQLCatalog) where
 >
 > import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
-> import Database.HsSqlPpp.Internals.Catalog.DefaultTemplate1Catalog
+> import Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
 > --import Data.List
 > import Data.Generics.Uniplate.Data
 > --import Debug.Trace

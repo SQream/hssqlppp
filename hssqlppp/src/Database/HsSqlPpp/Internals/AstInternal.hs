@@ -161,7 +161,7 @@ import qualified Data.Text as T
 
 import Text.Read
 --import Debug.Trace
-import Database.HsSqlPpp.Internals.Catalog.OdbcCatalog
+import Database.HsSqlPpp.Dialects.OdbcCatalog
 {-# LINE 166 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
 
 {-# LINE 2 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/TypeChecking.ag" #-}
