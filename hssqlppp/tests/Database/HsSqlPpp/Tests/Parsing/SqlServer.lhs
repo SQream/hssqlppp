@@ -161,7 +161,7 @@ needs to be better: the style is lost, also a bit inconsistent
 >      ]
 
 The following will fail if the words are not marked as keywords
-in ParserInternal.lhs
+in ParseInternal.lhs
 
 >   ,s "select * from t loop join u"
 >      [qs $ makeSelect

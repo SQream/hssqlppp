@@ -1,5 +1,5 @@
 
-Forward the public part of ParserInternal
+Forward the public part of ParseInternal
 
 > -- | Functions to parse SQL.
 
@@ -25,5 +25,5 @@ will need lots more to support the extensions/chaos stuff
 
 >     ) where
 >
-> import Database.HsSqlPpp.Internals.ParserInternal
+> import Database.HsSqlPpp.Internals.ParseInternal
 > import Database.HsSqlPpp.Dialect

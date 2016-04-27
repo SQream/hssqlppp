@@ -90,25 +90,25 @@
 > testParseScalarExpr src ast =
 >   parseUtil src ast (parseScalarExpr defaultParseFlags "" Nothing)
 >                     (parseScalarExpr defaultParseFlags "" Nothing)
->                     (printScalarExpr defaultPPFlags)
+>                     (prettyScalarExpr defaultPrettyFlags)
 > testParseQueryExpr :: Text -> QueryExpr -> T.TestTree
 > testParseQueryExpr src ast =
 >   parseUtil src ast (parseQueryExpr defaultParseFlags "" Nothing)
 >                     (parseQueryExpr defaultParseFlags "" Nothing)
->                     (printQueryExpr defaultPPFlags)
+>                     (prettyQueryExpr defaultPrettyFlags)
 
 >
 > testParseStatements :: Dialect -> Text -> [Statement] -> T.TestTree
 > testParseStatements flg src ast =
 >   let parse = parseStatements defaultParseFlags {pfDialect=flg} "" Nothing
->       pp = printStatements defaultPPFlags {ppDialect=flg}
+>       pp = prettyStatements defaultPrettyFlags {ppDialect=flg}
 >   in parseUtil src ast parse parse pp
 >
 > testParsePlpgsqlStatements :: Dialect -> Text -> [Statement] -> T.TestTree
 > testParsePlpgsqlStatements flg src ast =
 >   parseUtil src ast (parsePlpgsql defaultParseFlags {pfDialect=flg} "" Nothing)
 >                     (parsePlpgsql defaultParseFlags {pfDialect=flg} "" Nothing)
->                     (printStatements defaultPPFlags {ppDialect=flg})
+>                     (prettyStatements defaultPrettyFlags {ppDialect=flg})
 >
 > parseUtil :: (Show t, Eq b, Show b, Data b) =>
 >              Text
@@ -195,8 +195,8 @@
 >                Right l -> l
 >   in (if (resetAnnotations aast') /= (resetAnnotations wast)
 >       then trace ("\n***************** got: \n"
->                   ++ L.unpack (printScalarExpr defaultPPFlags aast')
->                   ++ "\nwanted:\n" ++ L.unpack (printScalarExpr defaultPPFlags wast)
+>                   ++ L.unpack (prettyScalarExpr defaultPrettyFlags aast')
+>                   ++ "\nwanted:\n" ++ L.unpack (prettyScalarExpr defaultPrettyFlags wast)
 >                   ++ "\n*****************\n"
 >                   ++ "\n***************** got: \n"
 >                   ++ groomNoAnns aast'
@@ -321,7 +321,7 @@ type checks properly and produces the same type
 >                cat ast
 >       ty = anType $ getAnnotation aast
 >       -- print with rewritten tree
->       pp = printQueryExpr defaultPPFlags aast
+>       pp = prettyQueryExpr defaultPrettyFlags aast
 >       astrw = case parseQueryExpr defaultParseFlags "" Nothing pp of
 >                 Left e -> error $ "parse: " ++ L.unpack pp ++ "\n" ++ show e
 >                 Right l -> l
@@ -361,8 +361,8 @@ type checks properly and produces the same type
 >               Right l -> resetAnnotations l
 >   (if astrw /= ast'
 >       then trace ("\n***************** expected\n" ++
->                   L.unpack (printQueryExpr defaultPPFlags ast')
->                   ++ "\n" ++ L.unpack (printQueryExpr defaultPPFlags astrw)
+>                   L.unpack (prettyQueryExpr defaultPrettyFlags ast')
+>                   ++ "\n" ++ L.unpack (prettyQueryExpr defaultPrettyFlags astrw)
 >                   ++ "\n\n" ++ groomTypes ast'
 >                   ++ "\n\n" ++ groomTypes astrw
 >                   ++ "\n***************** got\n")
@@ -371,8 +371,8 @@ type checks properly and produces the same type
 >   {-let astrw2 = resetAnnotations $ typeCheckQueryExpr f cat astrw
 >   (if astrw /= astrw2
 >       then trace ("\nSECOND REWRITE\n***************** expected\n" ++
->                   printQueryExpr defaultPPFlags astrw
->                   ++ "\n" ++ printQueryExpr defaultPPFlags astrw2
+>                   prettyQueryExpr defaultPrettyFlags astrw
+>                   ++ "\n" ++ prettyQueryExpr defaultPrettyFlags astrw2
 >                   ++ "\n\n" ++ groomTypes astrw
 >                   ++ "\n\n" ++ groomTypes astrw2
 >                   ++ "\n***************** got\n")

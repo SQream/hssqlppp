@@ -5,7 +5,7 @@ right choice, but it seems to do the job pretty well at the moment.
 > {-# LANGUAGE FlexibleContexts,ExplicitForAll,TupleSections,
 >              NoMonomorphismRestriction,OverloadedStrings #-}
 > -- | Functions to parse SQL.
-> module Database.HsSqlPpp.Internals.ParserInternal
+> module Database.HsSqlPpp.Internals.ParseInternal
 >     (-- * Main
 >      parseStatements
 >     ,parseQueryExpr
