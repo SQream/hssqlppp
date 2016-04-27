@@ -14,6 +14,7 @@ try to parse, if parses, print and check equal to original string
 > import Database.HsSqlPpp.Dialect
 > import Database.HsSqlPpp.Tests.TestTypes
 > --import Database.HsSqlPpp.Tests.Parsing.Utils
+> import Database.HsSqlPpp.Internals.Dialect
 
 > lexerTests :: Item
 > lexerTests = Group "lexing"

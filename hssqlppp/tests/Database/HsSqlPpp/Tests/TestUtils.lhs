@@ -31,6 +31,7 @@
 
 > import Database.HsSqlPpp.Tests.TestTypes
 > import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion2
+> import Database.HsSqlPpp.Internals.Dialect
 
 > --import Test.HUnit
 > --import Test.Framework.Providers.HUnit
@@ -97,13 +98,13 @@
 >                     (printQueryExpr defaultPPFlags)
 
 >
-> testParseStatements :: SQLSyntaxDialect -> Text -> [Statement] -> T.TestTree
+> testParseStatements :: Dialect -> Text -> [Statement] -> T.TestTree
 > testParseStatements flg src ast =
 >   let parse = parseStatements defaultParseFlags {pfDialect=flg} "" Nothing
 >       pp = printStatements defaultPPFlags {ppDialect=flg}
 >   in parseUtil src ast parse parse pp
 >
-> testParsePlpgsqlStatements :: SQLSyntaxDialect -> Text -> [Statement] -> T.TestTree
+> testParsePlpgsqlStatements :: Dialect -> Text -> [Statement] -> T.TestTree
 > testParsePlpgsqlStatements flg src ast =
 >   parseUtil src ast (parsePlpgsql defaultParseFlags {pfDialect=flg} "" Nothing)
 >                     (parsePlpgsql defaultParseFlags {pfDialect=flg} "" Nothing)
@@ -128,7 +129,7 @@
 >         Left er -> H.assertFailure $ "reparse\n" ++ (L.unpack $ printer ast) ++ "\n" ++ show er ++ "\n" -- ++ pp ++ "\n"
 >         Right ast'' -> H.assertEqual ("reparse: " ++ L.unpack (printer ast)) ast $ resetAnnotations ast''
 
-> testLex :: SQLSyntaxDialect -> T.Text -> [Token] -> T.TestTree
+> testLex :: Dialect -> T.Text -> [Token] -> T.TestTree
 > testLex d t r = H.testCase ("lex "++ T.unpack t) $ do
 >     let x = lexTokens d "" Nothing t
 >         y = either (error . show) id x
@@ -205,7 +206,7 @@
 >       else id) $ H.assertEqual "" (resetAnnotations aast') (resetAnnotations wast)
 
 
-> testQueryExprType :: SQLSyntaxDialect -> [CatalogUpdate] -> L.Text -> Either [TypeError] Type -> T.TestTree
+> testQueryExprType :: Dialect -> [CatalogUpdate] -> L.Text -> Either [TypeError] Type -> T.TestTree
 > testQueryExprType dl cus src et = H.testCase ("typecheck " ++ L.unpack src) $ do
 >   let ast = case parseQueryExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
@@ -236,7 +237,7 @@
 >   H.assertEqual "" et got
 >   --queryExprRewrites cus src et
 
-> testStatementsTypecheck :: SQLSyntaxDialect -> [CatalogUpdate] -> L.Text -> Maybe [TypeError] -> T.TestTree
+> testStatementsTypecheck :: Dialect -> [CatalogUpdate] -> L.Text -> Maybe [TypeError] -> T.TestTree
 > testStatementsTypecheck dl cus src et = H.testCase ("typecheck " ++ L.unpack src) $ do
 >   let ast = case parseStatements defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
@@ -268,7 +269,7 @@
 >   --queryExprRewrites cus src et
 
 
-> testInsertQueryExprType :: SQLSyntaxDialect -> [CatalogUpdate] -> L.Text -> Either [TypeError] Type -> T.TestTree
+> testInsertQueryExprType :: Dialect -> [CatalogUpdate] -> L.Text -> Either [TypeError] Type -> T.TestTree
 > testInsertQueryExprType dl cus src et = H.testCase ("typecheck " ++ L.unpack src) $ do
 >   let Right cat = updateCatalog cus $ case dl of
 >           PostgreSQLDialect -> defaultTemplate1Catalog
@@ -378,7 +379,7 @@ type checks properly and produces the same type
 >       else id) $ assertEqual "second rewrite" astrw astrw2-}
 
 
-> testMatchApp :: SQLSyntaxDialect -> Catalog -> [NameComponent]
+> testMatchApp :: Dialect -> Catalog -> [NameComponent]
 >              -> [(TypeExtra, Maybe LitArg)]
 >              -> (Either [TypeError] ([TypeExtra],TypeExtra))
 >              -> T.TestTree

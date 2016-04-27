@@ -143,7 +143,7 @@ import Data.Generics.Uniplate.Data
 --import Database.HsSqlPpp.Internals.Catalog.CatalogInternal (NameComponent(..),ncStr)
 
 --import Database.HsSqlPpp.Utils.Utils
-import Database.HsSqlPpp.Dialect
+import Database.HsSqlPpp.Internals.Dialect
 --import Data.Text (Text)
 import qualified Data.Text as T
 --import qualified Data.Text.Lazy as LT
@@ -182,7 +182,7 @@ import Control.Applicative
 {-# LINE 14 "hssqlppp/src/Database/HsSqlPpp/Internals/Annotation.ag" #-}
 
 import qualified Database.HsSqlPpp.Internals.TypesInternal as T
-import qualified Database.HsSqlPpp.Internals.Catalog.CatalogInternal as C
+import qualified Database.HsSqlPpp.Internals.Catalog.CatalogTypes as C
 
 {-# LINE 188 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
 {-# LINE 62 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/Updates.ag" #-}
@@ -261,7 +261,7 @@ implicitCastType expectedCast upType expType
 
 {-# LINE 466 "hssqlppp/src/Database/HsSqlPpp/Internals/TypeChecking/ScalarExprs.ag" #-}
 
-tcAppLike:: SQLSyntaxDialect -> Catalog -> Name
+tcAppLike:: Dialect -> Catalog -> Name
             -> [ScalarExpr] -> [Maybe TypeExtra]
             -> Either [TypeError] ([TypeExtra],TypeExtra)
 
@@ -350,7 +350,7 @@ data TypeCheckingFlags =
     ,tcfAddSelectItemAliases :: Bool
      -- | expand stars in select lists to explicit list columns
     ,tcfExpandStars :: Bool
-    ,tcfDialect :: SQLSyntaxDialect}
+    ,tcfDialect :: Dialect}
     deriving (Show,Eq)
 
 

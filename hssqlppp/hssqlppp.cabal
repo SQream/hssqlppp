@@ -66,6 +66,7 @@ Library
                      Database.HsSqlPpp.Internals.ParseErrors
                      Database.HsSqlPpp.Internals.Utils
                      Database.HsSqlPpp.Internals.ParserInternal
+                     Database.HsSqlPpp.Internals.Dialect
                      Database.HsSqlPpp.Internals.LexInternal
                      Database.HsSqlPpp.Internals.TypesInternal
                      Database.HsSqlPpp.Internals.TypeChecking.OldTediousTypeUtils
@@ -115,6 +116,7 @@ Test-Suite Tests
                      Database.HsSqlPpp.Internals.LexInternal
                      Database.HsSqlPpp.Internals.ParseErrors
                      Database.HsSqlPpp.Internals.ParserInternal
+                     Database.HsSqlPpp.Internals.Dialect
                      Database.HsSqlPpp.Internals.TypeChecking.Environment
                      Database.HsSqlPpp.Internals.TypeChecking.OldTediousTypeUtils
                      Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.OldTypeConversion

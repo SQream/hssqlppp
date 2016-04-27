@@ -37,7 +37,7 @@
 >           | TSQL L.Text [Statement]
 >           | Oracle L.Text [Statement]
 >           | PgSqlStmt L.Text [Statement]
->           | Lex SQLSyntaxDialect T.Text [Token]
+>           | Lex Dialect T.Text [Token]
 >           | ScalExpr L.Text (Either [TypeError] Type)
 >           | TCQueryExpr [CatalogUpdate] L.Text (Either [TypeError] Type)
 >           | TCStatements [CatalogUpdate] L.Text (Maybe [TypeError])
@@ -47,7 +47,7 @@
 >           | RewriteQueryExpr TypeCheckingFlags [CatalogUpdate] L.Text L.Text
 >           | ImpCastsScalar TypeCheckingFlags L.Text L.Text
 >           | ScalarExprExtra Catalog Environment L.Text (Either [TypeError] TypeExtra)
->           | MatchApp SQLSyntaxDialect Catalog [NameComponent]
+>           | MatchApp Dialect Catalog [NameComponent]
 >                      [(TypeExtra, Maybe LitArg)]
 >                      (Either [TypeError] ([TypeExtra],TypeExtra))
 

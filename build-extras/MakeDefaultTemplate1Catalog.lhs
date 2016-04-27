@@ -38,7 +38,8 @@ installed to do this.
 > module Database.HsSqlPpp.Internals.Catalog.DefaultTemplate1Catalog
 >      (defaultTemplate1Catalog) where
 >
-> import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
+> import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+> import Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
 > import Database.HsSqlPpp.Internals.Catalog.OdbcCatalog
 > --import Database.HsSqlPpp.Internals.TypesInternal
 > -- | The catalog from a default template1 database in roughly the

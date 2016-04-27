@@ -30,7 +30,7 @@ TODO: explicit imports
 > --import Database.HsSqlPpp.Utils.Utils
 
 > -- import Database.HsSqlPpp.Internals.TypeChecking.OldTypeConversion
-> import Database.HsSqlPpp.Dialect
+> import Database.HsSqlPpp.Internals.Dialect
 > -- import qualified Database.HsSqlPpp.Internals.TypeChecking.SqlTypeConversion as TSQL
 
 
@@ -69,7 +69,7 @@ match app matches a function + argument types, and determines (using a
 bunch of hacks and special cases) the precision, scale and nullability
 of the result type also.
 
-> matchApp :: SQLSyntaxDialect
+> matchApp :: Dialect
 >          -> Catalog
 >          -> [NameComponent]
 >          -> [(TypeExtra, Maybe LitArg)]
@@ -104,7 +104,7 @@ find matching app is the code which matches a function prototype to a
 list of input argument types, dealing with implicit casts and
 overloaded functions. It is based on the algorithm in postgresql.
 
-> findMatchingApp :: SQLSyntaxDialect
+> findMatchingApp :: Dialect
 >          -> Catalog
 >          -> [NameComponent]
 >          -> [(Type, Maybe LitArg)]

@@ -14,7 +14,6 @@
 >     ,printScalarExpr
 >     ,PrettyPrintFlags(..)
 >     ,defaultPPFlags
->     ,SQLSyntaxDialect(..)
 >     )
 >     where
 >
@@ -25,7 +24,7 @@
 > import Database.HsSqlPpp.Annotation
 > --import Database.HsSqlPpp.Utils.Utils
 
-> import Database.HsSqlPpp.Dialect
+> import Database.HsSqlPpp.Internals.Dialect
 
 > import Database.HsSqlPpp.Internals.TypesInternal
 > --import Database.HsSqlPpp.Internals.StringLike
@@ -43,7 +42,7 @@ Public functions
 todo: actually use the dialect. this will forced when the parser is
 adjusted to reject postgres only syntax when in sql server dialect
 
->   {ppDialect :: SQLSyntaxDialect
+>   {ppDialect :: Dialect
 >   }
 >   deriving (Show,Eq)
 

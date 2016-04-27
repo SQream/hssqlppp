@@ -8,6 +8,7 @@
 > --import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.TypeCheck
 > import Data.Text.Lazy ()
+> import Database.HsSqlPpp.Internals.Dialect
 
 
 > impCasts :: Item

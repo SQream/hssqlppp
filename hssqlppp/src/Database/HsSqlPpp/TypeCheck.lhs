@@ -12,7 +12,7 @@ This is the public module for the type checking functionality.
 >     ,typeCheckScalarExpr
 >     ,typeCheckScalarExprEnv
 >     ,TypeCheckingFlags(..)
->     ,SQLSyntaxDialect(..)
+>     ,module Database.HsSqlPpp.Dialect
 >     ,defaultTypeCheckingFlags
 >     ) where
 >

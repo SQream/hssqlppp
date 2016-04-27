@@ -12,7 +12,7 @@ Forward the public part of ParserInternal
 >      -- * Parsing options
 >     ,ParseFlags(..)
 >     ,defaultParseFlags
->     ,SQLSyntaxDialect(..)
+>     ,module Database.HsSqlPpp.Dialect
 >      -- * errors
 >     ,ParseErrorExtra(..)
 >      -- * internals
@@ -26,3 +26,4 @@ will need lots more to support the extensions/chaos stuff
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.ParserInternal
+> import Database.HsSqlPpp.Dialect

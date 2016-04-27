@@ -54,6 +54,9 @@ Forward the public part of CatalogInternal.
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
+> --import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+> --import Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
+> --import Database.HsSqlPpp.Internals.Catalog.CatalogUtils
 > import Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
 > import Database.HsSqlPpp.Dialects.DefaultTSQLCatalog
 > import Database.HsSqlPpp.Dialects.OdbcCatalog

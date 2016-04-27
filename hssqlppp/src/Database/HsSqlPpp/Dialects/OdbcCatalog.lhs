@@ -9,7 +9,8 @@ TODO: this needs finishing
 > module Database.HsSqlPpp.Dialects.OdbcCatalog
 >      (odbcCatalog,odbcConvertTypes,odbcIntervalTypes) where
 >
-> import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
+> import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+> --import Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
 > import Database.HsSqlPpp.Internals.TypesInternal
 > --import Database.HsSqlPpp.Internals.TypesInternal
 

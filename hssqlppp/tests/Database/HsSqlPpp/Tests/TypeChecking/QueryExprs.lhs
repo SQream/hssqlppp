@@ -7,7 +7,7 @@ typechecks as well as correct queries compared to the old tests.
 > module Database.HsSqlPpp.Tests.TypeChecking.QueryExprs
 >     (queryExprs) where
 
-> import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
+> import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
 > import Database.HsSqlPpp.Internals.TypesInternal
 > import Database.HsSqlPpp.Tests.TestTypes
 > --import Database.HsSqlPpp.Internals.AstInternal as A

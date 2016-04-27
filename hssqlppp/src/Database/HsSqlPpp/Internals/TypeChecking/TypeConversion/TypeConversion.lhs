@@ -53,7 +53,7 @@ should all be in one place.
 > import Control.Arrow
 
 > import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.OldTypeConversion
-> import Database.HsSqlPpp.Dialect
+> import Database.HsSqlPpp.Internals.Dialect
 > import qualified Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.SqlTypeConversion as TSQL
 > import Data.Text ()
 > import qualified Data.Text as T
@@ -69,7 +69,7 @@ This needs a lot more tests
 
 > type MatchAppLiteralList = [Maybe Int]
 
-> matchApp :: SQLSyntaxDialect
+> matchApp :: Dialect
 >          -> Catalog
 >          -> [NameComponent]
 >          -> [Type]
@@ -182,7 +182,7 @@ for long argument lists with several literals, there can be a lot of variants ge
 
 uses matchApp for inferring basic types
 
-> matchAppExtra :: SQLSyntaxDialect
+> matchAppExtra :: Dialect
 >                 -> Catalog
 >                 -> [NameComponent]
 >                 -> MatchAppLiteralList

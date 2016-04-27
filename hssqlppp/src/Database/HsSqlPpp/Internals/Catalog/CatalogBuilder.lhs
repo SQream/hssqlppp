@@ -1,9 +1,10 @@
 
-
+> {-# LANGUAGE OverloadedStrings #-}
 > module Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
 >     (updateCatalog
 >     ,deconstructCatalog
 >     ,insertOperators
+>     ,defaultCatalog
 >     ) where
 
 > import Control.Monad
@@ -117,3 +118,80 @@
 >   foldr i m vs
 >   where
 >     i (k,v) = M.insertWith (++) k [v]
+
+
+'system' stuff
+
+bunch of operators which you can use but don't appear in the
+postgresql catalog
+
+> -- | Represents what you probably want to use as a starting point if
+> -- you are building an catalog from scratch. It contains
+> -- information on built in function like things that aren't in the
+> -- Postgres catalog, such as greatest, coalesce, keyword operators
+> -- like \'and\', etc..
+> defaultCatalog :: Catalog
+> defaultCatalog =
+>     -- todo: specify in terms of catalog updates
+>   emptyCatalog {catSchemas = S.fromList ["public"]
+>                ,catBinaryOps = insertOperators systemBinaryOps M.empty
+>                ,catPrefixOps = insertOperators systemPrefixOps M.empty
+>                ,catPostfixOps = insertOperators systemPostfixOps M.empty
+>                ,catFunctions = insertOperators systemFunctions M.empty
+>                ,catScalarTypeNames = rangeTypes}
+
+> systemBinaryOps :: [(CatName,OperatorPrototype)]
+> systemBinaryOps =
+>    [("=", ("=",[Pseudo AnyElement, Pseudo AnyElement], typeBool, False))
+>    ,("and",("and", [typeBool, typeBool], typeBool, False))
+>    ,("or",("or", [typeBool, typeBool], typeBool, False))
+>    ,("like",("like", [ScalarType "text", ScalarType "text"], typeBool, False))
+>    ,("like",("like", [ScalarType "char", ScalarType "char"], typeBool, False))
+>    ,("like",("like", [ScalarType "varchar", ScalarType "varchar"], typeBool, False))
+>    ,("like",("like", [ScalarType "nvarchar", ScalarType "nvarchar"], typeBool, False))
+>    ,("notlike",("notlike", [ScalarType "text", ScalarType "text"], typeBool, False))
+>    ,("notlike",("notlike", [ScalarType "char", ScalarType "char"], typeBool, False))
+>    ,("notlike",("notlike", [ScalarType "varchar", ScalarType "varchar"], typeBool, False))
+>    ,("rlike",("rlike", [ScalarType "text", ScalarType "text"], typeBool, False))
+>    ,("rlike",("rlike", [ScalarType "char", ScalarType "char"], typeBool, False))
+>    ,("rlike",("rlike", [ScalarType "varchar", ScalarType "varchar"], typeBool, False))
+>    ,("arrayctor",("arrayctor", [ArrayType $ Pseudo AnyElement], Pseudo AnyArray, True))
+>    ,("between",("between", [Pseudo AnyElement
+>                            ,Pseudo AnyElement
+>                            ,Pseudo AnyElement], typeBool, False))
+>    ,("notbetween",("mptbetween", [Pseudo AnyElement
+>                                  ,Pseudo AnyElement
+>                                  ,Pseudo AnyElement], typeBool, False))
+>    ,("substring",("substring",[ScalarType "text",typeInt,typeInt],ScalarType "text",False))
+>    ,("substring",("substring",[ScalarType "varchar",typeInt,typeInt],ScalarType "varchar",False))
+>    ,("substring",("substring",[ScalarType "nvarchar",typeInt,typeInt],ScalarType "nvarchar",False))
+>    ,("substring",("substring",[ScalarType "char",typeInt,typeInt],ScalarType "char",False))
+>    ,("arraysub",("arraysub", [Pseudo AnyArray,typeInt], Pseudo AnyElement, False))
+>    ]
+
+> systemPrefixOps :: [(CatName,OperatorPrototype)]
+> systemPrefixOps =
+>    [("not",("not", [typeBool], typeBool, False))]
+
+> systemPostfixOps :: [(CatName,OperatorPrototype)]
+> systemPostfixOps =
+>    [("isnull",("isnull", [Pseudo AnyElement], typeBool, False))
+>    ,("isnotnull",("isnotnull", [Pseudo AnyElement], typeBool, False))]
+
+> systemFunctions :: [(CatName, OperatorPrototype)]
+> systemFunctions =
+>  [("coalesce",("coalesce", [ArrayType $ Pseudo AnyElement], Pseudo AnyElement, True))
+>  ,("nullif", ("nullif",[Pseudo AnyElement, Pseudo AnyElement], Pseudo AnyElement,False))
+>  ,("greatest",("greatest", [ArrayType $ Pseudo AnyElement], Pseudo AnyElement,True))
+>  ,("least",("least", [ArrayType $ Pseudo AnyElement], Pseudo AnyElement,True))
+>  ]
+
+built in range types in postgresql
+
+todo: maybe these are in the catalog somewhere and should come from
+postgres?
+
+> rangeTypes :: S.Set CatName
+> rangeTypes = S.fromList ["int4range", "int8range"
+>                         ,"numrange","daterange"
+>                         ,"tsrange","tstzrange"]

@@ -27,7 +27,7 @@ data TypeCheckingFlags =
     ,tcfAddSelectItemAliases :: Bool
      -- | expand stars in select lists to explicit list columns
     ,tcfExpandStars :: Bool
-    ,tcfDialect :: SQLSyntaxDialect}
+    ,tcfDialect :: Dialect}
     deriving (Show,Eq)
 
 

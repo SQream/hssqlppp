@@ -5,7 +5,8 @@
 > module Database.HsSqlPpp.Dialects.DefaultTSQLCatalog
 >      (defaultTSQLCatalog) where
 >
-> import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
+> import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+> import Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
 > import Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
 > --import Data.List
 > import Data.Generics.Uniplate.Data

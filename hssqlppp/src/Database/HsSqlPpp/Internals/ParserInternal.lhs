@@ -14,7 +14,6 @@ right choice, but it seems to do the job pretty well at the moment.
 >      -- * parsing flags
 >     ,ParseFlags(..)
 >     ,defaultParseFlags
->     ,SQLSyntaxDialect(..)
 >      -- * errors
 >     ,ParseErrorExtra(..)
 >      -- other helpers for internal use
@@ -50,7 +49,7 @@ right choice, but it seems to do the job pretty well at the moment.
 > import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Annotation as A
 > import Database.HsSqlPpp.Internals.Utils
-> import Database.HsSqlPpp.Dialect
+> import Database.HsSqlPpp.Internals.Dialect
 > import Data.Text (Text)
 > import qualified Data.Text as T
 > --import qualified Data.Text.Lazy as LT
@@ -115,7 +114,7 @@ Top level parsing functions
 >          $ runParser ps flg fn lxd
 >   return $ fixupTree psd
 
-> lexem :: SQLSyntaxDialect
+> lexem :: Dialect
 >        -> FilePath
 >        -> Maybe (Int,Int)
 >        -> L.Text
@@ -138,7 +137,7 @@ state is never updated during parsing
 
 > -- | Settings to influence the parsing
 > data ParseFlags = ParseFlags
->     {pfDialect :: SQLSyntaxDialect
+>     {pfDialect :: Dialect
 >     }
 >     deriving (Show,Eq)
 
@@ -1572,7 +1571,7 @@ TODO: this follows the old, incorrect postgresql precedence, update to
 the 9.5 behaviour which is much more in line with ansi sql and other
 sql dbmss.
 
-> tableAB :: SQLSyntaxDialect
+> tableAB :: Dialect
 >         -> Bool
 >         -> [[Operator [Token] ParseState Identity ScalarExpr]]
 > tableAB d isB = [[{-binary "." AssocLeft-}]
@@ -1679,10 +1678,10 @@ From postgresql src/backend/parser/gram.y
 
 ~~~~~
 
-> table :: SQLSyntaxDialect -> [[Operator [Token] ParseState Identity ScalarExpr]]
+> table :: Dialect -> [[Operator [Token] ParseState Identity ScalarExpr]]
 > table d = tableAB d False
 
-> tableB :: SQLSyntaxDialect -> [[Operator [Token] ParseState Identity ScalarExpr]]
+> tableB :: Dialect -> [[Operator [Token] ParseState Identity ScalarExpr]]
 > tableB d = tableAB d True
 
 use the same factors
