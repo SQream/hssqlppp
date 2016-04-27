@@ -36,11 +36,6 @@ Library
 
   hs-source-dirs:      src
   Exposed-modules:     Database.HsSqlPpp.Quote
-  default-extensions:  TupleSections
-                       DeriveDataTypeable,
-                       ScopedTypeVariables,
-                       PatternGuards,
-                       FlexibleContexts
   default-language:    Haskell2010
   ghc-options:         -Wall
 
@@ -58,10 +53,6 @@ Test-Suite TestsTh
                        hssqlppp == 0.5.26
 
   Other-Modules:       Database.HsSqlPpp.Tests.QuasiQuoteTests
-  default-extensions:  TupleSections
-                       DeriveDataTypeable,
-                       ScopedTypeVariables,
-                       PatternGuards,
-                       FlexibleContexts
+                       Database.HsSqlPpp.Quote
   default-language:    Haskell2010
   ghc-options:         -Wall

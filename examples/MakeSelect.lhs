@@ -1,7 +1,7 @@
 
 > {-# LANGUAGE OverloadedStrings #-}
 > import Database.HsSqlPpp.Annotation
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Pretty
 > import qualified Data.Text as T
 > import qualified Data.Text.Lazy as LT

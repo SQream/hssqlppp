@@ -5,7 +5,7 @@ right choice, but it seems to do the job pretty well at the moment.
 > {-# LANGUAGE FlexibleContexts,ExplicitForAll,TupleSections,
 >              NoMonomorphismRestriction,OverloadedStrings #-}
 > -- | Functions to parse SQL.
-> module Database.HsSqlPpp.Parsing.ParserInternal
+> module Database.HsSqlPpp.Internals.ParserInternal
 >     (-- * Main
 >      parseStatements
 >     ,parseQueryExpr
@@ -45,12 +45,12 @@ right choice, but it seems to do the job pretty well at the moment.
 > import Data.Generics.Uniplate.Data
 > import Data.Data hiding (Prefix,Infix)
 >
-> import qualified Database.HsSqlPpp.LexicalSyntax as Lex
-> import Database.HsSqlPpp.Parsing.ParseErrors
-> import Database.HsSqlPpp.Ast
+> import qualified Database.HsSqlPpp.Lex as Lex
+> import Database.HsSqlPpp.Internals.ParseErrors
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Annotation as A
-> import Database.HsSqlPpp.Utils.Utils
-> import Database.HsSqlPpp.SqlDialect
+> import Database.HsSqlPpp.Internals.Utils
+> import Database.HsSqlPpp.Dialect
 > import Data.Text (Text)
 > import qualified Data.Text as T
 > --import qualified Data.Text.Lazy as LT
@@ -123,7 +123,7 @@ Top level parsing functions
 > lexem d fn sp src =
 >   let ts :: Either ParseErrorExtra [Token]
 >       ts = either (error . show) Right
->             $ Lex.sqlTokens d fn sp $ T.concat $ L.toChunks src
+>             $ Lex.lexTokens d fn sp $ T.concat $ L.toChunks src
 >   in --trace ((\(Right r) -> intercalate "\n" $ map show r) ts) $
 >      filter keep `fmap` ts
 >   where

@@ -11,7 +11,7 @@ database.
 > import Data.Generics
 > import Data.Generics.Uniplate.Data
 >
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Annotation
 > import Database.HsSqlPpp.Extensions.ExtensionsUtils
 > import Database.HsSqlPpp.Quote

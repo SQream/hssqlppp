@@ -1,7 +1,7 @@
 > module Database.HsSqlPpp.Tests.TestTypes where
 
-> import Database.HsSqlPpp.Ast
-> import Database.HsSqlPpp.LexicalSyntax (Token)
+> import Database.HsSqlPpp.Syntax
+> import Database.HsSqlPpp.Lex (Token)
 > import Database.HsSqlPpp.Annotation
 > import qualified Data.Text as T
 > --import Data.Text (Text)
@@ -13,7 +13,7 @@
 > --import Data.List
 > --import Data.Generics.Uniplate.Data
 > --import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.TypeChecker
+> import Database.HsSqlPpp.TypeCheck
 > --import Database.HsSqlPpp.Annotation
 > import Database.HsSqlPpp.Catalog
 > --import Database.HsSqlPpp.Ast hiding (App)

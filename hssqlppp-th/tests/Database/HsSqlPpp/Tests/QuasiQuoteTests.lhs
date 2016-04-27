@@ -10,7 +10,7 @@ Tests mainly for antiquotation, plus examples of where antiquotes work.
 
 > import Data.Data
 >
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Annotation
 > import Database.HsSqlPpp.Pretty
 > import Database.HsSqlPpp.Quote

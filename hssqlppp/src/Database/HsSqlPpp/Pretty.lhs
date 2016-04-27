@@ -21,17 +21,17 @@
 > import Text.PrettyPrint
 > import Data.Maybe
 >
-> import Database.HsSqlPpp.Ast hiding (ann)
+> import Database.HsSqlPpp.Syntax hiding (ann)
 > import Database.HsSqlPpp.Annotation
 > --import Database.HsSqlPpp.Utils.Utils
 
-> import Database.HsSqlPpp.SqlDialect
+> import Database.HsSqlPpp.Dialect
 
 > import Database.HsSqlPpp.Internals.TypesInternal
 > --import Database.HsSqlPpp.Internals.StringLike
 > import qualified Data.Text as T
 > import qualified Data.Text.Lazy as L
-> import Database.HsSqlPpp.Utils.Utils
+> import Database.HsSqlPpp.Internals.Utils
 
 --------------------------------------------------------------------------------
 

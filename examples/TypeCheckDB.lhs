@@ -2,12 +2,12 @@
 > {-# LANGUAGE OverloadedStrings #-}
 > import System.Environment
 
-> import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.TypeChecker
+> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.TypeCheck
 > import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.Types
 > import Database.HsSqlPpp.Annotation
-> import Database.HsSqlPpp.Ast hiding (ann)
+> import Database.HsSqlPpp.Syntax hiding (ann)
 
 > import Database.HsSqlPpp.Utils.CatalogReader
 > import qualified Data.Text.Lazy ()

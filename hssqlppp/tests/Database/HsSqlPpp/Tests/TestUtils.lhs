@@ -12,10 +12,10 @@
 > import Control.Monad
 
 > --import Database.HsSqlPpp.Utils.Here
-> import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Pretty
-> import Database.HsSqlPpp.TypeChecker
+> import Database.HsSqlPpp.TypeCheck
 > import Database.HsSqlPpp.Annotation
 > import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.Utils.GroomUtils
@@ -25,7 +25,7 @@
 > import Data.Text.Lazy (Text)
 > import qualified Data.Text.Lazy as L
 > import qualified Data.Text as T
-> import Database.HsSqlPpp.LexicalSyntax (sqlTokens,prettyToken,Token)
+> import Database.HsSqlPpp.Lex (lexTokens,prettyToken,Token)
 > --import Text.Parsec.Text (runParser)
 > --import Control.Applicative
 
@@ -130,7 +130,7 @@
 
 > testLex :: SQLSyntaxDialect -> T.Text -> [Token] -> T.TestTree
 > testLex d t r = H.testCase ("lex "++ T.unpack t) $ do
->     let x = sqlTokens d "" Nothing t
+>     let x = lexTokens d "" Nothing t
 >         y = either (error . show) id x
 >     H.assertEqual "lex" r (map snd y)
 >     let t' = L.concat $ map (prettyToken d) r

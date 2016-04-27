@@ -47,13 +47,13 @@ should all be in one place.
 >
 > import Database.HsSqlPpp.Internals.TypesInternal
 > import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
-> import Database.HsSqlPpp.Utils.Utils
+> import Database.HsSqlPpp.Internals.Utils
 > import Control.Monad
 > import Control.Applicative
 > import Control.Arrow
 
 > import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.OldTypeConversion
-> import Database.HsSqlPpp.SqlDialect
+> import Database.HsSqlPpp.Dialect
 > import qualified Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.SqlTypeConversion as TSQL
 > import Data.Text ()
 > import qualified Data.Text as T

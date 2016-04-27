@@ -7,8 +7,8 @@ Convert qgen output into sql server format
 > import System.Environment
 > import Data.Data
 
-> import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Pretty
 > import Database.HsSqlPpp.Quote
 > import Database.HsSqlPpp.Annotation

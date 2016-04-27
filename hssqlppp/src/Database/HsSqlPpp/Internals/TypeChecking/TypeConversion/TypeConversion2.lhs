@@ -30,7 +30,7 @@ TODO: explicit imports
 > --import Database.HsSqlPpp.Utils.Utils
 
 > -- import Database.HsSqlPpp.Internals.TypeChecking.OldTypeConversion
-> import Database.HsSqlPpp.SqlDialect
+> import Database.HsSqlPpp.Dialect
 > -- import qualified Database.HsSqlPpp.Internals.TypeChecking.SqlTypeConversion as TSQL
 
 

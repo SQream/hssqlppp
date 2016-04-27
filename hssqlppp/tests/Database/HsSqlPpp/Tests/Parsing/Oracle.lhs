@@ -7,7 +7,7 @@ Tests for oracle syntax variations
 >
 > --import Database.HsSqlPpp.Utils.Here
 >
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 
 > import Database.HsSqlPpp.Tests.Parsing.Utils
 > import Database.HsSqlPpp.Tests.TestTypes

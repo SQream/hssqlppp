@@ -125,12 +125,12 @@ result type:
 
 [source,haskell]
 ----
-> import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.TypeChecker
+> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.TypeCheck
 > import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.Types
 > import Database.HsSqlPpp.Annotation
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 
 > main :: IO ()
 > main = do
@@ -164,12 +164,12 @@ Typecheck against an existing database:
 ----
 > import System.Environment
 
-> import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.TypeChecker
+> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.TypeCheck
 > import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.Types
 > import Database.HsSqlPpp.Annotation
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 
 > import Database.HsSqlPpp.Utils.CatalogReader
 
@@ -252,7 +252,7 @@ Here is a program which generates SQL:
 [source,haskell]
 ----
 > import Database.HsSqlPpp.Annotation
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Pretty
 
 > data MakeSelect = MakeSelect [String] String
@@ -293,7 +293,7 @@ TODO: add about use of helpers and approach in the parse test code
 [source,haskell]
 ----
 > {-# LANGUAGE QuasiQuotes #-}
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Quote
 > import Database.HsSqlPpp.Annotation
 > import Database.HsSqlPpp.Pretty
@@ -344,8 +344,8 @@ Convert qgen output into sql server format
 > import System.Environment
 > import Data.Data
 
-> import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Pretty
 > import Database.HsSqlPpp.Quote
 > import Database.HsSqlPpp.Annotation

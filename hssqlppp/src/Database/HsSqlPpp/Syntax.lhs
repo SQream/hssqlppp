@@ -9,7 +9,7 @@
 >      <https://github.com/JakeWheat/hssqlppp/blob/master/src/Database/HsSqlPpp/Internals/AstInternal.ag>
 >      -}
 >
-> module Database.HsSqlPpp.Ast
+> module Database.HsSqlPpp.Syntax
 >     (
 >      -- * Name and TypeName
 >      Name(..)

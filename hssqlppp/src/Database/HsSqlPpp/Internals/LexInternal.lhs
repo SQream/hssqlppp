@@ -1,11 +1,11 @@
 
 > {-# LANGUAGE TupleSections,OverloadedStrings #-}
-> module Database.HsSqlPpp.LexicalSyntax
+> module Database.HsSqlPpp.Internals.LexInternal
 >     (Token(..)
 >     ,prettyToken
->     ,sqlToken
->     ,sqlTokens
->     ,module Database.HsSqlPpp.SqlDialect
+>     ,lexToken
+>     ,lexTokens
+>     ,module Database.HsSqlPpp.Dialect
 >     ) where
 
 > import qualified Data.Text as T
@@ -15,7 +15,7 @@
 > import Text.Parsec.Text
 > import Control.Applicative hiding ((<|>), many)
 > import Data.Char
-> import Database.HsSqlPpp.SqlDialect
+> import Database.HsSqlPpp.Dialect
 > import Control.Monad
 > import Prelude hiding (takeWhile)
 > import Data.Maybe
@@ -123,8 +123,8 @@ investigate what is missing for postgresql
 investigate differences for sql server, oracle, maybe db2 and mysql
   also
 
-> sqlTokens :: SQLSyntaxDialect -> FilePath -> Maybe (Int,Int) -> T.Text -> Either ParseError [((FilePath,Int,Int),Token)]
-> sqlTokens dialect fn' mp txt =
+> lexTokens :: SQLSyntaxDialect -> FilePath -> Maybe (Int,Int) -> T.Text -> Either ParseError [((FilePath,Int,Int),Token)]
+> lexTokens dialect fn' mp txt =
 >     let (l',c') = fromMaybe (1,1) mp
 >     in runParser (setPos (fn',l',c') *> many_p <* eof) () "" txt
 >   where
@@ -136,18 +136,18 @@ if we see 'from stdin;' then try to lex a copy payload
 
 >      many_p = some_p `mplus` return []
 >      some_p = do
->        tok <- sqlToken dialect
+>        tok <- lexToken dialect
 >        case tok of
 >          (_, Identifier Nothing t) | T.map toLower t == "from" -> (tok:) <$> seeStdin
 >          _ -> (tok:) <$> many_p
 >      seeStdin = do
->        tok <- sqlToken dialect
+>        tok <- lexToken dialect
 >        case tok of
 >          (_,Identifier Nothing t) | T.map toLower t == "stdin" -> (tok:) <$> seeColon
 >          (_,x) | isWs x -> (tok:) <$> seeStdin
 >          _ -> (tok:) <$> many_p
 >      seeColon = do
->        tok <- sqlToken dialect
+>        tok <- lexToken dialect
 >        case tok of
 >          (_,Symbol ";") -> (tok:) <$> copyPayload
 >          _ -> (tok:) <$> many_p
@@ -172,8 +172,8 @@ if we see 'from stdin;' then try to lex a copy payload
 >      isWs _ = False
 
 > -- | parser for a sql token
-> sqlToken :: SQLSyntaxDialect -> Parser ((FilePath,Int,Int),Token)
-> sqlToken d = do
+> lexToken :: SQLSyntaxDialect -> Parser ((FilePath,Int,Int),Token)
+> lexToken d = do
 >     p' <- getPosition
 >     let p = (sourceName p',sourceLine p', sourceColumn p')
 >     (p,) <$> choice [sqlString d

@@ -4,12 +4,12 @@
 > import System.Environment
 > import Data.List
 
-> import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.TypeChecker
+> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.TypeCheck
 > import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.Types
 > import Database.HsSqlPpp.Annotation
-> import Database.HsSqlPpp.Ast
+> import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Utility
 > --import Text.Show.Pretty
 > import qualified Data.Text.Lazy.IO as LT

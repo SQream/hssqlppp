@@ -143,7 +143,7 @@ import Data.Generics.Uniplate.Data
 --import Database.HsSqlPpp.Internals.Catalog.CatalogInternal (NameComponent(..),ncStr)
 
 --import Database.HsSqlPpp.Utils.Utils
-import Database.HsSqlPpp.SqlDialect
+import Database.HsSqlPpp.Dialect
 --import Data.Text (Text)
 import qualified Data.Text as T
 --import qualified Data.Text.Lazy as LT
