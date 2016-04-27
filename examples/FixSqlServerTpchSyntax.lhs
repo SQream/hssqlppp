@@ -29,7 +29,7 @@ Convert qgen output into sql server format
 >            -- hssqlppp better that the sql server dialect
 >            $ parseStatements defaultParseFlags "" Nothing sql
 >       qe' = fixSqlAst qe
->   in printStatements defaultPPFlags {ppDialect = SQLServerDialect} qe'
+>   in prettyStatements defaultPrettyFlags {ppDialect = sqlServerDialect} qe'
 
 > fixSqlAst :: Data a => a -> a
 > fixSqlAst = fixDate . fixSubstring . fixExtract . fixIntervals

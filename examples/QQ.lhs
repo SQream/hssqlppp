@@ -20,4 +20,4 @@
 >     typename = [sqlNameComponent|text|]
 
 > main :: IO ()
-> main = LT.putStrLn $ printStatements defaultPPFlags [test]
+> main = LT.putStrLn $ prettyStatements defaultPrettyFlags [test]

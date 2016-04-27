@@ -23,5 +23,5 @@
 > main :: IO ()
 > main = do
 >   let s = MakeSelect ["a", "b"] "t"
->   putStrLn $ LT.unpack $ printQueryExpr defaultPPFlags $ sqlGen s
+>   putStrLn $ LT.unpack $ prettyQueryExpr defaultPrettyFlags $ sqlGen s
 

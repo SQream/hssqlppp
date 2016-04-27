@@ -4,8 +4,8 @@
 
 > import Text.Show.Pretty
 
-> import Database.HsSqlPpp.Parser
-> import Database.HsSqlPpp.TypeChecker
+> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.TypeCheck
 > import Database.HsSqlPpp.Catalog
 > import qualified Data.Text.Lazy.IO as LT
 
