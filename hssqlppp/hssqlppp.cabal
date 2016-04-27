@@ -63,10 +63,10 @@ Library
                      Database.HsSqlPpp.Dialects.OdbcCatalog
                      Database.HsSqlPpp.Internals.TypesInternal
                      Database.HsSqlPpp.Internals.TypeChecking.Environment
-                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion
-                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion2
-                     Database.HsSqlPpp.Internals.TypeChecking.SqlTypeConversion
-                     Database.HsSqlPpp.Internals.TypeChecking.OldTypeConversion
+                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion
+                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion2
+                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.SqlTypeConversion
+                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.OldTypeConversion
                      Database.HsSqlPpp.Internals.TypeChecking.OldTediousTypeUtils
                      Database.HsSqlPpp.Internals.TypeChecking.Environment
                      Database.HsSqlPpp.Internals.AstInternal
@@ -111,10 +111,10 @@ Test-Suite Tests
                      Database.HsSqlPpp.Dialects.OdbcCatalog
                      Database.HsSqlPpp.Internals.TypeChecking.Environment
                      Database.HsSqlPpp.Internals.TypeChecking.OldTediousTypeUtils
-                     Database.HsSqlPpp.Internals.TypeChecking.OldTypeConversion
-                     Database.HsSqlPpp.Internals.TypeChecking.SqlTypeConversion
-                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion
-                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion2
+                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion
+                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion2
+                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.SqlTypeConversion
+                     Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.OldTypeConversion
                      Database.HsSqlPpp.Internals.TypesInternal
                      Database.HsSqlPpp.LexicalSyntax
                      Database.HsSqlPpp.Parser

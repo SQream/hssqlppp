@@ -4,7 +4,7 @@ TODO: most of this code will move to the internals type conversion.
 rewrite the code to be nice and literate explaining everything
 
 > {-# LANGUAGE OverloadedStrings,LambdaCase,MultiWayIf,PatternGuards #-}
-> module Database.HsSqlPpp.Internals.TypeChecking.TypeConversion2
+> module Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion2
 >        (matchApp,LitArg(..)) where
 
 TODO: explicit imports

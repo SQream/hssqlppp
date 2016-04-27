@@ -30,7 +30,7 @@
 > --import Control.Applicative
 
 > import Database.HsSqlPpp.Tests.TestTypes
-> import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion2
+> import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion2
 
 > --import Test.HUnit
 > --import Test.Framework.Providers.HUnit

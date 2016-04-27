@@ -28,7 +28,7 @@
 
 > --import Database.HsSqlPpp.Utils.GroomUtils
 > --import qualified Data.Text.Lazy as L
-> import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion2
+> import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion2
 
 > data Item = Group String [Item]
 >           | Expr L.Text ScalarExpr

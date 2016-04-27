@@ -31,7 +31,7 @@ postgres) all the nullability, precision, dialect and special hacks
 should all be in one place.
 
 > {-# LANGUAGE OverloadedStrings, TupleSections, MultiWayIf,FlexibleInstances #-}
-> module Database.HsSqlPpp.Internals.TypeChecking.TypeConversion
+> module Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion
 >     (matchApp
 >     ,matchAppExtra
 >     ,resolveResultSetType
@@ -52,9 +52,9 @@ should all be in one place.
 > import Control.Applicative
 > import Control.Arrow
 
-> import Database.HsSqlPpp.Internals.TypeChecking.OldTypeConversion
+> import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.OldTypeConversion
 > import Database.HsSqlPpp.SqlDialect
-> import qualified Database.HsSqlPpp.Internals.TypeChecking.SqlTypeConversion as TSQL
+> import qualified Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.SqlTypeConversion as TSQL
 > import Data.Text ()
 > import qualified Data.Text as T
 > import Text.Printf

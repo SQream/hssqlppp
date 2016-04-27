@@ -171,7 +171,7 @@ import qualified Database.HsSqlPpp.Internals.TypeChecking.Environment as E
 import Database.HsSqlPpp.Internals.TypeChecking.Environment (Environment)
 import Database.HsSqlPpp.Internals.TypesInternal
 import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
-import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion
+import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion
 import Control.Monad
 import Data.List
 import Data.Maybe
