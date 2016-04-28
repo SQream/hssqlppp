@@ -14,29 +14,20 @@
 >     ) where
 
 > import Database.HsSqlPpp.Internals.Dialect
-> import Data.Data
+> --import Data.Data
 > import Data.Text (Text)
 
-make sort of compatible with 0.6.x
-
-> data SyntaxFlavour = Ansi | Postgres | SqlServer | Oracle
->                      deriving (Eq,Show,Data,Typeable)
-
 > ansiDialect :: Dialect
-> ansiDialect = PostgreSQLDialect
-
-
-> postgresDialect :: Dialect
-> postgresDialect = PostgreSQLDialect
+> ansiDialect = emptyDialect {diName = "ansi", diSyntaxFlavour=Postgres}
 
 > sqlServerDialect :: Dialect
-> sqlServerDialect = SQLServerDialect
+> sqlServerDialect = emptyDialect {diName = "sqlserver", diSyntaxFlavour=SqlServer}
 
 > oracleDialect :: Dialect
-> oracleDialect = OracleDialect
+> oracleDialect = emptyDialect {diName = "oracle", diSyntaxFlavour=Oracle}
 
 > ansiTypeNameToDialect :: Dialect -> Text -> Maybe Text
 > ansiTypeNameToDialect = error "ansiTypeNameToDialect not supported in this version"
 
 > canonicalizeTypeName :: Dialect -> Text -> Text
-> canonicalizeTypeName = error "ansiTypeNameToDialect not supported in this version"
+> canonicalizeTypeName = error "canonicalizeTypeName not supported in this version"

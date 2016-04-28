@@ -5,9 +5,8 @@
 >     ,prettyToken
 >     ,lexToken
 >     ,lexTokens
->     ,module Database.HsSqlPpp.Dialect
->     --,Dialect(..)
->     --,ansiDialect
+>     ,Dialect(..)
+>     ,ansiDialect
 >     ) where
 
 > import Database.HsSqlPpp.Internals.LexInternal

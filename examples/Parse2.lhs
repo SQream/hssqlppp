@@ -8,6 +8,7 @@
 > import GroomUtils
 > import Text.Show.Pretty
 > import qualified Data.Text.Lazy.IO as LT
+> import Database.HsSqlPpp.Dialect
 
 > main :: IO ()
 > main = do

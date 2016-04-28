@@ -81,7 +81,7 @@ This needs a lot more tests
 >     -- need to think of a better way to handle this when
 >     -- have a better idea of all the weird syntax used in
 >     -- tsql
->     matchApp' SQLServerDialect [Nmc dd] [_
+>     matchApp' (Dialect {diSyntaxFlavour = SqlServer}) [Nmc dd] [_
 >                                         ,ScalarType "date"
 >                                         ,ScalarType "date"]
 >       | map toLower dd == "datediff" =
@@ -89,26 +89,26 @@ This needs a lot more tests
 >       -- first is identifier from list
 >       -- other two are date types
 >       Right ([typeInt,typeDate,typeDate], typeInt)
->     matchApp' SQLServerDialect [Nmc dd] [_,ScalarType "date"]
+>     matchApp' (Dialect {diSyntaxFlavour = SqlServer}) [Nmc dd] [_,ScalarType "date"]
 >       | map toLower dd == "datepart" =
 >       Right ([typeInt,typeDate], typeInt)
 
->     matchApp' SQLServerDialect [Nmc dd] [_,ScalarType "timestamp"]
+>     matchApp' (Dialect {diSyntaxFlavour = SqlServer}) [Nmc dd] [_,ScalarType "timestamp"]
 >       | map toLower dd == "datepart" =
 >       Right ([typeInt,(ScalarType "timestamp")], typeInt)
 
 
->     matchApp' SQLServerDialect [Nmc dd] [_,_,ScalarType "date"]
+>     matchApp' (Dialect {diSyntaxFlavour = SqlServer}) [Nmc dd] [_,_,ScalarType "date"]
 >       | map toLower dd == "dateadd" =
 >       Right ([typeInt,typeInt,typeDate], typeDate)
 
->     matchApp' SQLServerDialect [Nmc dd] [_,_,ScalarType "timestamp"]
+>     matchApp' (Dialect {diSyntaxFlavour = SqlServer}) [Nmc dd] [_,_,ScalarType "timestamp"]
 >       | map toLower dd == "dateadd" =
 >       Right ([typeInt,typeInt,ScalarType "timestamp"], ScalarType "timestamp")
 
 double hack: support oracle decode when in tsql mode:
 
->     matchApp' SQLServerDialect [Nmc dd] as
+>     matchApp' (Dialect {diSyntaxFlavour = SqlServer}) [Nmc dd] as
 >       | map toLower dd == "decode" =
 
 decode is just syntax for simple case statement:
@@ -127,7 +127,7 @@ if there is a single trailing argument this is the else
 >             let checkBranches [] acc = return $ reverse acc
 >                 checkBranches [els] acc = return $ reverse (els:acc)
 >                 checkBranches (w:t:xs) acc = do
->                   _ <- matchApp' SQLServerDialect [Nmc "="] [tt,w]
+>                   _ <- matchApp' d [Nmc "="] [tt,w]
 >                   checkBranches xs (t:acc)
 >             sndTypes <- checkBranches as' []
 
@@ -144,7 +144,7 @@ todo: add the implicit casting where needed
 
 >     matchApp' d' nmcs' pts = {-trace ("matchapp: " ++ show (d,nmcs,pts)) $ -} do
 >       (_,ps,r,_) <- case d' of
->                       SQLServerDialect -> TSQL.findCallMatch cat nm pts
+>                       (Dialect {diSyntaxFlavour = SqlServer}) -> TSQL.findCallMatch cat nm pts
 >                       _ -> findCallMatch cat nm pts
 >       return (ps,r)
 >       where

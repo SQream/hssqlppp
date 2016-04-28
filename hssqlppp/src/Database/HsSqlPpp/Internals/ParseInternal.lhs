@@ -142,7 +142,7 @@ state is never updated during parsing
 >     deriving (Show,Eq)
 
 > defaultParseFlags :: ParseFlags
-> defaultParseFlags = ParseFlags {pfDialect = PostgreSQLDialect}
+> defaultParseFlags = ParseFlags {pfDialect = postgresDialect}
 
 
 > type ParseState = ParseFlags
@@ -150,12 +150,12 @@ state is never updated during parsing
 > isSqlServer :: SParser Bool
 > isSqlServer = do
 >   ParseFlags {pfDialect = d} <- getState
->   return $ d == SQLServerDialect
+>   return $ diSyntaxFlavour d == SqlServer
 
 > isOracle :: SParser Bool
 > isOracle = do
 >   ParseFlags {pfDialect = d} <- getState
->   return $ d == OracleDialect
+>   return $ diSyntaxFlavour d == Oracle
 
 couple of wrapper functions for the quoting
 
@@ -1601,7 +1601,7 @@ sql dbmss.
 >          ,binary ">>" AssocLeft
 >          ,binary "<->" AssocNone
 >          ,binary "||" AssocLeft]
->          ++ [prefix "@" "@" | d == PostgreSQLDialect]
+>          ++ [prefix "@" "@" | diSyntaxFlavour d == Postgres]
 >          -- Stop custom operators.
 >          --in should be here, but is treated as a factor instead
 >          --between

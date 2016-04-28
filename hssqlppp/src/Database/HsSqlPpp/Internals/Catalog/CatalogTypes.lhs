@@ -97,7 +97,7 @@ name, parameter types, return type and variadic flag
 >      -- save the updates
 >     ,catUpdates :: [CatalogUpdate]
 >     }
->                deriving Show
+>                deriving (Eq,Show,Data,Typeable)
 
 
 > -- | Use to note what the flavour of a cast is, i.e. if/when it can

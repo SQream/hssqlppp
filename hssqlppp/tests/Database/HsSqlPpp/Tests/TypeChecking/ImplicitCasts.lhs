@@ -8,7 +8,7 @@
 > --import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.TypeCheck
 > import Data.Text.Lazy ()
-> import Database.HsSqlPpp.Internals.Dialect
+> import Database.HsSqlPpp.Dialect
 
 
 > impCasts :: Item
@@ -25,4 +25,4 @@
 >   where
 >     e = ImpCastsScalar
 >     p = defaultTypeCheckingFlags
->     s = defaultTypeCheckingFlags {tcfDialect=SQLServerDialect}
+>     s = defaultTypeCheckingFlags {tcfDialect=sqlServerDialect}

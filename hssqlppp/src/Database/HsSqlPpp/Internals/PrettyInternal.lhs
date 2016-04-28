@@ -47,7 +47,7 @@ adjusted to reject postgres only syntax when in sql server dialect
 >   deriving (Show,Eq)
 
 > defaultPrettyFlags :: PrettyFlags
-> defaultPrettyFlags = PrettyFlags {ppDialect = PostgreSQLDialect}
+> defaultPrettyFlags = PrettyFlags {ppDialect = postgresDialect}
 
 > -- | Convert an ast back to valid SQL source.
 > prettyStatements :: PrettyFlags -> StatementList -> L.Text
@@ -137,8 +137,8 @@ Conversion routines - convert Sql asts into Docs
 >     annot ca ann <+>
 >     text "truncate"
 >     <+> sepCsvMap name names
->     <+> case (ppDialect flg) of
->        SQLServerDialect -> empty
+>     <+> case (diSyntaxFlavour (ppDialect flg)) of
+>        SqlServer -> empty
 >        _ -> text (case ri of
 >                       RestartIdentity -> "restart identity"
 >                       ContinueIdentity -> "continue identity")
@@ -155,8 +155,8 @@ Conversion routines - convert Sql asts into Docs
 >     <+> name tbl <+> lparen
 >     $+$ nest 2 (vcat (csv (map (attrDef flg) atts ++ map (constraint flg) cns)))
 >     $+$ rparen
->     $+$ case (ppDialect flg) of
->          SQLServerDialect -> empty
+>     $+$ case diSyntaxFlavour (ppDialect flg) of
+>          SqlServer -> empty
 >          _ -> (tablePartition partition)
 >     $+$ tableOpts flg opts
 >     <> statementEnd se
@@ -359,8 +359,8 @@ Conversion routines - convert Sql asts into Docs
 >                 Schema -> "schema")
 >     <+> ifExists ifE
 >     <+> sepCsvMap name names
->     <+> case (ppDialect flg) of
->            SQLServerDialect -> empty
+>     <+> case (diSyntaxFlavour (ppDialect flg)) of
+>            SqlServer -> empty
 >            _ -> cascade casc
 >     <> statementEnd se
 >
@@ -548,7 +548,7 @@ Conversion routines - convert Sql asts into Docs
 >    where
 >      constraintd (ex, sts) = scalExpr flg ex <+> text "then"
 >                              $+$ nestedStatements flg ca sts
->      tsql = ppDialect flg == SQLServerDialect
+>      tsql = diSyntaxFlavour (ppDialect flg) == SqlServer
 >      blck sts = sep [text "begin"
 >                     ,nestedStatements flg ca sts
 >                     ,text "end"]
@@ -677,7 +677,7 @@ Statement components
 >   ,if null hs then Nothing else Just $ text "option" $+$ parens (sepCsvMap (text . prettyQueryHint) hs)
 >   ])
 >   where
->     useTop = ppDialect flg == SQLServerDialect
+>     useTop = diSyntaxFlavour (ppDialect flg) == SqlServer
 >     prettyQueryHint QueryHintPartitionGroup = "partition group"
 >     prettyQueryHint QueryHintColumnarHostGroup = "columnar host group"
 >

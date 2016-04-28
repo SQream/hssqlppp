@@ -12,7 +12,8 @@ This is the public module for the type checking functionality.
 >     ,typeCheckScalarExpr
 >     ,typeCheckScalarExprEnv
 >     ,TypeCheckingFlags(..)
->     ,module Database.HsSqlPpp.Dialect
+>     ,Dialect(..)
+>     ,ansiDialect
 >     ,defaultTypeCheckingFlags
 >     ) where
 >

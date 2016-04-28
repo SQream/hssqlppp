@@ -8,7 +8,8 @@
 >     ,prettyScalarExpr
 >     ,PrettyFlags(..)
 >     ,defaultPrettyFlags
->     ,module Database.HsSqlPpp.Dialect
+>     ,Dialect(..)
+>     ,ansiDialect
 >     )
 >     where
 

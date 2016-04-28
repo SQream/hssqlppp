@@ -6,6 +6,7 @@
 
 > import Database.HsSqlPpp.Parse
 > import Database.HsSqlPpp.Pretty
+> import Database.HsSqlPpp.Dialect
 
 > import qualified Data.Text.Lazy.IO as LT
 

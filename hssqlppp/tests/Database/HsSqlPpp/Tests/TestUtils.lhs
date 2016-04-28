@@ -20,18 +20,19 @@
 > import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.Utils.GroomUtils
 > import Database.HsSqlPpp.Utility
+> import Database.HsSqlPpp.Dialect
 > --import Database.HsSqlPpp.SqlTypes
 > --import Database.HsSqlPpp.Utils.PPExpr
 > import Data.Text.Lazy (Text)
 > import qualified Data.Text.Lazy as L
-> import qualified Data.Text as T
+> --import qualified Data.Text as T
 > import Database.HsSqlPpp.Lex (lexTokens,prettyToken,Token)
 > --import Text.Parsec.Text (runParser)
 > --import Control.Applicative
 
 > import Database.HsSqlPpp.Tests.TestTypes
 > import Database.HsSqlPpp.Internals.TypeChecking.TypeConversion.TypeConversion2
-> import Database.HsSqlPpp.Internals.Dialect
+> --import Database.HsSqlPpp.Internals.Dialect
 
 > --import Test.HUnit
 > --import Test.Framework.Providers.HUnit
@@ -63,24 +64,24 @@
 > itemToTft :: Item -> T.TestTree
 > itemToTft (Expr a b) = testParseScalarExpr a b
 > itemToTft (QueryExpr a b) = testParseQueryExpr a b
-> itemToTft (PgSqlStmt a b) = testParsePlpgsqlStatements PostgreSQLDialect a b
-> itemToTft (Stmt a b) = testParseStatements PostgreSQLDialect a b
+> itemToTft (PgSqlStmt a b) = testParsePlpgsqlStatements postgresDialect a b
+> itemToTft (Stmt a b) = testParseStatements postgresDialect a b
 > itemToTft (TSQL a b) =
 >   testParsePlpgsqlStatements (if True
->                        then SQLServerDialect
->                        else PostgreSQLDialect) a b
+>                        then sqlServerDialect
+>                        else postgresDialect) a b
 > itemToTft (OracleStmt a b) =
->   testParsePlpgsqlStatements OracleDialect a b
+>   testParsePlpgsqlStatements oracleDialect a b
 > --itemToTft (MSStmt a b) = testParseStatements a b
 > itemToTft (Group s is) = T.testGroup s $ map itemToTft is
 > itemToTft (Lex d a b) = testLex d (L.fromStrict a) b
 
 > itemToTft (ScalExpr s r) = testScalarExprType s r
-> itemToTft (TCQueryExpr cus s r) = testQueryExprType PostgreSQLDialect cus s r
-> itemToTft (TCStatements cus s r) = testStatementsTypecheck PostgreSQLDialect cus s r
-> itemToTft (InsertQueryExpr cus s r) = testInsertQueryExprType SQLServerDialect {-PostgreSQLDialect-} cus s r
-> itemToTft (TSQLQueryExpr cus s r) = testQueryExprType SQLServerDialect cus s r
-> itemToTft (OracleQueryExpr cus s r) = testQueryExprType OracleDialect cus s r
+> itemToTft (TCQueryExpr cus s r) = testQueryExprType postgresDialect cus s r
+> itemToTft (TCStatements cus s r) = testStatementsTypecheck postgresDialect cus s r
+> itemToTft (InsertQueryExpr cus s r) = testInsertQueryExprType sqlServerDialect {-postgresDialect-} cus s r
+> itemToTft (TSQLQueryExpr cus s r) = testQueryExprType sqlServerDialect cus s r
+> itemToTft (OracleQueryExpr cus s r) = testQueryExprType oracleDialect cus s r
 > itemToTft (RewriteQueryExpr f cus s s') = testRewrite f cus s s'
 > itemToTft (ImpCastsScalar f s s') = testImpCastsScalar f s s'
 > itemToTft (ScalarExprExtra cat env s r) = testScalarExprTypeExtra cat env s r
@@ -211,14 +212,16 @@
 >   let ast = case parseQueryExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       Right cat = updateCatalog cus $ case dl of
->           PostgreSQLDialect -> defaultTemplate1Catalog
->           SQLServerDialect -> defaultTSQLCatalog
->           OracleDialect -> defaultTSQLCatalog
->       flg = case dl of
->           PostgreSQLDialect -> defaultTypeCheckingFlags
->           SQLServerDialect -> defaultTypeCheckingFlags {tcfDialect = SQLServerDialect}
->           OracleDialect -> defaultTypeCheckingFlags {tcfDialect = OracleDialect}
+>       Right cat = updateCatalog cus $ case diSyntaxFlavour dl of
+>           Postgres -> defaultTemplate1Catalog
+>           Ansi -> defaultTemplate1Catalog
+>           SqlServer -> defaultTSQLCatalog
+>           Oracle -> defaultTSQLCatalog
+>       flg = case diSyntaxFlavour dl of
+>           Postgres -> defaultTypeCheckingFlags
+>           Ansi -> defaultTypeCheckingFlags
+>           SqlServer -> defaultTypeCheckingFlags {tcfDialect = sqlServerDialect}
+>           Oracle -> defaultTypeCheckingFlags {tcfDialect = oracleDialect}
 >       aast = typeCheckQueryExpr flg cat ast
 >       (ty,errs,noTypeQEs,noTypeSEs) = tcTreeInfo aast
 >       er = concatMap fst errs
@@ -242,14 +245,16 @@
 >   let ast = case parseStatements defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       Right cat = updateCatalog cus $ case dl of
->           PostgreSQLDialect -> defaultTemplate1Catalog
->           SQLServerDialect -> defaultTSQLCatalog
->           OracleDialect -> defaultTSQLCatalog
->       flg = case dl of
->           PostgreSQLDialect -> defaultTypeCheckingFlags
->           SQLServerDialect -> defaultTypeCheckingFlags {tcfDialect = SQLServerDialect}
->           OracleDialect -> defaultTypeCheckingFlags {tcfDialect = OracleDialect}
+>       Right cat = updateCatalog cus $ case diSyntaxFlavour dl of
+>           Postgres -> defaultTemplate1Catalog
+>           Ansi -> defaultTemplate1Catalog
+>           SqlServer -> defaultTSQLCatalog
+>           Oracle -> defaultTSQLCatalog
+>       flg = case diSyntaxFlavour dl of
+>           Postgres -> defaultTypeCheckingFlags
+>           Ansi -> defaultTypeCheckingFlags
+>           SqlServer -> defaultTypeCheckingFlags {tcfDialect = sqlServerDialect}
+>           Oracle -> defaultTypeCheckingFlags {tcfDialect = oracleDialect}
 >       (_,aast) = typeCheckStatements flg cat ast
 >       (_,errs,noTypeQEs,noTypeSEs) = tcTreeInfo aast
 >       er = concatMap fst errs
@@ -271,14 +276,16 @@
 
 > testInsertQueryExprType :: Dialect -> [CatalogUpdate] -> L.Text -> Either [TypeError] Type -> T.TestTree
 > testInsertQueryExprType dl cus src et = H.testCase ("typecheck " ++ L.unpack src) $ do
->   let Right cat = updateCatalog cus $ case dl of
->           PostgreSQLDialect -> defaultTemplate1Catalog
->           SQLServerDialect -> defaultTSQLCatalog
->           OracleDialect -> defaultTSQLCatalog
->       flg = case dl of
->           PostgreSQLDialect -> defaultTypeCheckingFlags
->           SQLServerDialect -> defaultTypeCheckingFlags {tcfDialect = SQLServerDialect}
->           OracleDialect -> defaultTypeCheckingFlags {tcfDialect = OracleDialect}
+>   let Right cat = updateCatalog cus $ case diSyntaxFlavour dl of
+>           Postgres -> defaultTemplate1Catalog
+>           Ansi -> defaultTemplate1Catalog
+>           SqlServer -> defaultTSQLCatalog
+>           Oracle -> defaultTSQLCatalog
+>       flg = case diSyntaxFlavour dl of
+>           Postgres -> defaultTypeCheckingFlags
+>           Ansi -> defaultTypeCheckingFlags
+>           SqlServer -> defaultTypeCheckingFlags {tcfDialect = sqlServerDialect}
+>           Oracle -> defaultTypeCheckingFlags {tcfDialect = oracleDialect}
 >       asts = either (error . show) id $ parseStatements defaultParseFlags "" Nothing src
 >       Insert _ _ _ q _ = extractInsert $ snd $ typeCheckStatements flg cat asts
 >       q' = addImplicitCasts cat q

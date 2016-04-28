@@ -188,7 +188,7 @@ quoting uses [] or ""
 
 TODO: fix all the "qiden" parsers to allow "qid""en"
 
-> identifier SQLServerDialect =
+> identifier (Dialect {diSyntaxFlavour = SqlServer}) =
 >     choice
 >     [Identifier (Just ('[',']'))
 >      <$> (char '[' *> takeWhile1 (/=']') <* char ']')
@@ -203,7 +203,7 @@ oracle: identifiers can start with :
 quoting uses ""
 (todo: check other possibilities)
 
-> identifier OracleDialect =
+> identifier (Dialect {diSyntaxFlavour = Oracle}) =
 >     choice
 >     [Identifier (Just ('"','"'))
 >      <$> (char '"' *> takeWhile1 (/='"') <* char '"')
@@ -211,13 +211,19 @@ quoting uses ""
 >     ,Identifier Nothing <$> identifierString
 >     ]
 
-> identifier PostgreSQLDialect =
+> identifier (Dialect {diSyntaxFlavour = Postgres}) =
 >     choice
 >     [Identifier (Just ('"','"'))
 >      <$> (char '"' *> takeWhile1 (/='"') <* char '"')
 >     ,Identifier Nothing <$> identifierString
 >     ]
 
+> identifier (Dialect {diSyntaxFlavour = Ansi}) =
+>     choice
+>     [Identifier (Just ('"','"'))
+>      <$> (char '"' *> takeWhile1 (/='"') <* char '"')
+>     ,Identifier Nothing <$> identifierString
+>     ]
 
 > identifierStringPrefix :: Char  -> Parser String
 > identifierStringPrefix p = do
@@ -392,13 +398,13 @@ inClass :: String -> Char -> Bool
 >         startsWith (inClass compoundFirst)
 >                    (inClass compoundTail) -}
 >     simpleSymbols :: String
->     simpleSymbols | dialect == PostgreSQLDialect = "(),;[]{}"
+>     simpleSymbols | diSyntaxFlavour dialect == Postgres = "(),;[]{}"
 >                   | otherwise = "(),;{}"
 >     compoundFirst :: String
->     compoundFirst | dialect == PostgreSQLDialect = "*/<>=~!@#%^&|`?+-"
+>     compoundFirst | diSyntaxFlavour dialect == Postgres = "*/<>=~!@#%^&|`?+-"
 >                   | otherwise = "*/<>=~!%^&|`?+-"
 >     compoundTail :: String
->     compoundTail | dialect == PostgreSQLDialect = "*/<>=~!@#%^&|`?"
+>     compoundTail | diSyntaxFlavour dialect == Postgres = "*/<>=~!@#%^&|`?"
 >                  | otherwise = "*/<>=~!%^&|`?"
 
 
@@ -407,7 +413,7 @@ inClass :: String -> Char -> Bool
 
 > positionalArg :: Dialect -> Parser Token
 > -- uses try so we don't get confused with $splices
-> positionalArg PostgreSQLDialect = try (
+> positionalArg (Dialect {diSyntaxFlavour = Postgres}) = try (
 >   PositionalArg <$> (char '$' *> (read <$> many1 digit)))
 
 > positionalArg _ = satisfy (const False) >> fail "positional arg unsupported"

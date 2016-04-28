@@ -363,7 +363,7 @@ defaultTypeCheckingFlags =
     ,tcfAddFullTablerefAliases = False
     ,tcfAddSelectItemAliases = False
     ,tcfExpandStars = False
-    ,tcfDialect = PostgreSQLDialect}
+    ,tcfDialect = postgresDialect}
 
 -- | Typechecks the ast, and returns the updated catalog (which
 -- includes changes from any ddl statements in the ast).

@@ -12,7 +12,8 @@ Forward the public part of ParseInternal
 >      -- * Parsing options
 >     ,ParseFlags(..)
 >     ,defaultParseFlags
->     ,module Database.HsSqlPpp.Dialect
+>     ,Dialect(..)
+>     ,ansiDialect
 >      -- * errors
 >     ,ParseErrorExtra(..)
 >      -- * internals

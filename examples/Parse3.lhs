@@ -5,6 +5,7 @@
 > --import Data.Generics.Uniplate.Data
 
 > import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.Dialect
 > import GroomUtils
 > import Text.Show.Pretty
 > import qualified Data.Text.Lazy.IO as LT

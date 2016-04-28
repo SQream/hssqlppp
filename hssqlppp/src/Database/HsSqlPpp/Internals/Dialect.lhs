@@ -1,44 +1,45 @@
 
 > -- | The sql dialect type which is used by the parser and the pretty
 > -- printer so has its own module.
+> {-# LANGUAGE DeriveDataTypeable #-}
 > module Database.HsSqlPpp.Internals.Dialect where
 
-more dialect options will be added here
+> import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+> import Data.Data
+> import Data.Text (Text)
 
-> -- | The dialect of SQL to use.
-> data Dialect = PostgreSQLDialect
->              | SQLServerDialect
->              | OracleDialect
->                deriving (Show,Eq)
+stub for forward compatibility. This version of the code just looks at
+the syntax flavour
 
-data Dialect Source
+> data SyntaxFlavour = Ansi | Postgres | SqlServer | Oracle
+>                      deriving (Eq,Show,Data,Typeable)
 
-Constructors
-Dialect	 
-diName :: StringdiSyntaxFlavour :: SyntaxFlavourdiCanonicalTypeNames :: [(Text, [Text])]diTextTypes :: [Text]diDatetimeTypes :: [Text]diNumberTypes :: [Text]namesForAnsiTypes :: [(Text, Text)]diDefaultCatalog :: Catalog
-Instances
-Eq DialectSource	 
-Data DialectSource	 
-Show DialectSource	 
-data SyntaxFlavour Source
 
-Constructors
-Ansi	 
-Postgres	 
-SqlServer	 
-Oracle	 
-Instances
-Eq SyntaxFlavourSource	 
-Data SyntaxFlavourSource	 
-Show SyntaxFlavourSource	 
-ansiDialect :: Dialect Source
+> data Dialect = Dialect
+>      {diName :: String
+>      ,diSyntaxFlavour :: SyntaxFlavour
+>      ,diCanonicalTypeNames :: [(Text,[Text])]
+>      ,diTextTypes :: [Text] -- names of the text types (canonical names must be used)
+>      ,diDatetimeTypes :: [Text]
+>      ,diNumberTypes :: [Text] -- names of the number types (canonical names must be used)
+>      -- this is a map from the canonical ansi name (in hssqlppp)
+>      -- to the canonical name in the dialect
+>      -- if there is no entry, then it means that type isn't
+>      -- supported in this dialect
+>      ,namesForAnsiTypes :: [(Text,Text)]
+>      ,diDefaultCatalog :: Catalog
+>      } deriving (Eq,Show,Data,Typeable)
 
-postgresDialect :: Dialect Source
+> emptyDialect :: Dialect
+> emptyDialect = Dialect {diName = ""
+>                        ,diSyntaxFlavour = Postgres
+>                        ,diCanonicalTypeNames = []
+>                        ,diTextTypes = []
+>                        ,diDatetimeTypes = []
+>                        ,diNumberTypes = []
+>                        ,namesForAnsiTypes = []
+>                        ,diDefaultCatalog = emptyCatalog}
 
-sqlServerDialect :: Dialect Source
 
-oracleDialect :: Dialect Source
-
-canonicalizeTypeName :: Dialect -> Text -> Text Source
-
-ansiTypeNameToDialect :: Dialect -> Text -> Maybe Text
+> postgresDialect :: Dialect
+> postgresDialect = emptyDialect {diName = "postgres", diSyntaxFlavour=Postgres}

@@ -12,6 +12,7 @@ Convert qgen output into sql server format
 > import Database.HsSqlPpp.Pretty
 > import Database.HsSqlPpp.Quote
 > import Database.HsSqlPpp.Annotation
+> import Database.HsSqlPpp.Dialect
 > import qualified Data.Text.Lazy as LT
 > import qualified Data.Text.Lazy.IO as LT
 
