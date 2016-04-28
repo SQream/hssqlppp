@@ -69,11 +69,11 @@
 >   testParsePlpgsqlStatements (if True
 >                        then SQLServerDialect
 >                        else PostgreSQLDialect) a b
-> itemToTft (Oracle a b) =
+> itemToTft (OracleStmt a b) =
 >   testParsePlpgsqlStatements OracleDialect a b
 > --itemToTft (MSStmt a b) = testParseStatements a b
 > itemToTft (Group s is) = T.testGroup s $ map itemToTft is
-> itemToTft (Lex d a b) = testLex d a b
+> itemToTft (Lex d a b) = testLex d (L.fromStrict a) b
 
 > itemToTft (ScalExpr s r) = testScalarExprType s r
 > itemToTft (TCQueryExpr cus s r) = testQueryExprType PostgreSQLDialect cus s r
@@ -129,13 +129,13 @@
 >         Left er -> H.assertFailure $ "reparse\n" ++ (L.unpack $ printer ast) ++ "\n" ++ show er ++ "\n" -- ++ pp ++ "\n"
 >         Right ast'' -> H.assertEqual ("reparse: " ++ L.unpack (printer ast)) ast $ resetAnnotations ast''
 
-> testLex :: Dialect -> T.Text -> [Token] -> T.TestTree
-> testLex d t r = H.testCase ("lex "++ T.unpack t) $ do
+> testLex :: Dialect -> L.Text -> [Token] -> T.TestTree
+> testLex d t r = H.testCase ("lex "++ L.unpack t) $ do
 >     let x = lexTokens d "" Nothing t
 >         y = either (error . show) id x
 >     H.assertEqual "lex" r (map snd y)
->     let t' = L.concat $ map (prettyToken d) r
->     H.assertEqual "lex . pretty" (L.fromChunks [t]) t'
+>     let t' = concat $ map (prettyToken d) r
+>     H.assertEqual "lex . pretty" t (L.pack t')
 
 
 

@@ -35,7 +35,7 @@
 >           | Stmt L.Text [Statement]
 >           | QueryExpr L.Text QueryExpr
 >           | TSQL L.Text [Statement]
->           | Oracle L.Text [Statement]
+>           | OracleStmt L.Text [Statement]
 >           | PgSqlStmt L.Text [Statement]
 >           | Lex Dialect T.Text [Token]
 >           | ScalExpr L.Text (Either [TypeError] Type)

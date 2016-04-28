@@ -23,7 +23,7 @@
 > import Database.HsSqlPpp.Internals.AstInternal
 > import Database.HsSqlPpp.Internals.TypesInternal
 > import Database.HsSqlPpp.Catalog
-> import Database.HsSqlPpp.Parse
+> import Database.HsSqlPpp.Parse hiding (canonicalizeTypeName)
 > --import Text.Parsec.Prim
 > --import Control.Monad.Identity
 > import qualified Data.Text.Lazy as L

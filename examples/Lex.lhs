@@ -2,11 +2,11 @@
 > import Database.HsSqlPpp.Lex
 > import Text.Show.Pretty
 > import System.Environment
-> import qualified Data.Text.IO as T
+> import qualified Data.Text.Lazy.IO as LT
 
 > main :: IO ()
 > main = do
 >   [s] <- getArgs
->   f <- T.readFile s
+>   f <- LT.readFile s
 >   putStrLn $ ppShow $ lexTokens postgresDialect "" (Just (1,0)) f
 >   --putStrLn $ ppShow $ parsePlpgsql "" s
