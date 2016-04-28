@@ -84,7 +84,7 @@
 >      -- * utility
 >     ,SetValue(..)
 >      -- * misc
->     ,WithQueryList
+>     {-,WithQueryList
 >     ,MaybeSelectList
 >     ,TableRefList
 >     ,MaybeScalarExpr
@@ -113,7 +113,7 @@
 >     ,AlterTableActionList
 >     ,MaybeNameComponentList
 >     ,NameComponentList
->     ,MaybeBoolExpr
+>     ,MaybeBoolExpr-}
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.AstInternal

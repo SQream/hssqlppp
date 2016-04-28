@@ -28,7 +28,7 @@ shortcuts for constructing test data and asts
 > qn :: Text -> Text -> Name
 > qn c n = Name ea [Nmc $ T.unpack c, Nmc $ T.unpack n]
 >
-> sl :: SelectItemList -> SelectList
+> sl :: [SelectItem] -> SelectList
 > sl = SelectList ea
 >
 >
