@@ -24,5 +24,5 @@
 >   ]
 >   where
 >     e = ImpCastsScalar
->     p = defaultTypeCheckingFlags
->     s = defaultTypeCheckingFlags {tcfDialect=sqlServerDialect}
+>     p = defaultTypeCheckFlags
+>     s = defaultTypeCheckFlags {tcfDialect=sqlServerDialect}

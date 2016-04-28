@@ -2,7 +2,7 @@
 
 > import Database.HsSqlPpp.Syntax
 > import Database.HsSqlPpp.Lex (Token)
-> import Database.HsSqlPpp.Annotation
+> --import Database.HsSqlPpp.Annotation
 > import qualified Data.Text as T
 > --import Data.Text (Text)
 > import qualified Data.Text.Lazy as L
@@ -44,8 +44,8 @@
 >           | InsertQueryExpr [CatalogUpdate] L.Text (Either [TypeError] Type)
 >           | TSQLQueryExpr [CatalogUpdate] L.Text (Either [TypeError] Type)
 >           | OracleQueryExpr [CatalogUpdate] L.Text (Either [TypeError] Type)
->           | RewriteQueryExpr TypeCheckingFlags [CatalogUpdate] L.Text L.Text
->           | ImpCastsScalar TypeCheckingFlags L.Text L.Text
+>           | RewriteQueryExpr TypeCheckFlags [CatalogUpdate] L.Text L.Text
+>           | ImpCastsScalar TypeCheckFlags L.Text L.Text
 >           | ScalarExprExtra Catalog Environment L.Text (Either [TypeError] TypeExtra)
 >           | MatchApp Dialect Catalog [NameComponent]
 >                      [(TypeExtra, Maybe LitArg)]

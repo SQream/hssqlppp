@@ -11,10 +11,10 @@ This is the public module for the type checking functionality.
 >     ,typeCheckQueryExpr
 >     ,typeCheckScalarExpr
 >     ,typeCheckScalarExprEnv
->     ,TypeCheckingFlags(..)
+>     ,TypeCheckFlags(..)
 >     ,Dialect(..)
 >     ,ansiDialect
->     ,defaultTypeCheckingFlags
+>     ,defaultTypeCheckFlags
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.AstInternal

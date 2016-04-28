@@ -6,7 +6,7 @@
 
 > import Database.HsSqlPpp.Parse
 > import Database.HsSqlPpp.TypeCheck
-> import Database.HsSqlPpp.Catalog
+> --import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.Dialect
 > import Database.HsSqlPpp.Types
 > import Database.HsSqlPpp.Annotation
@@ -24,7 +24,7 @@
 >             $ parseProcSQL defaultParseFlags "" Nothing query
 >       -- type check the ast
 >       aast :: [Statement]
->       aast = snd $ typeCheckStatements defaultTypeCheckingFlags cat ast
+>       aast = snd $ typeCheckStatements defaultTypeCheckFlags cat ast
 >       -- get a list of scalarexpr and queryexpr nodes with
 >       -- no type: indicates an error has occured
 >       -- and get the list of type errors with source positions

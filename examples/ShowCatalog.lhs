@@ -7,7 +7,7 @@
 > import Database.HsSqlPpp.Parse
 > import Database.HsSqlPpp.TypeCheck
 > import Database.HsSqlPpp.Catalog
-> import Database.HsSqlPpp.Dialect
+> --import Database.HsSqlPpp.Dialect
 > import qualified Data.Text.Lazy.IO as LT
 
 > main :: IO ()
@@ -16,9 +16,9 @@
 >   src <- LT.readFile f
 >   let ast = either (error . show ) id
 >             $ parseStatements defaultParseFlags f Nothing src
->       catIn = diDefaultCatalog $ tcfDialect defaultTypeCheckingFlags
+>       catIn = diDefaultCatalog $ tcfDialect defaultTypeCheckFlags
 >   let (cat,_) =
->                 typeCheckStatements defaultTypeCheckingFlags
->                 (diDefaultCatalog $ tcfDialect defaultTypeCheckingFlags) ast
+>                 typeCheckStatements defaultTypeCheckFlags
+>                 (diDefaultCatalog $ tcfDialect defaultTypeCheckFlags) ast
 >       cc = deconstructCatalog cat \\ deconstructCatalog catIn
 >   putStrLn $ ppShow cc

@@ -147,7 +147,7 @@
 >   let ast = case parseScalarExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       aast = typeCheckScalarExpr defaultTypeCheckingFlags defaultTemplate1Catalog ast
+>       aast = typeCheckScalarExpr defaultTypeCheckFlags defaultTemplate1Catalog ast
 >       (ty,errs,noTypeQEs,noTypeSEs) = tcTreeInfo aast
 >       er = concatMap fst errs
 >       got = case () of
@@ -170,7 +170,7 @@
 >   let ast = case parseScalarExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       aast = typeCheckScalarExprEnv defaultTypeCheckingFlags cat env ast
+>       aast = typeCheckScalarExprEnv defaultTypeCheckFlags cat env ast
 >       (ty,errs,noTypeQEs,noTypeSEs) = tcTreeInfo aast
 >       er = concatMap fst errs
 >       got = case () of
@@ -186,7 +186,7 @@
 >   unless (ete == got) $ trace (groomTypes aast) $ return ()
 >   H.assertEqual "" ete got
 
-> testImpCastsScalar :: TypeCheckingFlags -> L.Text -> L.Text -> T.TestTree
+> testImpCastsScalar :: TypeCheckFlags -> L.Text -> L.Text -> T.TestTree
 > testImpCastsScalar f src wsrc = H.testCase ("typecheck " ++ L.unpack src) $
 >   let ast = case parseScalarExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
@@ -222,10 +222,10 @@
 >           SqlServer -> defaultTSQLCatalog
 >           Oracle -> defaultTSQLCatalog
 >       flg = case diSyntaxFlavour dl of
->           Postgres -> defaultTypeCheckingFlags
->           Ansi -> defaultTypeCheckingFlags
->           SqlServer -> defaultTypeCheckingFlags {tcfDialect = sqlServerDialect}
->           Oracle -> defaultTypeCheckingFlags {tcfDialect = oracleDialect}
+>           Postgres -> defaultTypeCheckFlags
+>           Ansi -> defaultTypeCheckFlags
+>           SqlServer -> defaultTypeCheckFlags {tcfDialect = sqlServerDialect}
+>           Oracle -> defaultTypeCheckFlags {tcfDialect = oracleDialect}
 >       aast = typeCheckQueryExpr flg cat ast
 >       (ty,errs,noTypeQEs,noTypeSEs) = tcTreeInfo aast
 >       er = concatMap fst errs
@@ -255,10 +255,10 @@
 >           SqlServer -> defaultTSQLCatalog
 >           Oracle -> defaultTSQLCatalog
 >       flg = case diSyntaxFlavour dl of
->           Postgres -> defaultTypeCheckingFlags
->           Ansi -> defaultTypeCheckingFlags
->           SqlServer -> defaultTypeCheckingFlags {tcfDialect = sqlServerDialect}
->           Oracle -> defaultTypeCheckingFlags {tcfDialect = oracleDialect}
+>           Postgres -> defaultTypeCheckFlags
+>           Ansi -> defaultTypeCheckFlags
+>           SqlServer -> defaultTypeCheckFlags {tcfDialect = sqlServerDialect}
+>           Oracle -> defaultTypeCheckFlags {tcfDialect = oracleDialect}
 >       (_,aast) = typeCheckStatements flg cat ast
 >       (_,errs,noTypeQEs,noTypeSEs) = tcTreeInfo aast
 >       er = concatMap fst errs
@@ -286,10 +286,10 @@
 >           SqlServer -> defaultTSQLCatalog
 >           Oracle -> defaultTSQLCatalog
 >       flg = case diSyntaxFlavour dl of
->           Postgres -> defaultTypeCheckingFlags
->           Ansi -> defaultTypeCheckingFlags
->           SqlServer -> defaultTypeCheckingFlags {tcfDialect = sqlServerDialect}
->           Oracle -> defaultTypeCheckingFlags {tcfDialect = oracleDialect}
+>           Postgres -> defaultTypeCheckFlags
+>           Ansi -> defaultTypeCheckFlags
+>           SqlServer -> defaultTypeCheckFlags {tcfDialect = sqlServerDialect}
+>           Oracle -> defaultTypeCheckFlags {tcfDialect = oracleDialect}
 >       asts = either (error . show) id $ parseStatements defaultParseFlags "" Nothing src
 >       Insert _ _ _ q _ = extractInsert $ snd $ typeCheckStatements flg cat asts
 >       q' = addImplicitCasts cat q
@@ -325,7 +325,7 @@ type checks properly and produces the same type
 >               Right l -> l
 >   let cat = either (error.show) id $ updateCatalog cus defaultTemplate1Catalog
 >       aast = typeCheckQueryExpr
->                defaultTypeCheckingFlags {tcfAddQualifiers = True
+>                defaultTypeCheckFlags {tcfAddQualifiers = True
 >                                         ,tcfAddSelectItemAliases = True
 >                                         ,tcfExpandStars = True
 >                                         ,tcfAddFullTablerefAliases = True}
@@ -337,7 +337,7 @@ type checks properly and produces the same type
 >                 Left e -> error $ "parse: " ++ L.unpack pp ++ "\n" ++ show e
 >                 Right l -> l
 >       aastrw = typeCheckQueryExpr
->                  defaultTypeCheckingFlags
+>                  defaultTypeCheckFlags
 >                  cat astrw
 >       tyrw = anType $ getAnnotation aast
 >   H.assertEqual "rewrite pp . parse" (resetAnnotations aast) (resetAnnotations aastrw)
@@ -358,7 +358,7 @@ type checks properly and produces the same type
 
 
 
-> testRewrite :: TypeCheckingFlags -> [CatalogUpdate] -> L.Text -> L.Text
+> testRewrite :: TypeCheckFlags -> [CatalogUpdate] -> L.Text -> L.Text
 >             -> T.TestTree
 > testRewrite f cus src src' = H.testCase ("rewrite " ++ L.unpack src) $ do
 >   let ast = case parseQueryExpr defaultParseFlags "" Nothing src of

@@ -26,7 +26,7 @@
 >             $ parseProcSQL defaultParseFlags {pfDialect = SQLServerDialect } f Nothing query
 >       -- type check the ast
 >       aast :: [Statement]
->       aast = snd $ typeCheckStatements defaultTypeCheckingFlags { tcfDialect = SQLServerDialect } cat ast
+>       aast = snd $ typeCheckStatements defaultTypeCheckFlags { tcfDialect = SQLServerDialect } cat ast
 >   putStrLn $ ppShow aast
 >   where
 >     cat = either (error . ppShow) id $

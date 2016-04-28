@@ -20,7 +20,7 @@
 >       ast :: QueryExpr
 >       Right ast = parseQueryExpr defaultParseFlags "" Nothing query
 >       aast :: QueryExpr
->       aast = typeCheckQueryExpr defaultTypeCheckingFlags cat ast
+>       aast = typeCheckQueryExpr defaultTypeCheckFlags cat ast
 >       ann :: Annotation
 >       ann = getAnnotation aast
 >       ty :: Maybe Type
