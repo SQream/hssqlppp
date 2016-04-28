@@ -11,6 +11,7 @@
 > --import Database.HsSqlPpp.Internals.TypeChecking.Environment
 > import Database.HsSqlPpp.Types
 > import Database.HsSqlPpp.Tests.TypeChecking.Utils
+> import Database.HsSqlPpp.Dialect
 
 > precisionAndNullable :: Item
 > precisionAndNullable =
@@ -153,8 +154,8 @@
 >       ]
 >     ]
 >   where
->     cat1 = defaultTemplate1Catalog
->     cat2 = defaultTSQLCatalog
+>     cat1 = diDefaultCatalog postgresDialect
+>     cat2 = diDefaultCatalog sqlServerDialect
 >     anType = TypeExtra typeInt Nothing Nothing True
 >     anEnv = selListEnv [("an", anType)]
 >     aType = mkTypeExtraNN typeInt

@@ -35,11 +35,11 @@ Forward the public part of CatalogInternal.
 >     --,DomainDefinition
 >     --,FunFlav(..)
 >      -- * Catalog values
->     ,emptyCatalog
+>     {-,emptyCatalog
 >     ,defaultCatalog
 >     ,defaultTemplate1Catalog
 >     ,defaultTSQLCatalog
->     ,odbcCatalog
+>     ,odbcCatalog-}
 >      -- * Catalog comparison
 >     --,CatalogDiff(..)
 >     --,compareCatalogs
@@ -57,7 +57,7 @@ Forward the public part of CatalogInternal.
 > --import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
 > --import Database.HsSqlPpp.Internals.Catalog.CatalogBuilder
 > --import Database.HsSqlPpp.Internals.Catalog.CatalogUtils
-> import Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
-> import Database.HsSqlPpp.Dialects.DefaultTSQLCatalog
-> import Database.HsSqlPpp.Dialects.OdbcCatalog
+> --import Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
+> --import Database.HsSqlPpp.Dialects.DefaultTSQLCatalog
+> --import Database.HsSqlPpp.Dialects.OdbcCatalog
 > import Database.HsSqlPpp.Internals.TypeChecking.Environment

@@ -138,6 +138,8 @@
 >     let t' = concat $ map (prettyToken d) r
 >     H.assertEqual "lex . pretty" t (L.pack t')
 
+> defaultTemplate1Catalog :: Catalog
+> defaultTemplate1Catalog = diDefaultCatalog postgresDialect
 
 
 > testScalarExprType :: L.Text -> Either [TypeError] Type -> T.TestTree
@@ -206,13 +208,15 @@
 >                   )
 >       else id) $ H.assertEqual "" (resetAnnotations aast') (resetAnnotations wast)
 
+> defaultTSQLCatalog :: Catalog
+> defaultTSQLCatalog = diDefaultCatalog sqlServerDialect
 
 > testQueryExprType :: Dialect -> [CatalogUpdate] -> L.Text -> Either [TypeError] Type -> T.TestTree
 > testQueryExprType dl cus src et = H.testCase ("typecheck " ++ L.unpack src) $ do
 >   let ast = case parseQueryExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       Right cat = updateCatalog cus $ case diSyntaxFlavour dl of
+>       cat = either (error.show) id $ updateCatalog cus $ case diSyntaxFlavour dl of
 >           Postgres -> defaultTemplate1Catalog
 >           Ansi -> defaultTemplate1Catalog
 >           SqlServer -> defaultTSQLCatalog
@@ -245,7 +249,7 @@
 >   let ast = case parseStatements defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       Right cat = updateCatalog cus $ case diSyntaxFlavour dl of
+>       cat = either (error.show) id $ updateCatalog cus $ case diSyntaxFlavour dl of
 >           Postgres -> defaultTemplate1Catalog
 >           Ansi -> defaultTemplate1Catalog
 >           SqlServer -> defaultTSQLCatalog
@@ -276,7 +280,7 @@
 
 > testInsertQueryExprType :: Dialect -> [CatalogUpdate] -> L.Text -> Either [TypeError] Type -> T.TestTree
 > testInsertQueryExprType dl cus src et = H.testCase ("typecheck " ++ L.unpack src) $ do
->   let Right cat = updateCatalog cus $ case diSyntaxFlavour dl of
+>   let cat = either (error.show) id $ updateCatalog cus $ case diSyntaxFlavour dl of
 >           Postgres -> defaultTemplate1Catalog
 >           Ansi -> defaultTemplate1Catalog
 >           SqlServer -> defaultTSQLCatalog
@@ -319,7 +323,7 @@ type checks properly and produces the same type
 >   let ast = case parseQueryExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ "parse: " ++ L.unpack src ++ "\n" ++ show e
 >               Right l -> l
->   let Right cat = updateCatalog cus defaultTemplate1Catalog
+>   let cat = either (error.show) id $ updateCatalog cus defaultTemplate1Catalog
 >       aast = typeCheckQueryExpr
 >                defaultTypeCheckingFlags {tcfAddQualifiers = True
 >                                         ,tcfAddSelectItemAliases = True
@@ -360,7 +364,7 @@ type checks properly and produces the same type
 >   let ast = case parseQueryExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       Right cat = updateCatalog cus defaultTemplate1Catalog
+>       cat = either (error.show) id $ updateCatalog cus defaultTemplate1Catalog
 >       aast = typeCheckQueryExpr f cat ast
 >       astrw = resetAnnotations aast
 >       ast' = case parseQueryExpr defaultParseFlags "" Nothing src' of

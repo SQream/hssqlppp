@@ -7,6 +7,7 @@
 > import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
 > import Data.Data
 > import Data.Text (Text)
+> import Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
 
 stub for forward compatibility. This version of the code just looks at
 the syntax flavour
@@ -42,4 +43,6 @@ the syntax flavour
 
 
 > postgresDialect :: Dialect
-> postgresDialect = emptyDialect {diName = "postgres", diSyntaxFlavour=Postgres}
+> postgresDialect = emptyDialect {diName = "postgres"
+>                                ,diSyntaxFlavour=Postgres
+>                                ,diDefaultCatalog = defaultTemplate1Catalog}

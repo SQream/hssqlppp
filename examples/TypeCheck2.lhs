@@ -7,6 +7,7 @@
 > import Database.HsSqlPpp.Parse
 > import Database.HsSqlPpp.TypeCheck
 > import Database.HsSqlPpp.Catalog
+> import Database.HsSqlPpp.Dialect
 > import Database.HsSqlPpp.Types
 > import Database.HsSqlPpp.Annotation
 > import Database.HsSqlPpp.Syntax
@@ -41,4 +42,4 @@
 >   -- print the result types in the unlikely event that we have some
 >   putStrLn $ intercalate " " $ map (show . anType . getAnnotation) aast
 >   where
->     cat = defaultTemplate1Catalog
+>     cat = diDefaultCatalog postgresDialect

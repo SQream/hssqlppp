@@ -14,17 +14,26 @@
 >     ) where
 
 > import Database.HsSqlPpp.Internals.Dialect
+> import Database.HsSqlPpp.Dialects.DefaultTSQLCatalog
+> --import Database.HsSqlPpp.Internals.Catalog.CatalogTypes
+> import Database.HsSqlPpp.Dialects.DefaultTemplate1Catalog
 > --import Data.Data
 > import Data.Text (Text)
 
 > ansiDialect :: Dialect
-> ansiDialect = emptyDialect {diName = "ansi", diSyntaxFlavour=Postgres}
+> ansiDialect = emptyDialect {diName = "ansi"
+>                            ,diSyntaxFlavour=Postgres
+>                            ,diDefaultCatalog = defaultTemplate1Catalog}
 
 > sqlServerDialect :: Dialect
-> sqlServerDialect = emptyDialect {diName = "sqlserver", diSyntaxFlavour=SqlServer}
+> sqlServerDialect = emptyDialect {diName = "sqlserver"
+>                                 ,diSyntaxFlavour=SqlServer
+>                                 ,diDefaultCatalog = defaultTSQLCatalog}
 
 > oracleDialect :: Dialect
-> oracleDialect = emptyDialect {diName = "oracle", diSyntaxFlavour=Oracle}
+> oracleDialect = emptyDialect {diName = "oracle"
+>                              ,diSyntaxFlavour=Oracle
+>                              ,diDefaultCatalog = defaultTemplate1Catalog}
 
 > ansiTypeNameToDialect :: Dialect -> Text -> Maybe Text
 > ansiTypeNameToDialect = error "ansiTypeNameToDialect not supported in this version"
