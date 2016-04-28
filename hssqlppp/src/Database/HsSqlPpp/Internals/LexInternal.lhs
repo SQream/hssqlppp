@@ -49,7 +49,7 @@
 >     -- The identifier also includes the \'variable marker prefix\'
 >     -- used in sql server (e.g. \@identifier, #identifier), and oracle
 >     -- (e.g. :identifier)
->     | Identifier (Maybe (Char,Char)) String
+>     | Identifier (Maybe (String,String)) String
 >
 >     -- | This is a string literal.
 >     --
@@ -61,7 +61,7 @@
 >     -- on the literal source e.g. E\'\\n\' parses to SqlString \"E\'\" \"\\n\"
 >     -- with the literal characters \'\\\' and \'n\' in the string, not a newline character.
 >     -- quotes within a string (\'\') or escaped string (\'\' or \\\') are passed through unchanged
->     | SqlString String String
+>     | SqlString String String String
 >
 >     -- | a number literal (integral or otherwise), stored in original format
 >     -- unchanged
@@ -98,9 +98,8 @@
 > prettyToken _ (Symbol s) = s
 > prettyToken _ (Identifier Nothing t) = t
 > prettyToken _ (Identifier (Just (a,b)) t) =
->     [a] ++ t ++ [b]
-> prettyToken _ (SqlString "E'" t) = "E'" ++ t ++ "'"
-> prettyToken _ (SqlString q t) = q ++ t ++ q
+>     a ++ t ++ b
+> prettyToken _ (SqlString q0 q1 t) = q0 ++ t ++ q1
 > prettyToken _ (SqlNumber r) = r
 > prettyToken _ (Whitespace t) = t
 > prettyToken _ (PositionalArg n) =  '$' : show n
@@ -190,9 +189,9 @@ TODO: fix all the "qiden" parsers to allow "qid""en"
 
 > identifier (Dialect {diSyntaxFlavour = SqlServer}) =
 >     choice
->     [Identifier (Just ('[',']'))
+>     [Identifier (Just ("[","]"))
 >      <$> (char '[' *> takeWhile1 (/=']') <* char ']')
->     ,Identifier (Just ('"','"'))
+>     ,Identifier (Just ("\"","\""))
 >      <$> (char '"' *> takeWhile1 (/='"') <* char '"')
 >     ,Identifier Nothing <$> identifierStringPrefix '@'
 >     ,Identifier Nothing <$> identifierStringPrefix '#'
@@ -205,7 +204,7 @@ quoting uses ""
 
 > identifier (Dialect {diSyntaxFlavour = Oracle}) =
 >     choice
->     [Identifier (Just ('"','"'))
+>     [Identifier (Just ("\"","\""))
 >      <$> (char '"' *> takeWhile1 (/='"') <* char '"')
 >     ,Identifier Nothing <$> identifierStringPrefix ':'
 >     ,Identifier Nothing <$> identifierString
@@ -213,14 +212,14 @@ quoting uses ""
 
 > identifier (Dialect {diSyntaxFlavour = Postgres}) =
 >     choice
->     [Identifier (Just ('"','"'))
+>     [Identifier (Just ("\"","\""))
 >      <$> (char '"' *> takeWhile1 (/='"') <* char '"')
 >     ,Identifier Nothing <$> identifierString
 >     ]
 
 > identifier (Dialect {diSyntaxFlavour = Ansi}) =
 >     choice
->     [Identifier (Just ('"','"'))
+>     [Identifier (Just ("\"","\""))
 >      <$> (char '"' *> takeWhile1 (/='"') <* char '"')
 >     ,Identifier Nothing <$> identifierString
 >     ]
@@ -262,7 +261,7 @@ variants.
 >            ,eString
 >            ,dollarString]
 >   where
->     normalString = SqlString "'" <$> (char '\'' *> normalStringSuffix "")
+>     normalString = SqlString "'" "'" <$> (char '\'' *> normalStringSuffix "")
 >     normalStringSuffix t = do
 >         s <- takeTill (=='\'')
 >         void $ char '\''
@@ -271,7 +270,7 @@ variants.
 >                 void $ char '\''
 >                 normalStringSuffix $ concat [t,s,"''"]
 >                ,return $ concat [t,s]]
->     eString = SqlString "E'" <$> (try (string "E'") *> eStringSuffix "")
+>     eString = SqlString "E'" "'" <$> (try (string "E'") *> eStringSuffix "")
 >     eStringSuffix :: String -> Parser String
 >     eStringSuffix t = do
 >         s <- takeTill (`elem` ("\\'"::String))
@@ -290,7 +289,7 @@ variants.
 >     dollarString = do
 >         delim <- dollarDelim
 >         y <- manyTill anyChar (try $ string delim)
->         return $ SqlString delim y
+>         return $ SqlString delim delim y
 >     dollarDelim :: Parser String
 >     dollarDelim = try $ do
 >       void $ char '$'

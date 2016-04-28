@@ -2542,7 +2542,7 @@ Utility parsers
 > liftStringTok :: SParser String
 > liftStringTok = mytoken (\tok ->
 >                   case tok of
->                            Lex.SqlString _ s ->
+>                            Lex.SqlString _ _ s ->
 >                               -- bit hacky, the lexer doesn't process quotes
 >                               -- but the parser expects them to have been replaced
 >                               Just $ T.unpack $ T.replace "''" "'" $ T.replace "\'" "'" $ T.pack s
@@ -2559,7 +2559,7 @@ Utility parsers
 > stringN :: SParser String
 > stringN = mytoken (\tok ->
 >                   case tok of
->                            Lex.SqlString _ s -> Just s
+>                            Lex.SqlString _ _ s -> Just s
 >                            _ -> Nothing)
 
 > extrStr :: ScalarExpr -> String

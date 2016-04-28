@@ -18,24 +18,24 @@ try to parse, if parses, print and check equal to original string
 
 > lexerTests :: Item
 > lexerTests = Group "lexing"
->     [Lex postgresDialect "'string'" [SqlString "'" "string"]
->     ,Lex postgresDialect "E'string\\n'" [SqlString "E'" "string\\n"] -- the \\n is to put a literal \ and n in the string
->     ,Lex postgresDialect "E'bsquoteend\\''" [SqlString "E'" "bsquoteend\\'"]
->     ,Lex postgresDialect "E'bsquote\\'xx'" [SqlString "E'" "bsquote\\'xx"]
->     ,Lex postgresDialect "E'quoteend'''" [SqlString "E'" "quoteend''"]
->     ,Lex postgresDialect "E'quote''x'" [SqlString "E'" "quote''x"]
->     ,Lex postgresDialect "'normal '' quote'" [SqlString "'" "normal '' quote"]
->     ,Lex postgresDialect "'normalendquote '''" [SqlString "'" "normalendquote ''"]
->     ,Lex postgresDialect "$$dollar quoting$$" [SqlString "$$" "dollar quoting"]
->     ,Lex postgresDialect "$x$dollar $$ quoting$x$" [SqlString "$x$" "dollar $$ quoting"]
+>     [Lex postgresDialect "'string'" [SqlString "'" "'" "string"]
+>     ,Lex postgresDialect "E'string\\n'" [SqlString "E'" "'" "string\\n"] -- the \\n is to put a literal \ and n in the string
+>     ,Lex postgresDialect "E'bsquoteend\\''" [SqlString "E'" "'" "bsquoteend\\'"]
+>     ,Lex postgresDialect "E'bsquote\\'xx'" [SqlString "E'" "'" "bsquote\\'xx"]
+>     ,Lex postgresDialect "E'quoteend'''" [SqlString "E'" "'" "quoteend''"]
+>     ,Lex postgresDialect "E'quote''x'" [SqlString "E'" "'" "quote''x"]
+>     ,Lex postgresDialect "'normal '' quote'" [SqlString "'" "'" "normal '' quote"]
+>     ,Lex postgresDialect "'normalendquote '''" [SqlString "'" "'" "normalendquote ''"]
+>     ,Lex postgresDialect "$$dollar quoting$$" [SqlString "$$" "$$" "dollar quoting"]
+>     ,Lex postgresDialect "$x$dollar $$ quoting$x$" [SqlString "$x$" "$x$" "dollar $$ quoting"]
 
 identifiers
 
 >     ,Lex postgresDialect "test" [Identifier Nothing "test"]
 >     ,Lex postgresDialect "_test" [Identifier Nothing "_test"]
->     ,Lex postgresDialect "\"test test\"" [Identifier (Just ('"','"')) "test test"]
+>     ,Lex postgresDialect "\"test test\"" [Identifier (Just ("\"","\"")) "test test"]
 >     ,Lex postgresDialect "test123" [Identifier Nothing "test123"]
->     ,Lex sqlServerDialect "[test \"]" [Identifier (Just ('[',']')) "test \""]
+>     ,Lex sqlServerDialect "[test \"]" [Identifier (Just ("[","]")) "test \""]
 >     ,Lex sqlServerDialect "@test" [Identifier Nothing "@test"]
 >     ,Lex sqlServerDialect "#test" [Identifier Nothing "#test"]
 >     ,Lex oracleDialect ":test" [Identifier Nothing ":test"]
