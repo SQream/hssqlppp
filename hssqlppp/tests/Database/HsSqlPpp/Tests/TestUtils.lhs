@@ -107,8 +107,8 @@
 >
 > testParsePlpgsqlStatements :: Dialect -> Text -> [Statement] -> T.TestTree
 > testParsePlpgsqlStatements flg src ast =
->   parseUtil src ast (parsePlpgsql defaultParseFlags {pfDialect=flg} "" Nothing)
->                     (parsePlpgsql defaultParseFlags {pfDialect=flg} "" Nothing)
+>   parseUtil src ast (parseProcSQL defaultParseFlags {pfDialect=flg} "" Nothing)
+>                     (parseProcSQL defaultParseFlags {pfDialect=flg} "" Nothing)
 >                     (prettyStatements defaultPrettyFlags {ppDialect=flg})
 >
 > parseUtil :: (Show t, Eq b, Show b, Data b) =>

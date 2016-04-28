@@ -23,7 +23,7 @@
 >   query <- LT.readFile f
 >   let ast :: [Statement]
 >       ast = either (error . show) id
->             $ parsePlpgsql defaultParseFlags {pfDialect = SQLServerDialect } f Nothing query
+>             $ parseProcSQL defaultParseFlags {pfDialect = SQLServerDialect } f Nothing query
 >       -- type check the ast
 >       aast :: [Statement]
 >       aast = snd $ typeCheckStatements defaultTypeCheckingFlags { tcfDialect = SQLServerDialect } cat ast

@@ -8,7 +8,7 @@ Forward the public part of ParseInternal
 >      parseStatements
 >     ,parseQueryExpr
 >     ,parseScalarExpr
->     ,parsePlpgsql
+>     ,parseProcSQL
 >      -- * Parsing options
 >     ,ParseFlags(..)
 >     ,defaultParseFlags

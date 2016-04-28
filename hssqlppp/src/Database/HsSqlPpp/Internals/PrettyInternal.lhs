@@ -50,7 +50,7 @@ adjusted to reject postgres only syntax when in sql server dialect
 > defaultPrettyFlags = PrettyFlags {ppDialect = postgresDialect}
 
 > -- | Convert an ast back to valid SQL source.
-> prettyStatements :: PrettyFlags -> StatementList -> L.Text
+> prettyStatements :: PrettyFlags -> [Statement] -> L.Text
 > prettyStatements f = printStatementsAnn f (const "")
 >
 > -- | Convert the ast back to valid source, and convert any annotations to
@@ -59,7 +59,7 @@ adjusted to reject postgres only syntax when in sql server dialect
 
 this needs some work
 
-> printStatementsAnn :: PrettyFlags -> (Annotation -> String) -> StatementList -> L.Text
+> printStatementsAnn :: PrettyFlags -> (Annotation -> String) -> [Statement] -> L.Text
 > printStatementsAnn flg f ast =
 >   renderText $ vcat (map (statement flg True f) ast) <> text "\n"
 
@@ -907,7 +907,7 @@ syntax maybe should error instead of silently breaking
 > -- plpgsql
 >
 >
-> nestedStatements :: PrettyFlags -> (Annotation -> String) -> StatementList -> Doc
+> nestedStatements :: PrettyFlags -> (Annotation -> String) -> [Statement] -> Doc
 > nestedStatements flg pa = nest 2 . vcat . map (statement flg True pa)
 >
 > typeName :: TypeName -> Doc

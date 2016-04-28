@@ -21,7 +21,7 @@
 >   query <- LT.readFile f
 >   let ast :: [Statement]
 >       ast = either (error . show) id
->             $ parsePlpgsql defaultParseFlags "" Nothing query
+>             $ parseProcSQL defaultParseFlags "" Nothing query
 >       -- type check the ast
 >       aast :: [Statement]
 >       aast = snd $ typeCheckStatements defaultTypeCheckingFlags cat ast

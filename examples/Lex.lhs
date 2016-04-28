@@ -10,4 +10,4 @@
 >   [s] <- getArgs
 >   f <- LT.readFile s
 >   putStrLn $ ppShow $ lexTokens postgresDialect "" (Just (1,0)) f
->   --putStrLn $ ppShow $ parsePlpgsql "" s
+>   --putStrLn $ ppShow $ parseProcSQL "" s

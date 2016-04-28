@@ -99,7 +99,7 @@ public api: the quasiquote functions
 >
 > -- | quotes plpgsql Statements
 > pgsqlStmts :: QuasiQuoter
-> pgsqlStmts = makeQQ $ parsePlpgsql P.defaultParseFlags
+> pgsqlStmts = makeQQ $ parseProcSQL P.defaultParseFlags
 >
 > -- | quotes a plpgsql Statement
 > pgsqlStmt :: QuasiQuoter
@@ -192,7 +192,7 @@ exactly one statement
 
 > parseOnePlpgsql :: Parser String Statement
 > parseOnePlpgsql f sp s =
->     case parsePlpgsql P.defaultParseFlags f sp s of
+>     case parseProcSQL P.defaultParseFlags f sp s of
 >       Right [st] -> Right st
 >       Right _ -> Left "got multiple statements"
 >       Left e -> Left $ show e
@@ -352,9 +352,9 @@ also, how to use haskell syntax in splices
 >                    -> Either P.ParseErrorExtra NameComponent
 > parseNameComponent p f s src = P.parseNameComponent p f s (L.pack src)
 
-> parsePlpgsql :: P.ParseFlags -- ^ parse options
+> parseProcSQL :: P.ParseFlags -- ^ parse options
 >              -> FilePath -- ^ filename to use in errors
 >              -> Maybe (Int,Int) -- ^ set the line number and column number
 >              -> String
 >              -> Either P.ParseErrorExtra [Statement]
-> parsePlpgsql p f s src = P.parsePlpgsql p f s (L.pack src)
+> parseProcSQL p f s src = P.parseProcSQL p f s (L.pack src)

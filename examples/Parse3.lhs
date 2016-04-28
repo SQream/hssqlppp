@@ -14,6 +14,6 @@
 > main = do
 >   [f] <- getArgs
 >   src <- LT.readFile f
->   let ast = parsePlpgsql defaultParseFlags {pfDialect=sqlServerDialect}
+>   let ast = parseProcSQL defaultParseFlags {pfDialect=sqlServerDialect}
 >                          f Nothing src
 >   putStrLn $ either ppShow groomNoAnns ast
