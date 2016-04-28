@@ -7,17 +7,19 @@ This is the public module for the type checking functionality.
 >     (
 >      -- * typechecking/ annotation functions
 >      typeCheckStatements
->     ,typeCheckParameterizedStatement
+>     --,typeCheckParameterizedStatement
 >     ,typeCheckQueryExpr
 >     ,typeCheckScalarExpr
->     ,typeCheckScalarExprEnv
+>     --,typeCheckScalarExprEnv
 >     ,TypeCheckFlags(..)
 >     ,Dialect(..)
 >     ,ansiDialect
 >     ,defaultTypeCheckFlags
+>     ,emptyEnvironment
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.AstInternal
+> import Database.HsSqlPpp.Internals.TypeChecking.Environment (emptyEnvironment)
 > import Database.HsSqlPpp.Dialect
 > --import Database.HsSqlPpp.Internals.TypeChecking.Utils
 > --import Database.HsSqlPpp.Internals.AstAnnotation

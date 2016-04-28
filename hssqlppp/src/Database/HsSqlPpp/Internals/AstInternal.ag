@@ -121,12 +121,11 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,MaybeNameComponentList
    -- typechecking
    ,typeCheckStatements
-   ,typeCheckParameterizedStatement
+   --,typeCheckParameterizedStatement
    ,typeCheckScalarExpr
-   ,typeCheckScalarExprEnv
    ,typeCheckQueryExpr
-   ,TypeCheckingFlags(..)
-   ,defaultTypeCheckingFlags
+   ,TypeCheckFlags(..)
+   ,defaultTypeCheckFlags
    ,addExplicitCasts
    ,addImplicitCasts
    -- annotation

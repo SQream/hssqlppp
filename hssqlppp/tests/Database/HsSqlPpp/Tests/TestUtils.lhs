@@ -147,7 +147,7 @@
 >   let ast = case parseScalarExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       aast = typeCheckScalarExpr defaultTypeCheckFlags defaultTemplate1Catalog ast
+>       aast = typeCheckScalarExpr defaultTypeCheckFlags defaultTemplate1Catalog emptyEnvironment ast
 >       (ty,errs,noTypeQEs,noTypeSEs) = tcTreeInfo aast
 >       er = concatMap fst errs
 >       got = case () of
@@ -170,7 +170,7 @@
 >   let ast = case parseScalarExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       aast = typeCheckScalarExprEnv defaultTypeCheckFlags cat env ast
+>       aast = typeCheckScalarExpr defaultTypeCheckFlags cat env ast
 >       (ty,errs,noTypeQEs,noTypeSEs) = tcTreeInfo aast
 >       er = concatMap fst errs
 >       got = case () of
@@ -191,7 +191,7 @@
 >   let ast = case parseScalarExpr defaultParseFlags "" Nothing src of
 >               Left e -> error $ show e
 >               Right l -> l
->       aast = typeCheckScalarExpr f defaultTemplate1Catalog ast
+>       aast = typeCheckScalarExpr f defaultTemplate1Catalog emptyEnvironment ast
 >       aast' = addExplicitCasts aast
 >       wast = case parseScalarExpr defaultParseFlags "" Nothing wsrc of
 >                Left e -> error $ show e

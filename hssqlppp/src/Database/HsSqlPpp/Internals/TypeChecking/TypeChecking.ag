@@ -61,6 +61,7 @@ typeCheckQueryExpr f cat qe =
    let (_,[QueryStatement _ qe']) = typeCheckStatements f cat [QueryStatement emptyAnnotation qe]
    in qe'
 
+{-
 -- | Not working yet. Typechecks a statement possibly containing ?
 -- placeholders. These are annotated with the 'inferred type', and the
 -- stType annotation on the return value can be used to get this info
@@ -94,10 +95,11 @@ typeCheckScalarExpr f cat ex =
 cse"-}}))
     in case rt of
          ScalarExprRoot e -> fixTree e
+-}
 
-typeCheckScalarExprEnv::  TypeCheckFlags -> Catalog -> Environment
+typeCheckScalarExpr :: TypeCheckFlags -> Catalog -> Environment
                           -> ScalarExpr -> ScalarExpr
-typeCheckScalarExprEnv f cat env ex =
+typeCheckScalarExpr f cat env ex =
     let t = sem_ScalarExprRoot (ScalarExprRoot ex)
         rt = annotatedTree_Syn_ScalarExprRoot
                 $ wrap_ScalarExprRoot t
