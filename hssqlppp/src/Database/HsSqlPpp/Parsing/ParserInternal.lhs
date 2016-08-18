@@ -200,7 +200,13 @@ Parsing top level statements
 >     ,copy
 >     ,--do
 >      --not <$> isSqlServer >>= guard
->      set
+>      do an <- pos
+>         keyword "set"
+>         choice
+>           [ setRole an
+>           , set an
+>           ]
+>     ,resetRole
 >     ,notify
 >     ,keyword "create" *>
 >              choice [
@@ -214,6 +220,7 @@ Parsing top level statements
 >                ,createLanguage
 >                ,createTrigger
 >                ,createIndex
+>                ,createRole
 >                ,createLogin
 >                ,createUser
 >                ,createSchema]
@@ -222,6 +229,7 @@ Parsing top level statements
 >                 alterSequence
 >                ,alterTable
 >                ,alterDatabase
+>                ,alterRole
 >                ,alterLogin
 >                ,alterUser
 >                ,alterView
@@ -609,20 +617,49 @@ other dml-type stuff
 
 --------------------------------------------------------------------------------
 
+roles
+=====
+
+> setRole :: Annotation -> SParser Statement
+> setRole an =
+>   SetRole an
+>     <$> (keyword "role" *> nameComponent)
+
+> resetRole :: SParser Statement
+> resetRole =
+>   ResetRole <$> (pos <* keyword "reset" <* keyword "role")
+
+> createRole :: SParser Statement
+> createRole =
+>   CreateRole
+>     <$> pos
+>     <*> (keyword "role" *> nameComponent)
+
+> alterRole :: SParser Statement
+> alterRole =
+>   AlterRole
+>     <$> pos
+>     <*> (keyword "role" *> nameComponent)
+>     <*> (keyword "rename" *> keyword "to" *> nameComponent)
+
+--------------------------------------------------------------------------------
+
 misc
 ====
 
-> set :: SParser Statement
-> set = Set <$> pos
->       <*> (keyword "set" *> idString)
->       <*> ((keyword "to" <|> symbol "=") *>
->            commaSep1 sv)
+> set :: Annotation -> SParser Statement
+> set an =
+>   Set an
+>     <$> idString
+>     <*> ((keyword "to" <|> symbol "=") *> commaSep1 sv)
+>
 >   where
->         sv = choice [
->               SetStr <$> pos <*> stringN
->              ,SetId <$> pos <*> idString
->              ,SetNum <$> pos <*> (try (fromInteger <$> integer)
->                                   <|> (read <$> numString))]
+>     sv = choice
+>         [SetStr <$> pos <*> stringN
+>         ,SetId  <$> pos <*> idString
+>         ,SetNum <$> pos <*> (try (fromInteger <$> integer) <|> (read <$> numString))
+>         ]
+
 >
 > notify :: SParser Statement
 > notify = Notify <$> pos
@@ -1036,6 +1073,7 @@ variable declarations in a plpgsql function
 >                 ,Table <$ keyword "table"
 >                 ,View <$ keyword "view"
 >                 ,Database <$ keyword "database"
+>                 ,Role <$ keyword "role"
 >                 ,User <$ keyword "user"
 >                 ,Login <$ keyword "login"
 >                 ,Schema <$ keyword "schema"

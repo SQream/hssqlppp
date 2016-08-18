@@ -756,6 +756,14 @@ data Statement
     | AlterLogin ann::Annotation
                  name :: Name
                  password :: String
+-- roles
+    | CreateRole ann::Annotation
+                 name :: NameComponent
+    | AlterRole ann::Annotation
+                name :: NameComponent
+                newName :: NameComponent
+    | SetRole ann::Annotation name::NameComponent
+    | ResetRole ann::Annotation
 
 -- schemas
     | CreateSchema ann::Annotation
@@ -1076,6 +1084,7 @@ data DropType = Table
               | View
               | Type
               | Database
+              | Role
               | User
               | Login
               | Schema

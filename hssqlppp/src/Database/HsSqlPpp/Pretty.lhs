@@ -355,6 +355,7 @@ Conversion routines - convert Sql asts into Docs
 >                 Domain -> "domain"
 >                 Type -> "type"
 >                 Database -> "database"
+>                 Role -> "role"
 >                 User -> "user"
 >                 Login -> "login"
 >                 Schema -> "schema")
@@ -591,7 +592,27 @@ Conversion routines - convert Sql asts into Docs
 >       ttext nm <+> typeName ty
 >       <+> maybe empty (\e -> text "=" <+> scalExpr flg e) val
 
->
+roles
+
+> statement _flg se _ (SetRole _ role) =
+>   text "set" <+> text "role" <+> nmc role
+>   <> statementEnd se
+
+> statement _flg se _ (ResetRole _) =
+>   text "reset" <+> text "role"
+>   <> statementEnd se
+
+> statement _flg se ca (CreateRole ann role) =
+>   annot ca ann
+>   <+> text "create" <+> text "role" <+> nmc role
+>   <> statementEnd se
+
+> statement _flg se ca (AlterRole ann role newrole) =
+>   annot ca ann
+>   <+> text "alter"  <+> text "role" <+> nmc role
+>   <+> text "rename" <+> text "to" <+> nmc newrole
+>   <> statementEnd se
+
 > -- misc
 >
 > statement _flg se _ (Set _ n vs) =
