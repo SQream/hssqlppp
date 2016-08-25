@@ -88,6 +88,9 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,TriggerEvent(..)
    ,TriggerFire(..)
    ,QueryHint(..)
+   ,PrivilegeObject(..)
+   ,PermissionAction(..)
+   ,RoleDescription(..)
    ,StatementList
    ,ScalarExprListStatementListTripleList
    ,ScalarExprListStatementListTriple
@@ -758,12 +761,37 @@ data Statement
                  password :: String
 -- roles
     | CreateRole ann::Annotation
-                 name :: NameComponent
+                 name :: RoleDescription
     | AlterRole ann::Annotation
-                name :: NameComponent
-                newName :: NameComponent
-    | SetRole ann::Annotation name::NameComponent
-    | ResetRole ann::Annotation
+                name :: RoleDescription
+                newName :: RoleDescription
+    | SetRole ann :: Annotation
+              name :: RoleDescription
+    | ResetRole ann :: Annotation
+
+-- alter defaults
+
+    | AlterDefaultRole
+        ann :: Annotation
+        role :: RoleDescription
+        defaultRole :: RoleDescription
+
+    | AlterDefaultSchema
+        ann :: Annotation
+        role :: RoleDescription
+        defaultSchema :: Name
+
+    | AlterCurrentDefaultSchema
+        ann::Annotation
+        defaultSchema :: Name
+
+    | AlterDefaultPermissions
+        ann::Annotation
+        creatorRoles :: {[RoleDescription]}
+        inSchemas    :: {[Name]}
+        forObjects   :: {[PrivilegeObject]}
+        permissions  :: {[PermissionAction]}
+        grantedRoles :: {[RoleDescription]}
 
 -- schemas
     | CreateSchema ann::Annotation
@@ -978,6 +1006,7 @@ data Constraint | UniqueConstraint ann::Annotation name::String x::{[NameCompone
                                       tableAtts :: {[NameComponent]}
                                       onUpdate :: Cascade
                                       onDelete :: Cascade
+
 {
 data TableOption =
        TableOptionStringVal [String] String
@@ -986,6 +1015,42 @@ data TableOption =
      | TableOptionKeywords [String]
        deriving (Show,Eq,Typeable,Data)
 
+}
+
+{
+
+data RoleDescription
+  = CurrentRole
+  | SessionRole
+  | RoleName NameComponent
+  deriving (Eq,Show,Data,Typeable)
+
+data PrivilegeObject
+  = Tables
+  | Schemas
+  | Views
+  | SavedQueries
+  | Databases
+  deriving (Eq,Show,Data,Typeable)
+
+}
+
+{
+data PermissionAction
+  = PrivAll
+  | PrivSelect
+  | PrivDelete
+  | PrivInsert
+  | PrivDDL
+  | PrivLogin
+  | PrivUsage
+  | PrivConnect
+  | PrivSuperUser
+  | PrivRoleAdmin
+  | PrivSetPermissions
+  | PrivPassword String
+  | PrivConnectionLimit Integer
+  deriving (Show,Eq,Typeable,Data)
 }
 
 data TypeAttributeDef | TypeAttDef ann::Annotation

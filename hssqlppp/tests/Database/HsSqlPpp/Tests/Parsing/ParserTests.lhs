@@ -35,6 +35,7 @@ There are no tests for invalid syntax at the moment.
 > import Database.HsSqlPpp.Tests.Parsing.Misc
 
 > import Database.HsSqlPpp.Tests.Parsing.Roles
+> import Database.HsSqlPpp.Tests.Parsing.AlterDefault
 
 > import Database.HsSqlPpp.Tests.Parsing.CreateTable
 > import Database.HsSqlPpp.Tests.Parsing.MiscDdl
@@ -70,7 +71,9 @@ There are no tests for invalid syntax at the moment.
 >                          ,miscDdl
 >                          ,functionsDdl]
 >             ,Group "permissions"
->               [ roles ]
+>               [ roles
+>               , alterDefault
+>               ]
 >             ,schemas
 >             ,pgplsql
 >             ,misc

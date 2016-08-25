@@ -1,4 +1,4 @@
-
+Int
 The main file for parsing sql, uses parsec. Not sure if parsec is the
 right choice, but it seems to do the job pretty well at the moment.
 
@@ -224,16 +224,20 @@ Parsing top level statements
 >                ,createLogin
 >                ,createUser
 >                ,createSchema]
->     ,keyword "alter" *>
+>     , do an <- pos
+>          keyword "alter" *>
 >              choice [
 >                 alterSequence
 >                ,alterTable
 >                ,alterDatabase
->                ,alterRole
+>                ,alterRole an
 >                ,alterLogin
 >                ,alterUser
 >                ,alterView
->                ,alterSchema]
+>                ,alterSchema
+>                ,alterDefault an
+>                ,alterCurrentDefault an
+>                ]
 >     ,keyword "drop" *>
 >              choice [
 >                 dropSomething
@@ -620,10 +624,16 @@ other dml-type stuff
 roles
 =====
 
+> role :: SParser RoleDescription
+> role =
+>       (keyword "current_role" *> pure CurrentRole)
+>   <|> (keyword "session_role" *> pure SessionRole)
+>   <|> fmap RoleName nameComponent
+
 > setRole :: Annotation -> SParser Statement
 > setRole an =
 >   SetRole an
->     <$> (keyword "role" *> nameComponent)
+>     <$> (keyword "role" *> role)
 
 > resetRole :: SParser Statement
 > resetRole =
@@ -633,14 +643,13 @@ roles
 > createRole =
 >   CreateRole
 >     <$> pos
->     <*> (keyword "role" *> nameComponent)
+>     <*> (keyword "role" *> role)
 
-> alterRole :: SParser Statement
-> alterRole =
->   AlterRole
->     <$> pos
->     <*> (keyword "role" *> nameComponent)
->     <*> (keyword "rename" *> keyword "to" *> nameComponent)
+> alterRole :: Annotation -> SParser Statement
+> alterRole an =
+>   AlterRole an
+>     <$> (keyword "role" *> role)
+>     <*> (keyword "rename" *> keyword "to" *> role)
 
 --------------------------------------------------------------------------------
 
@@ -1042,6 +1051,84 @@ variable declarations in a plpgsql function
 >                changeOwner  = AlterSchemaOwner
 >                              <$> (pos <* keyword "owner" <* keyword "to")
 >                              <*> name
+
+alter defaults
+
+
+> alterDefault :: Annotation -> SParser Statement
+> alterDefault an =
+>     keyword "default" *> (pRole <|> schema <|> permissions)
+
+>   where
+>     pRole = keyword "role" *>
+>       (AlterDefaultRole an
+>         <$> (keyword "for" *> role)
+>         <*> (keyword "to" *> role))
+
+>     schema = keyword "schema" *>
+>       (AlterDefaultSchema an
+>         <$> (keyword "for" *> role)
+>         <*> (keyword "to" *> name))
+
+>     permissions = keyword "permissions" *>
+>       (permissionsDB <|> permissionsSchema)
+>
+>     permissionsDB = do
+>       creatorRoles <-
+>              try (keyword "for" *> keyword "databases" *> pure Nothing)
+>          <|> try (optionMaybe (keyword "for" *> commaSep1 role) <* (keyword "for" *> keyword "databases"))
+>       perms <- keyword "grant" *> commaSep1 privs
+>       toRoles <- keyword "to" *> commaSep1 role
+>       pure $ AlterDefaultPermissions
+>         an
+>         (concat creatorRoles)
+>         []
+>         [Databases]
+>         perms
+>         toRoles
+
+>     permissionsSchema = do
+>       creatorRoles <- optionMaybe (keyword "for" *> commaSep1 role)
+>       schemas <- optionMaybe (keyword "in" *> commaSep1 name)
+>       forObjects <- (keyword "for" *> commaSep1 permObjects)
+>       perms <- keyword "grant" *> commaSep1 privs
+>       toRoles <- keyword "to" *> commaSep1 role
+>       pure $ AlterDefaultPermissions
+>         an
+>         (concat creatorRoles)
+>         (concat schemas)
+>         forObjects
+>         perms
+>         toRoles
+
+>     permObjects =
+>           (keyword "tables" *> pure Tables)
+>       <|> (keyword "schemas" *> pure Schemas)
+>       <|> (keyword "views" *> pure Views)
+>       <|> (keyword "saved_queries" *> pure SavedQueries)
+
+>     privs =
+>           (keyword "all" *> pure PrivAll)
+>       <|> (keyword "select" *> pure PrivSelect)
+>       <|> (keyword "delete" *> pure PrivDelete)
+>       <|> (keyword "insert" *> pure PrivInsert)
+>       <|> (keyword "ddl" *> pure PrivDDL)
+>       <|> (keyword "login" *> pure PrivLogin)
+>       <|> (keyword "usage" *> pure PrivUsage)
+>       <|> (keyword "connect" *> pure PrivConnect)
+>       <|> (keyword "superuser" *> pure PrivSuperUser)
+>       <|> (keyword "roleadmin" *> pure PrivRoleAdmin)
+>       <|> (keyword "set_permissions" *> pure PrivSetPermissions)
+>       <|> (keyword "password" *> fmap PrivPassword idString)
+>       <|> (keyword "limit" *> fmap PrivConnectionLimit (integer <?> "positive integer"))
+
+> alterCurrentDefault :: Annotation -> SParser Statement
+> alterCurrentDefault an =
+>     keyword "current" *> keyword "default" *> schema
+
+>   where
+>     schema = keyword "schema" *>
+>      (AlterCurrentDefaultSchema an <$> (keyword "to" *> name))
 
 >
 > createDomain :: SParser Statement

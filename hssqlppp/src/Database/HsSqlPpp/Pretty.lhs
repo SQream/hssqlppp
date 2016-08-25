@@ -4,7 +4,7 @@
 >
 >    Some effort is made produce human readable output.
 > -}
-> {-# LANGUAGE PatternGuards,OverloadedStrings,TypeSynonymInstances,FlexibleInstances #-}
+> {-# LANGUAGE PatternGuards,OverloadedStrings,TypeSynonymInstances,FlexibleInstances, LambdaCase #-}
 > module Database.HsSqlPpp.Pretty
 >     (--convert a sql ast to text
 >      printStatements
@@ -259,7 +259,7 @@ Conversion routines - convert Sql asts into Docs
 >           annot ca ann1 <+>
 >           statement flg True ca blk
 >       paramDefn (ParamDef _ n t) = nmc n <+> typeName t
->       paramDefn  (ParamDefTp _ t) = typeName t
+>       paramDefn (ParamDefTp _ t) = typeName t
 >
 > statement flg se ca (Block ann lb decls sts) =
 >   annot ca ann <+>
@@ -591,28 +591,6 @@ Conversion routines - convert Sql asts into Docs
 >     de (nm,ty,val) =
 >       ttext nm <+> typeName ty
 >       <+> maybe empty (\e -> text "=" <+> scalExpr flg e) val
-
-roles
-
-> statement _flg se _ (SetRole _ role) =
->   text "set" <+> text "role" <+> nmc role
->   <> statementEnd se
-
-> statement _flg se _ (ResetRole _) =
->   text "reset" <+> text "role"
->   <> statementEnd se
-
-> statement _flg se ca (CreateRole ann role) =
->   annot ca ann
->   <+> text "create" <+> text "role" <+> nmc role
->   <> statementEnd se
-
-> statement _flg se ca (AlterRole ann role newrole) =
->   annot ca ann
->   <+> text "alter"  <+> text "role" <+> nmc role
->   <+> text "rename" <+> text "to" <+> nmc newrole
->   <> statementEnd se
-
 > -- misc
 >
 > statement _flg se _ (Set _ n vs) =
@@ -650,6 +628,81 @@ roles
 >   text "alter login" <+> name nm
 >   <+> text "with password=" <> quotes (text pw)
 
+roles
+
+> statement _flg se _ (SetRole _ r) =
+>   text "set" <+> text "role" <+> role r
+>   <> statementEnd se
+
+> statement _flg se _ (ResetRole _) =
+>   text "reset" <+> text "role"
+>   <> statementEnd se
+
+> statement _flg se ca (CreateRole ann r) =
+>   annot ca ann
+>   <+> text "create" <+> text "role" <+> role r
+>   <> statementEnd se
+
+> statement _flg se ca (AlterRole ann r newr) =
+>   annot ca ann
+>   <+> text "alter"  <+> text "role" <+> role r
+>   <+> text "rename" <+> text "to" <+> role newr
+>   <> statementEnd se
+
+
+Alter Default
+
+> statement _flg se _ (AlterDefaultRole _ r newr) =
+>   text "alter default role for" <+> role r <+> text "to" <+> role newr <> statementEnd se
+
+> statement _flg se _ (AlterDefaultSchema _ r schema) =
+>   text "alter default schema for" <+> role r <+> text "to" <+> name schema <> statementEnd se
+
+> statement _flg se _ (AlterCurrentDefaultSchema _ schema) =
+>   text "alter current default schema to" <+> name schema <> statementEnd se
+
+> statement _flg se _ (AlterDefaultPermissions _ creators schemas forObjects permissions grantedRoles) =
+>      text "alter default permissions"
+>  <+> hcat (punctuate (comma <> space) (shove (text "for") $ map role creators))
+>  <+> hcat (punctuate (comma <> space) (shove (text "in")  $ map name schemas))
+>  <+> hcat (punctuate (comma <> space) (shove (text "for") $ map privilegeObject forObjects))
+>  <+> hcat (punctuate (comma <> space) (shove (text "grant") $ map permissionAction permissions))
+>  <+> hcat (punctuate (comma <> space) (shove (text "to") $ map role grantedRoles))
+>  <+> statementEnd se
+
+>    where shove d = \case
+>            [] -> []
+>            (x:xs) -> (d <+> x) : xs
+
+> role :: RoleDescription -> Doc
+> role = \case
+>   RoleName r  -> nmc r
+>   CurrentRole -> text "current_role"
+>   SessionRole -> text "session_role"
+
+> privilegeObject :: PrivilegeObject -> Doc
+> privilegeObject = \case
+>   Tables -> text "tables"
+>   Schemas -> text "schemas"
+>   Views -> text "views"
+>   SavedQueries -> text "saved_queries"
+>   Databases -> text "databases"
+
+> permissionAction :: PermissionAction -> Doc
+> permissionAction = \case
+>   PrivAll -> text "all"
+>   PrivSelect -> text "select"
+>   PrivDelete -> text "delete"
+>   PrivInsert -> text "insert"
+>   PrivDDL -> text "ddl"
+>   PrivLogin -> text "login"
+>   PrivUsage -> text "usage"
+>   PrivConnect -> text "connect"
+>   PrivSuperUser -> text "superuser"
+>   PrivRoleAdmin -> text "roleadmin"
+>   PrivSetPermissions -> text "set_permissions"
+>   PrivPassword pass -> text "password" <+> ttext pass
+>   PrivConnectionLimit limit -> text "connection_limit" <+> ttext (show limit)
 
 > statementEnd :: Bool -> Doc
 > statementEnd b = if b

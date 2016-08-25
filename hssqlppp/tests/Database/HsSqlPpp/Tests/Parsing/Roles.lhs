@@ -20,7 +20,7 @@ There are no tests for invalid syntax at the moment.
 >   Group "roleTests"
 >   [Group "SET ROLE"
 >     [s "SET ROLE my_role;"
->      [SetRole ea $ Nmc "my_role"]
+>      [SetRole ea $ RoleName $ Nmc "my_role"]
 >     ]
 >   ,Group "RESET ROLE"
 >     [s "RESET ROLE;"
@@ -28,11 +28,11 @@ There are no tests for invalid syntax at the moment.
 >     ]
 >   ,Group "CREATE ROLE"
 >     [s "CREATE ROLE my_role;"
->      [CreateRole ea $ Nmc "my_role"]
+>      [CreateRole ea $ RoleName $ Nmc "my_role"]
 >     ]
 >   ,Group "ALTER ROLE"
 >     [s "ALTER ROLE my_role RENAME TO other_role;"
->      [AlterRole ea (Nmc "my_role") (Nmc "other_role")]
+>      [AlterRole ea (RoleName $ Nmc "my_role") (RoleName $ Nmc "other_role")]
 >     ]
 >   ,Group "DROP ROLE"
 >     [s "DROP ROLE my_role;"
