@@ -156,6 +156,9 @@ Test-Suite Tests
                      Database.HsSqlPpp.Tests.Parsing.ParserTests
                      Database.HsSqlPpp.Tests.Parsing.LexerTests
                      Database.HsSqlPpp.Tests.Parsing.OdbcParsing
+                     Database.HsSqlPpp.Tests.Parsing.Roles
+                     Database.HsSqlPpp.Tests.Parsing.AlterDefault
+                     Database.HsSqlPpp.Tests.Parsing.Grant
                      Database.HsSqlPpp.Tests.TpchData
                      Database.HsSqlPpp.Tests.TestTypes
                      Database.HsSqlPpp.Utils.Here

@@ -36,6 +36,7 @@ There are no tests for invalid syntax at the moment.
 
 > import Database.HsSqlPpp.Tests.Parsing.Roles
 > import Database.HsSqlPpp.Tests.Parsing.AlterDefault
+> import Database.HsSqlPpp.Tests.Parsing.Grant
 
 > import Database.HsSqlPpp.Tests.Parsing.CreateTable
 > import Database.HsSqlPpp.Tests.Parsing.MiscDdl
@@ -73,6 +74,7 @@ There are no tests for invalid syntax at the moment.
 >             ,Group "permissions"
 >               [ roles
 >               , alterDefault
+>               , grantRevoke
 >               ]
 >             ,schemas
 >             ,pgplsql

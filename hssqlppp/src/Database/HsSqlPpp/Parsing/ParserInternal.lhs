@@ -208,6 +208,21 @@ Parsing top level statements
 >           ]
 >     ,resetRole
 >     ,notify
+
+>     ,do an <- pos
+>         keyword "grant"
+>         choice $ map ($ an)
+>           [grantGlobal
+>           ,grantRole
+>           ]
+
+>     ,do an <- pos
+>         keyword "revoke"
+>         choice $ map ($ an)
+>           [revokeGlobal
+>           ,revokeRole
+>           ]
+
 >     ,keyword "create" *>
 >              choice [
 >                 try createTable
@@ -650,6 +665,63 @@ roles
 >   AlterRole an
 >     <$> (keyword "role" *> role)
 >     <*> (keyword "rename" *> keyword "to" *> role)
+
+grants
+======
+
+> grantRole :: Annotation -> SParser Statement
+> grantRole an = do
+>   (roles, assignedRoles) <- try
+>     ((,)
+>       <$> commaSep1 role
+>       <*> (keyword "to" *> commaSep1 role))
+>   inherit <- fmap (fromMaybe Inherit) $ optionMaybe (keyword "with" *> ((keyword "inherit" *> pure Inherit) <|> (keyword "noinherit" *> pure NoInherit)))
+>   pure $ GrantRole an roles assignedRoles inherit
+
+> revokeRole :: Annotation -> SParser Statement
+> revokeRole an = do
+>   roles <- commaSep1 role
+>   keyword "from"
+>   assignedRoles <- commaSep1 role
+>   pure $ RevokeRole an roles assignedRoles 
+
+> grantGlobal :: Annotation -> SParser Statement
+> grantGlobal an =
+>   GrantPermissionCluster an
+>     <$> commaSep1 globalPermissionAction
+>     <*> (keyword "to" *> commaSep1 role)
+
+> globalPermissionAction :: SParser PermissionAction
+> globalPermissionAction =
+>       (keyword "superuser" *> pure PrivSuperUser)
+>   <|> (keyword "roleadmin" *> pure PrivRoleAdmin)
+>   <|> (keyword "login" *> pure PrivLogin)
+>   <|> (keyword "password" *> (PrivPassword <$> idString))
+>   <|> (keyword "connection_limit" *> (PrivConnectionLimit <$> integer))
+
+
+> revokeGlobal :: Annotation -> SParser Statement
+> revokeGlobal an =
+>   RevokePermissionCluster an
+>     <$> commaSep1 globalPermissionActionRevoke
+>     <*> (keyword "from" *> commaSep1 role)
+
+> globalPermissionActionRevoke :: SParser PermissionAction
+> globalPermissionActionRevoke =
+>       (keyword "superuser" *> pure PrivSuperUser)
+>   <|> (keyword "roleadmin" *> pure PrivRoleAdmin)
+>   <|> (keyword "login" *> pure PrivLogin)
+>   <|> (keyword "password" *> pure (PrivPassword ""))
+>   <|> (keyword "connection_limit" *> pure (PrivConnectionLimit 0))
+
+
+> tablePermissionAction :: SParser PermissionAction
+> tablePermissionAction =
+>       (keyword "select" *> pure PrivSelect)
+>   <|> (keyword "insert" *> pure PrivInsert)
+>   <|> (keyword "delete" *> pure PrivDelete)
+>   <|> (keyword "ddl"    *> pure PrivDDL)
+>   <|> (keyword "all"    *> pure PrivAll)
 
 --------------------------------------------------------------------------------
 

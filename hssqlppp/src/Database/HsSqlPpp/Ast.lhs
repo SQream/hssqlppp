@@ -114,9 +114,11 @@
 >     ,MaybeNameComponentList
 >     ,NameComponentList
 >     ,MaybeBoolExpr
+>     ,PrivilegeObjectType(..)
 >     ,PrivilegeObject(..)
 >     ,PermissionAction(..)
 >     ,RoleDescription(..)
+>     ,InheritOption(..)
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.AstInternal

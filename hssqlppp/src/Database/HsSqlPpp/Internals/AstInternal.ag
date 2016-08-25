@@ -88,9 +88,11 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,TriggerEvent(..)
    ,TriggerFire(..)
    ,QueryHint(..)
+   ,PrivilegeObjectType(..)
    ,PrivilegeObject(..)
    ,PermissionAction(..)
    ,RoleDescription(..)
+   ,InheritOption(..)
    ,StatementList
    ,ScalarExprListStatementListTripleList
    ,ScalarExprListStatementListTriple
@@ -789,9 +791,59 @@ data Statement
         ann::Annotation
         creatorRoles :: {[RoleDescription]}
         inSchemas    :: {[Name]}
-        forObjects   :: {[PrivilegeObject]}
+        forObjects   :: {[PrivilegeObjectType]}
         permissions  :: {[PermissionAction]}
         grantedRoles :: {[RoleDescription]}
+
+-- grant
+
+    | GrantPermissionIn
+        ann :: Annotation
+        permissions :: {[PermissionAction]}
+        onObjects :: PrivilegeObject
+        inObjects :: PrivilegeObject
+        roles :: {[RoleDescription]}
+
+    | GrantPermissionOn
+        ann :: Annotation
+        permissions :: {[PermissionAction]}
+        onObjects :: PrivilegeObject
+        roles :: {[RoleDescription]}
+
+    | GrantPermissionCluster
+        ann :: Annotation
+        permissions :: {[PermissionAction]}
+        roles :: {[RoleDescription]}
+
+    | GrantRole
+        ann :: Annotation
+        role :: {[RoleDescription]}
+        assigned :: {[RoleDescription]}
+        inherit :: InheritOption
+
+    | RevokePermissionIn
+        ann :: Annotation
+        permissions :: {[PermissionAction]}
+        onObjects :: PrivilegeObject
+        inObjects :: PrivilegeObject
+        roles :: {[RoleDescription]}
+
+    | RevokePermissionOn
+        ann :: Annotation
+        permissions :: {[PermissionAction]}
+        onObjects :: PrivilegeObject
+        roles :: {[RoleDescription]}
+
+    | RevokePermissionCluster
+        ann :: Annotation
+        permissions  :: {[PermissionAction]}
+        roles :: {[RoleDescription]}
+
+    | RevokeRole
+        ann :: Annotation
+        role :: {[RoleDescription]}
+        assigned :: {[RoleDescription]}
+
 
 -- schemas
     | CreateSchema ann::Annotation
@@ -1019,13 +1071,21 @@ data TableOption =
 
 {
 
+data InheritOption
+  = Inherit
+  | NoInherit
+  deriving (Eq,Show,Data,Typeable)
+}
+
+{
+
 data RoleDescription
   = CurrentRole
   | SessionRole
   | RoleName NameComponent
   deriving (Eq,Show,Data,Typeable)
 
-data PrivilegeObject
+data PrivilegeObjectType
   = Tables
   | Schemas
   | Views
@@ -1033,6 +1093,15 @@ data PrivilegeObject
   | Databases
   deriving (Eq,Show,Data,Typeable)
 
+
+data PrivilegeObject
+  = PrivTable [Name]
+  | PrivView [Name]
+  | PrivSavedQuery [Name]
+  | PrivSchema [Name]
+  | PrivDB [Name]
+  | PrivAllObject
+  deriving (Eq,Show,Data,Typeable)
 }
 
 {

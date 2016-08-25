@@ -670,9 +670,47 @@ Alter Default
 >  <+> hcat (punctuate (comma <> space) (shove (text "to") $ map role grantedRoles))
 >  <+> statementEnd se
 
->    where shove d = \case
->            [] -> []
->            (x:xs) -> (d <+> x) : xs
+>    where
+>      shove d = \case
+>        [] -> []
+>        (x:xs) -> (d <+> x) : xs
+
+> statement _flg se _ (GrantPermissionCluster _ permissions roles) =
+>      text "grant"
+>  <+> hcat (punctuate (comma <> space) (map permissionAction permissions))
+>  <+> text "to"
+>  <+> hcat (punctuate (comma <> space) (map role roles))
+>  <+> statementEnd se
+
+> statement _flg se _ (RevokePermissionCluster _ permissions roles) =
+>      text "revoke"
+>  <+> hcat (punctuate (comma <> space) (map permissionActionRevoke permissions))
+>  <+> text "from"
+>  <+> hcat (punctuate (comma <> space) (map role roles))
+>  <+> statementEnd se
+
+> statement _flg se _ (GrantRole _ roles assignedRoles i) =
+>      text "grant"
+>  <+> hcat (punctuate (comma <> space) (map role roles))
+>  <+> text "to"
+>  <+> hcat (punctuate (comma <> space) (map role assignedRoles))
+>  <+> text "with"
+>  <+> inherit i
+>  <+> statementEnd se
+
+>    where
+>      inherit = \case
+>        Inherit -> text "inherit"
+>        NoInherit -> text "noinherit"
+
+> statement _flg se _ (RevokeRole _ roles assignedRoles) =
+>      text "revoke"
+>  <+> hcat (punctuate (comma <> space) (map role roles))
+>  <+> text "from"
+>  <+> hcat (punctuate (comma <> space) (map role assignedRoles))
+>  <+> statementEnd se
+
+
 
 > role :: RoleDescription -> Doc
 > role = \case
@@ -680,7 +718,7 @@ Alter Default
 >   CurrentRole -> text "current_role"
 >   SessionRole -> text "session_role"
 
-> privilegeObject :: PrivilegeObject -> Doc
+> privilegeObject :: PrivilegeObjectType -> Doc
 > privilegeObject = \case
 >   Tables -> text "tables"
 >   Schemas -> text "schemas"
@@ -703,6 +741,14 @@ Alter Default
 >   PrivSetPermissions -> text "set_permissions"
 >   PrivPassword pass -> text "password" <+> ttext pass
 >   PrivConnectionLimit limit -> text "connection_limit" <+> ttext (show limit)
+
+> permissionActionRevoke :: PermissionAction -> Doc
+> permissionActionRevoke = \case
+>   PrivPassword _ -> text "password"
+>   PrivConnectionLimit _ -> text "connection_limit"
+>   perm -> permissionAction perm
+
+
 
 > statementEnd :: Bool -> Doc
 > statementEnd b = if b
