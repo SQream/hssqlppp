@@ -50,4 +50,44 @@ There are no tests for invalid syntax at the moment.
 
 >     ]
 
+>   ,Group "Grant Table"
+
+>     [Stmt "GRANT SELECT, INSERT, DELETE, DDL ON TABLE t1,t2,t3 IN SCHEMA s1, s2 TO role1, current_role, session_role;"
+>      [GrantPermissionIn ea
+>        [PrivSelect, PrivInsert, PrivDelete, PrivDDL]
+>        (PrivTable [name "t1", name "t2", name "t3"])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+
+>     ,Stmt "GRANT ALL ON ALL TABLES IN SCHEMA s1, s2 TO role1, current_role, session_role;"
+>      [GrantPermissionIn ea
+>        [PrivAll]
+>        (PrivTable [])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ]
+
+>   ,Group "Grant View"
+
+>     [Stmt "GRANT SELECT, DDL ON VIEW v1,v2,v3 IN SCHEMA s1, s2 TO role1, current_role, session_role;"
+>      [GrantPermissionIn ea
+>        [PrivSelect, PrivDDL]
+>        (PrivView [name "v1", name "v2", name "v3"])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+
+>     ,Stmt "GRANT ALL ON ALL VIEWS IN SCHEMA s1, s2 TO role1, current_role, session_role;"
+>      [GrantPermissionIn ea
+>        [PrivAll]
+>        (PrivView [])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ]
+
 >   ]
+
+

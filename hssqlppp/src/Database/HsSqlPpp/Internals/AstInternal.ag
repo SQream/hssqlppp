@@ -801,7 +801,7 @@ data Statement
         ann :: Annotation
         permissions :: {[PermissionAction]}
         onObjects :: PrivilegeObject
-        inObjects :: PrivilegeObject
+        inSchemas :: {[Name]}
         roles :: {[RoleDescription]}
 
     | GrantPermissionOn
@@ -1100,7 +1100,6 @@ data PrivilegeObject
   | PrivSavedQuery [Name]
   | PrivSchema [Name]
   | PrivDB [Name]
-  | PrivAllObject
   deriving (Eq,Show,Data,Typeable)
 }
 

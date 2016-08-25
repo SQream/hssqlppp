@@ -710,6 +710,26 @@ Alter Default
 >  <+> hcat (punctuate (comma <> space) (map role assignedRoles))
 >  <+> statementEnd se
 
+> statement _flg se _ (GrantPermissionIn _ permissions onObjs schemas roles) =
+>      text "grant"
+>  <+> hcat (punctuate (comma <> space) (map permissionAction permissions))
+>  <+> text "on"
+>  <+> onObjects onObjs
+>  <+> text "in schema"
+>  <+> hcat (punctuate (comma <> space) (map name schemas))
+>  <+> text "to"
+>  <+> hcat (punctuate (comma <> space) (map role roles))
+>  <+> statementEnd se
+
+> onObjects :: PrivilegeObject -> Doc
+> onObjects = \case
+>   PrivTable [] -> text "all tables"
+>   PrivView [] -> text "all views"
+>   PrivTable ts -> text "table" <+> hcat (punctuate (comma <> space) (map name ts))
+>   PrivView vs -> text "view" <+> hcat (punctuate (comma <> space) (map name vs))
+>   PrivSavedQuery sqs -> text "saved_query" <+> hcat (punctuate (comma <> space) (map name sqs))
+>   PrivSchema ss -> text "schema" <+> hcat (punctuate (comma <> space) (map name ss))
+>   PrivDB dbs -> text "database"  <+> hcat (punctuate (comma <> space) (map name dbs))
 
 
 > role :: RoleDescription -> Doc

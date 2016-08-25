@@ -213,6 +213,7 @@ Parsing top level statements
 >         keyword "grant"
 >         choice $ map ($ an)
 >           [grantGlobal
+>           ,grantIn
 >           ,grantRole
 >           ]
 
@@ -715,6 +716,26 @@ grants
 >   <|> (keyword "connection_limit" *> pure (PrivConnectionLimit 0))
 
 
+> grantIn :: Annotation -> SParser Statement
+> grantIn an = do
+>   (permissions, tables) <- tryTable <|> tryView
+>   keyword "in"
+>   keyword "schema"
+>   schemas <- commaSep1 name
+>   keyword "to"
+>   roles <- commaSep1 role
+>   pure $ GrantPermissionIn an permissions tables schemas roles
+
+>  where
+>    tryTable = try $
+>      (,)
+>        <$> commaSep1 tablePermissionAction
+>        <*> (keyword "on" *> ((keyword "table" *> fmap PrivTable (commaSep1 name)) <|> (keyword "all" *> keyword "tables" *> pure (PrivTable []))))
+>    tryView = try $
+>      (,)
+>        <$> commaSep1 viewPermissionAction
+>        <*> (keyword "on" *> ((keyword "view" *> fmap PrivView (commaSep1 name)) <|> (keyword "all" *> keyword "views" *> pure (PrivView []))))
+
 > tablePermissionAction :: SParser PermissionAction
 > tablePermissionAction =
 >       (keyword "select" *> pure PrivSelect)
@@ -722,6 +743,14 @@ grants
 >   <|> (keyword "delete" *> pure PrivDelete)
 >   <|> (keyword "ddl"    *> pure PrivDDL)
 >   <|> (keyword "all"    *> pure PrivAll)
+
+> viewPermissionAction :: SParser PermissionAction
+> viewPermissionAction =
+>       (keyword "select" *> pure PrivSelect)
+>   <|> (keyword "ddl"    *> pure PrivDDL)
+>   <|> (keyword "all"    *> pure PrivAll)
+
+
 
 --------------------------------------------------------------------------------
 
