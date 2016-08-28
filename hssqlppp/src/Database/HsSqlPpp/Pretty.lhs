@@ -711,15 +711,17 @@ Alter Default
 >  <+> statementEnd se
 
 > statement _flg se _ (GrantPermissionIn _ permissions onObjs schemas roles) =
->      text "grant"
->  <+> hcat (punctuate (comma <> space) (map permissionAction permissions))
->  <+> text "on"
->  <+> onObjects onObjs
->  <+> text "in schema"
->  <+> hcat (punctuate (comma <> space) (map name schemas))
->  <+> text "to"
->  <+> hcat (punctuate (comma <> space) (map role roles))
->  <+> statementEnd se
+>   permissionIn se "grant" "to" permissions onObjs schemas roles
+
+> statement _flg se _ (RevokePermissionIn _ permissions onObjs schemas roles) =
+>   permissionIn se "revoke" "from" permissions onObjs schemas roles
+
+> statement _flg se _ (GrantPermissionOn _ permissions onObjs roles) =
+>   permissionOn se "grant" "to" permissions onObjs roles
+
+> statement _flg se _ (RevokePermissionOn _ permissions onObjs roles) =
+>   permissionOn se "revoke" "from" permissions onObjs roles
+
 
 > onObjects :: PrivilegeObject -> Doc
 > onObjects = \case
@@ -731,6 +733,42 @@ Alter Default
 >   PrivSchema ss -> text "schema" <+> hcat (punctuate (comma <> space) (map name ss))
 >   PrivDB dbs -> text "database"  <+> hcat (punctuate (comma <> space) (map name dbs))
 
+> permissionIn
+>   :: Bool -- se
+>   -> String -- action
+>   -> String -- preposition
+>   -> [PermissionAction] -- permissions
+>   -> PrivilegeObject -- on which objects
+>   -> [Name] -- in what schema
+>   -> [RoleDescription] -- for with roles
+>   -> Doc
+> permissionIn se action preposition permissions onObjs schemas roles =
+>      text action
+>  <+> hcat (punctuate (comma <> space) (map permissionAction permissions))
+>  <+> text "on"
+>  <+> onObjects onObjs
+>  <+> text "in schema"
+>  <+> hcat (punctuate (comma <> space) (map name schemas))
+>  <+> text preposition
+>  <+> hcat (punctuate (comma <> space) (map role roles))
+>  <+> statementEnd se
+
+> permissionOn
+>   :: Bool -- se
+>   -> String -- action
+>   -> String -- preposition
+>   -> [PermissionAction] -- permissions
+>   -> PrivilegeObject -- on which objects
+>   -> [RoleDescription] -- for with roles
+>   -> Doc
+> permissionOn se action preposition permissions onObjs roles =
+>      text action
+>  <+> hcat (punctuate (comma <> space) (map permissionAction permissions))
+>  <+> text "on"
+>  <+> onObjects onObjs
+>  <+> text preposition
+>  <+> hcat (punctuate (comma <> space) (map role roles))
+>  <+> statementEnd se
 
 > role :: RoleDescription -> Doc
 > role = \case
@@ -755,6 +793,7 @@ Alter Default
 >   PrivDDL -> text "ddl"
 >   PrivLogin -> text "login"
 >   PrivUsage -> text "usage"
+>   PrivCreate  -> text "create"
 >   PrivConnect -> text "connect"
 >   PrivSuperUser -> text "superuser"
 >   PrivRoleAdmin -> text "roleadmin"
@@ -767,7 +806,6 @@ Alter Default
 >   PrivPassword _ -> text "password"
 >   PrivConnectionLimit _ -> text "connection_limit"
 >   perm -> permissionAction perm
-
 
 
 > statementEnd :: Bool -> Doc

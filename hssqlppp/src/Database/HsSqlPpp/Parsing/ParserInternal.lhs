@@ -213,7 +213,8 @@ Parsing top level statements
 >         keyword "grant"
 >         choice $ map ($ an)
 >           [grantGlobal
->           ,grantIn
+>           ,grantOrRevokeIn "to" GrantPermissionIn
+>           ,grantOrRevokeOn "to" GrantPermissionOn
 >           ,grantRole
 >           ]
 
@@ -221,6 +222,8 @@ Parsing top level statements
 >         keyword "revoke"
 >         choice $ map ($ an)
 >           [revokeGlobal
+>           ,grantOrRevokeIn "from" RevokePermissionIn
+>           ,grantOrRevokeOn "from" RevokePermissionOn
 >           ,revokeRole
 >           ]
 
@@ -667,8 +670,8 @@ roles
 >     <$> (keyword "role" *> role)
 >     <*> (keyword "rename" *> keyword "to" *> role)
 
-grants
-======
+grants and revokes
+==================
 
 > grantRole :: Annotation -> SParser Statement
 > grantRole an = do
@@ -715,16 +718,24 @@ grants
 >   <|> (keyword "password" *> pure (PrivPassword ""))
 >   <|> (keyword "connection_limit" *> pure (PrivConnectionLimit 0))
 
-
-> grantIn :: Annotation -> SParser Statement
-> grantIn an = do
->   (permissions, tables) <- tryTable <|> tryView
+> grantOrRevokeIn
+>   :: Text
+>   -> (Annotation
+>      -> [PermissionAction]
+>      -> PrivilegeObject
+>      -> [Name]
+>      -> [RoleDescription]
+>      -> Statement)
+>   -> Annotation
+>   -> SParser Statement
+> grantOrRevokeIn preposition constructor an = do
+>   (permissions, objects) <- tryTable <|> tryView
 >   keyword "in"
 >   keyword "schema"
 >   schemas <- commaSep1 name
->   keyword "to"
+>   keyword preposition
 >   roles <- commaSep1 role
->   pure $ GrantPermissionIn an permissions tables schemas roles
+>   pure $ constructor an permissions objects schemas roles
 
 >  where
 >    tryTable = try $
@@ -750,6 +761,59 @@ grants
 >   <|> (keyword "ddl"    *> pure PrivDDL)
 >   <|> (keyword "all"    *> pure PrivAll)
 
+
+> grantOrRevokeOn
+>   :: Text
+>   -> (Annotation
+>      -> [PermissionAction]
+>      -> PrivilegeObject
+>      -> [RoleDescription]
+>      -> Statement)
+>   -> Annotation
+>   -> SParser Statement
+> grantOrRevokeOn preposition constructor an = do
+>   (permissions, objects) <- trySavedQuery <|> tryDB <|> trySchema
+>   keyword preposition
+>   roles <- commaSep1 role
+>   pure $ constructor an permissions objects roles
+
+>  where
+>    trySavedQuery = try $
+>      (,)
+>        <$> commaSep1 sqPermissionAction
+>        <*> (keyword "on" *> (keyword "saved_query" *> fmap PrivSavedQuery (commaSep1 name)))
+>    tryDB = try $
+>      (,)
+>        <$> commaSep1 dbPermissionAction
+>        <*> (keyword "on" *> (keyword "database" *> fmap PrivDB (commaSep1 name)))
+
+>    trySchema = try $
+>      (,)
+>        <$> commaSep1 schemaPermissionAction
+>        <*> (keyword "on" *> (keyword "schema" *> fmap PrivSchema (commaSep1 name)))
+
+> sqPermissionAction :: SParser PermissionAction
+> sqPermissionAction =
+>       (keyword "select" *> pure PrivSelect)
+>   <|> (keyword "ddl"    *> pure PrivDDL)
+
+> dbPermissionAction :: SParser PermissionAction
+> dbPermissionAction =
+>       (keyword "create"          *> pure PrivCreate)
+>   <|> (keyword "connect"         *> pure PrivConnect)
+>   <|> (keyword "ddl"             *> pure PrivDDL)
+>   <|> (keyword "set_permissions" *> pure PrivSetPermissions)
+>   <|> (keyword "superuser"       *> pure PrivSuperUser)
+>   <|> (keyword "all"             *> pure PrivAll)
+
+> schemaPermissionAction :: SParser PermissionAction
+> schemaPermissionAction =
+>       (keyword "create"          *> pure PrivCreate)
+>   <|> (keyword "ddl"             *> pure PrivDDL)
+>   <|> (keyword "usage"           *> pure PrivUsage)
+>   <|> (keyword "set_permissions" *> pure PrivSetPermissions)
+>   <|> (keyword "superuser"       *> pure PrivSuperUser)
+>   <|> (keyword "all"             *> pure PrivAll)
 
 
 --------------------------------------------------------------------------------

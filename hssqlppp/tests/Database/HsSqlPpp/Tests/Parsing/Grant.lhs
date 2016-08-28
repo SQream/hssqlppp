@@ -69,6 +69,25 @@ There are no tests for invalid syntax at the moment.
 >      ]
 >     ]
 
+>   ,Group "Revoke Table"
+
+>     [Stmt "REVOKE SELECT, INSERT, DELETE, DDL ON TABLE t1,t2,t3 IN SCHEMA s1, s2 FROM role1, current_role, session_role;"
+>      [RevokePermissionIn ea
+>        [PrivSelect, PrivInsert, PrivDelete, PrivDDL]
+>        (PrivTable [name "t1", name "t2", name "t3"])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+
+>     ,Stmt "REVOKE ALL ON ALL TABLES IN SCHEMA s1, s2 FROM role1, current_role, session_role;"
+>      [RevokePermissionIn ea
+>        [PrivAll]
+>        (PrivTable [])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ]
+
 >   ,Group "Grant View"
 
 >     [Stmt "GRANT SELECT, DDL ON VIEW v1,v2,v3 IN SCHEMA s1, s2 TO role1, current_role, session_role;"
@@ -84,6 +103,113 @@ There are no tests for invalid syntax at the moment.
 >        [PrivAll]
 >        (PrivView [])
 >        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ]
+
+>   ,Group "Revoke View"
+
+>     [Stmt "REVOKE SELECT, DDL ON VIEW v1,v2,v3 IN SCHEMA s1, s2 FROM role1, current_role, session_role;"
+>      [RevokePermissionIn ea
+>        [PrivSelect, PrivDDL]
+>        (PrivView [name "v1", name "v2", name "v3"])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+
+>     ,Stmt "REVOKE ALL ON ALL VIEWS IN SCHEMA s1, s2 FROM role1, current_role, session_role;"
+>      [RevokePermissionIn ea
+>        [PrivAll]
+>        (PrivView [])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ]
+
+
+>   ,Group "Grant Saved Query"
+
+>     [Stmt "GRANT SELECT, DDL ON SAVED_QUERY sq1,sq2,sq3 TO role1, current_role, session_role;"
+>      [GrantPermissionOn ea
+>        [PrivSelect, PrivDDL]
+>        (PrivSavedQuery [name "sq1", name "sq2", name "sq3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+
+>     ]
+
+>   ,Group "Revoke Saved Query"
+
+>     [Stmt "REVOKE SELECT, DDL ON SAVED_QUERY sq1,sq2,sq3 FROM role1, current_role, session_role;"
+>      [RevokePermissionOn ea
+>        [PrivSelect, PrivDDL]
+>        (PrivSavedQuery [name "sq1", name "sq2", name "sq3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+
+>     ]
+
+
+>   ,Group "Grant Database"
+
+>     [Stmt "GRANT CREATE, CONNECT, DDL, SET_PERMISSIONS, SUPERUSER ON DATABASE db1,db2,db3 TO role1, current_role, session_role;"
+>      [GrantPermissionOn ea
+>        [PrivCreate, PrivConnect, PrivDDL, PrivSetPermissions, PrivSuperUser]
+>        (PrivDB [name "db1", name "db2", name "db3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ,Stmt "GRANT ALL ON DATABASE db1,db2,db3 TO role1, current_role, session_role;"
+>      [GrantPermissionOn ea
+>        [PrivAll]
+>        (PrivDB [name "db1", name "db2", name "db3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ]
+
+>   ,Group "Revoke Database"
+
+>     [Stmt "REVOKE CREATE, CONNECT, DDL, SET_PERMISSIONS, SUPERUSER ON DATABASE db1,db2,db3 FROM role1, current_role, session_role;"
+>      [RevokePermissionOn ea
+>        [PrivCreate, PrivConnect, PrivDDL, PrivSetPermissions, PrivSuperUser]
+>        (PrivDB [name "db1", name "db2", name "db3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ,Stmt "REVOKE ALL ON DATABASE db1,db2,db3 FROM role1, current_role, session_role;"
+>      [RevokePermissionOn ea
+>        [PrivAll]
+>        (PrivDB [name "db1", name "db2", name "db3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ]
+
+>   ,Group "Grant Schema"
+
+>     [Stmt "GRANT CREATE, DDL, USAGE, SET_PERMISSIONS, SUPERUSER ON SCHEMA s1,s2,s3 TO role1, current_role, session_role;"
+>      [GrantPermissionOn ea
+>        [PrivCreate, PrivDDL, PrivUsage, PrivSetPermissions, PrivSuperUser]
+>        (PrivSchema [name "s1", name "s2", name "s3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ,Stmt "GRANT ALL ON SCHEMA s1,s2,s3 TO role1, current_role, session_role;"
+>      [GrantPermissionOn ea
+>        [PrivAll]
+>        (PrivSchema [name "s1", name "s2", name "s3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ]
+
+>   ,Group "Revoke Schema"
+
+>     [Stmt "REVOKE CREATE, DDL, USAGE, SET_PERMISSIONS, SUPERUSER ON SCHEMA s1,s2,s3 FROM role1, current_role, session_role;"
+>      [RevokePermissionOn ea
+>        [PrivCreate, PrivDDL, PrivUsage, PrivSetPermissions, PrivSuperUser]
+>        (PrivSchema [name "s1", name "s2", name "s3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+>     ,Stmt "REVOKE ALL ON SCHEMA s1,s2,s3 FROM role1, current_role, session_role;"
+>      [RevokePermissionOn ea
+>        [PrivAll]
+>        (PrivSchema [name "s1", name "s2", name "s3"])
 >        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
 >      ]
 >     ]
