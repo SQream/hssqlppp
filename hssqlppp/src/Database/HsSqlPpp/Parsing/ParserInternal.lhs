@@ -740,11 +740,11 @@ grants and revokes
 >  where
 >    tryTable = try $
 >      (,)
->        <$> commaSep1 tablePermissionAction
+>        <$> (commaSep1 tablePermissionAction <|> allPermissions)
 >        <*> (keyword "on" *> ((keyword "table" *> fmap PrivTable (commaSep1 name)) <|> (keyword "all" *> keyword "tables" *> pure (PrivTable []))))
 >    tryView = try $
 >      (,)
->        <$> commaSep1 viewPermissionAction
+>        <$> (commaSep1 viewPermissionAction <|> allPermissions)
 >        <*> (keyword "on" *> ((keyword "view" *> fmap PrivView (commaSep1 name)) <|> (keyword "all" *> keyword "views" *> pure (PrivView []))))
 
 > tablePermissionAction :: SParser PermissionAction
@@ -753,13 +753,11 @@ grants and revokes
 >   <|> (keyword "insert" *> pure PrivInsert)
 >   <|> (keyword "delete" *> pure PrivDelete)
 >   <|> (keyword "ddl"    *> pure PrivDDL)
->   <|> (keyword "all"    *> pure PrivAll)
 
 > viewPermissionAction :: SParser PermissionAction
 > viewPermissionAction =
 >       (keyword "select" *> pure PrivSelect)
 >   <|> (keyword "ddl"    *> pure PrivDDL)
->   <|> (keyword "all"    *> pure PrivAll)
 
 
 > grantOrRevokeOn
@@ -780,16 +778,16 @@ grants and revokes
 >  where
 >    trySavedQuery = try $
 >      (,)
->        <$> commaSep1 sqPermissionAction
+>        <$> (commaSep1 sqPermissionAction <|> allPermissions)
 >        <*> (keyword "on" *> (keyword "saved_query" *> fmap PrivSavedQuery (commaSep1 name)))
 >    tryDB = try $
 >      (,)
->        <$> commaSep1 dbPermissionAction
+>        <$> (commaSep1 dbPermissionAction <|> allPermissions)
 >        <*> (keyword "on" *> (keyword "database" *> fmap PrivDB (commaSep1 name)))
 
 >    trySchema = try $
 >      (,)
->        <$> commaSep1 schemaPermissionAction
+>        <$> (commaSep1 schemaPermissionAction <|> allPermissions)
 >        <*> (keyword "on" *> (keyword "schema" *> fmap PrivSchema (commaSep1 name)))
 
 > sqPermissionAction :: SParser PermissionAction
@@ -804,7 +802,6 @@ grants and revokes
 >   <|> (keyword "ddl"             *> pure PrivDDL)
 >   <|> (keyword "set_permissions" *> pure PrivSetPermissions)
 >   <|> (keyword "superuser"       *> pure PrivSuperUser)
->   <|> (keyword "all"             *> pure PrivAll)
 
 > schemaPermissionAction :: SParser PermissionAction
 > schemaPermissionAction =
@@ -813,7 +810,10 @@ grants and revokes
 >   <|> (keyword "usage"           *> pure PrivUsage)
 >   <|> (keyword "set_permissions" *> pure PrivSetPermissions)
 >   <|> (keyword "superuser"       *> pure PrivSuperUser)
->   <|> (keyword "all"             *> pure PrivAll)
+
+> allPermissions :: SParser [PermissionAction]
+> allPermissions =
+>   (keyword "all" *> (optional $ keyword "permissions") *> pure [PrivAll])
 
 
 --------------------------------------------------------------------------------

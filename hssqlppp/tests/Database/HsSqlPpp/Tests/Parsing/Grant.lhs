@@ -86,6 +86,14 @@ There are no tests for invalid syntax at the moment.
 >        [name "s1", name "s2"]
 >        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
 >      ]
+
+>     ,Stmt "REVOKE ALL PERMISSIONS ON ALL TABLES IN SCHEMA s1, s2 FROM role1, current_role, session_role;"
+>      [RevokePermissionIn ea
+>        [PrivAll]
+>        (PrivTable [])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
 >     ]
 
 >   ,Group "Grant View"
@@ -99,6 +107,14 @@ There are no tests for invalid syntax at the moment.
 >      ]
 
 >     ,Stmt "GRANT ALL ON ALL VIEWS IN SCHEMA s1, s2 TO role1, current_role, session_role;"
+>      [GrantPermissionIn ea
+>        [PrivAll]
+>        (PrivView [])
+>        [name "s1", name "s2"]
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
+
+>     ,Stmt "GRANT ALL PERMISSIONS ON ALL VIEWS IN SCHEMA s1, s2 TO role1, current_role, session_role;"
 >      [GrantPermissionIn ea
 >        [PrivAll]
 >        (PrivView [])
@@ -124,6 +140,7 @@ There are no tests for invalid syntax at the moment.
 >        [name "s1", name "s2"]
 >        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
 >      ]
+
 >     ]
 
 
@@ -180,6 +197,13 @@ There are no tests for invalid syntax at the moment.
 >        (PrivDB [name "db1", name "db2", name "db3"])
 >        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
 >      ]
+
+>     ,Stmt "REVOKE ALL PERMISSIONS ON DATABASE db1,db2,db3 FROM role1, current_role, session_role;"
+>      [RevokePermissionOn ea
+>        [PrivAll]
+>        (PrivDB [name "db1", name "db2", name "db3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
 >     ]
 
 >   ,Group "Grant Schema"
@@ -212,7 +236,14 @@ There are no tests for invalid syntax at the moment.
 >        (PrivSchema [name "s1", name "s2", name "s3"])
 >        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
 >      ]
+>     ,Stmt "REVOKE ALL PERMISSIONS ON SCHEMA s1,s2,s3 FROM role1, current_role, session_role;"
+>      [RevokePermissionOn ea
+>        [PrivAll]
+>        (PrivSchema [name "s1", name "s2", name "s3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
 >     ]
+
 
 >   ]
 
