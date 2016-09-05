@@ -797,17 +797,10 @@ data Statement
 
 -- grant
 
-    | GrantPermissionIn
+    | GrantPermission
         ann :: Annotation
         permissions :: {[PermissionAction]}
-        onObjects :: PrivilegeObject
-        inSchemas :: {[Name]}
-        roles :: {[RoleDescription]}
-
-    | GrantPermissionOn
-        ann :: Annotation
-        permissions :: {[PermissionAction]}
-        onObjects :: PrivilegeObject
+        onObjects :: {Either PrivilegeObject (PrivilegeObjectType, [Name])}
         roles :: {[RoleDescription]}
 
     | GrantPermissionCluster
@@ -821,17 +814,10 @@ data Statement
         assigned :: {[RoleDescription]}
         inherit :: InheritOption
 
-    | RevokePermissionIn
+    | RevokePermission
         ann :: Annotation
         permissions :: {[PermissionAction]}
-        onObjects :: PrivilegeObject
-        inSchemas :: {[Name]}
-        roles :: {[RoleDescription]}
-
-    | RevokePermissionOn
-        ann :: Annotation
-        permissions :: {[PermissionAction]}
-        onObjects :: PrivilegeObject
+        onObjects :: {Either PrivilegeObject (PrivilegeObjectType, [Name])}
         roles :: {[RoleDescription]}
 
     | RevokePermissionCluster

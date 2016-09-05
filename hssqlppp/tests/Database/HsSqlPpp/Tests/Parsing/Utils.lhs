@@ -41,6 +41,9 @@ shortcuts for constructing test data and asts
 > name :: Text -> Name
 > name n = Name ea [Nmc $ T.unpack n]
 
+> name2 :: Text -> Text -> Name
+> name2 n1 n2 = Name ea [Nmc $ T.unpack n1, Nmc $ T.unpack n2]
+
 > member :: ScalarExpr -> ScalarExpr -> ScalarExpr
 > member a b = BinaryOp ea (name ".") a b
 

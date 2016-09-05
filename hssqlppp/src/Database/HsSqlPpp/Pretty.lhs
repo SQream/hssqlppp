@@ -710,58 +710,41 @@ Alter Default
 >  <+> hcat (punctuate (comma <> space) (map role assignedRoles))
 >  <+> statementEnd se
 
-> statement _flg se _ (GrantPermissionIn _ permissions onObjs schemas roles) =
->   permissionIn se "grant" "to" permissions onObjs schemas roles
+> statement _flg se _ (GrantPermission _ permissions onObjs roles) =
+>   grantOrRevoke se "grant" "to" permissions onObjs roles
 
-> statement _flg se _ (RevokePermissionIn _ permissions onObjs schemas roles) =
->   permissionIn se "revoke" "from" permissions onObjs schemas roles
-
-> statement _flg se _ (GrantPermissionOn _ permissions onObjs roles) =
->   permissionOn se "grant" "to" permissions onObjs roles
-
-> statement _flg se _ (RevokePermissionOn _ permissions onObjs roles) =
->   permissionOn se "revoke" "from" permissions onObjs roles
+> statement _flg se _ (RevokePermission _ permissions onObjs roles) =
+>   grantOrRevoke se "revoke" "from" permissions onObjs roles
 
 
-> onObjects :: PrivilegeObject -> Doc
+> onObjects :: Either PrivilegeObject (PrivilegeObjectType, [Name]) -> Doc
 > onObjects = \case
->   PrivTable [] -> text "all tables"
->   PrivView [] -> text "all views"
->   PrivTable ts -> text "table" <+> hcat (punctuate (comma <> space) (map name ts))
->   PrivView vs -> text "view" <+> hcat (punctuate (comma <> space) (map name vs))
->   PrivSavedQuery sqs -> text "saved_query" <+> hcat (punctuate (comma <> space) (map name sqs))
->   PrivSchema ss -> text "schema" <+> hcat (punctuate (comma <> space) (map name ss))
->   PrivDB dbs -> text "database"  <+> hcat (punctuate (comma <> space) (map name dbs))
+>   Right (Tables, schemas) ->
+>         text "all tables in schema"
+>     <+> hcat (punctuate (comma <> space) (map name schemas))
+>   Right (Views, schemas) ->
+>         text "all views in schema"
+>     <+> hcat (punctuate (comma <> space) (map name schemas))
+>   Left (PrivTable ts) ->
+>     text "table" <+> hcat (punctuate (comma <> space) (map name ts))
+>   Left (PrivView vs) ->
+>     text "view" <+> hcat (punctuate (comma <> space) (map name vs))
+>   Left (PrivSavedQuery sqs) ->
+>     text "saved_query" <+> hcat (punctuate (comma <> space) (map name sqs))
+>   Left (PrivSchema ss) ->
+>     text "schema" <+> hcat (punctuate (comma <> space) (map name ss))
+>   Left (PrivDB dbs) ->
+>     text "database"  <+> hcat (punctuate (comma <> space) (map name dbs))
 
-> permissionIn
+> grantOrRevoke
 >   :: Bool -- se
 >   -> String -- action
 >   -> String -- preposition
 >   -> [PermissionAction] -- permissions
->   -> PrivilegeObject -- on which objects
->   -> [Name] -- in what schema
+>   -> Either PrivilegeObject (PrivilegeObjectType, [Name]) -- on which objects
 >   -> [RoleDescription] -- for with roles
 >   -> Doc
-> permissionIn se action preposition permissions onObjs schemas roles =
->      text action
->  <+> hcat (punctuate (comma <> space) (map permissionAction permissions))
->  <+> text "on"
->  <+> onObjects onObjs
->  <+> text "in schema"
->  <+> hcat (punctuate (comma <> space) (map name schemas))
->  <+> text preposition
->  <+> hcat (punctuate (comma <> space) (map role roles))
->  <+> statementEnd se
-
-> permissionOn
->   :: Bool -- se
->   -> String -- action
->   -> String -- preposition
->   -> [PermissionAction] -- permissions
->   -> PrivilegeObject -- on which objects
->   -> [RoleDescription] -- for with roles
->   -> Doc
-> permissionOn se action preposition permissions onObjs roles =
+> grantOrRevoke se action preposition permissions onObjs roles =
 >      text action
 >  <+> hcat (punctuate (comma <> space) (map permissionAction permissions))
 >  <+> text "on"
@@ -798,7 +781,7 @@ Alter Default
 >   PrivSuperUser -> text "superuser"
 >   PrivRoleAdmin -> text "roleadmin"
 >   PrivSetPermissions -> text "set_permissions"
->   PrivPassword pass -> text "password" <+> ttext pass
+>   PrivPassword pass -> text "password '" <> ttext pass <> text "'"
 >   PrivConnectionLimit limit -> text "connection_limit" <+> ttext (show limit)
 
 > permissionActionRevoke :: PermissionAction -> Doc

@@ -213,8 +213,7 @@ Parsing top level statements
 >         keyword "grant"
 >         choice $ map ($ an)
 >           [grantGlobal
->           ,grantOrRevokeIn "to" GrantPermissionIn
->           ,grantOrRevokeOn "to" GrantPermissionOn
+>           ,grantOrRevoke "to" GrantPermission
 >           ,grantRole
 >           ]
 
@@ -222,8 +221,7 @@ Parsing top level statements
 >         keyword "revoke"
 >         choice $ map ($ an)
 >           [revokeGlobal
->           ,grantOrRevokeIn "from" RevokePermissionIn
->           ,grantOrRevokeOn "from" RevokePermissionOn
+>           ,grantOrRevoke "from" RevokePermission
 >           ,revokeRole
 >           ]
 
@@ -700,7 +698,7 @@ grants and revokes
 >       (keyword "superuser" *> pure PrivSuperUser)
 >   <|> (keyword "roleadmin" *> pure PrivRoleAdmin)
 >   <|> (keyword "login" *> pure PrivLogin)
->   <|> (keyword "password" *> (PrivPassword <$> idString))
+>   <|> (keyword "password" *> (PrivPassword <$> stringN))
 >   <|> (keyword "connection_limit" *> (PrivConnectionLimit <$> integer))
 
 
@@ -718,34 +716,50 @@ grants and revokes
 >   <|> (keyword "password" *> pure (PrivPassword ""))
 >   <|> (keyword "connection_limit" *> pure (PrivConnectionLimit 0))
 
-> grantOrRevokeIn
+> grantOrRevoke
 >   :: Text
 >   -> (Annotation
 >      -> [PermissionAction]
->      -> PrivilegeObject
->      -> [Name]
+>      -> Either PrivilegeObject (PrivilegeObjectType, [Name])
 >      -> [RoleDescription]
 >      -> Statement)
 >   -> Annotation
 >   -> SParser Statement
-> grantOrRevokeIn preposition constructor an = do
->   (permissions, objects) <- tryTable <|> tryView
->   keyword "in"
->   keyword "schema"
->   schemas <- commaSep1 name
+> grantOrRevoke preposition constructor an = do
+>   (permissions, objects) <- tryTable <|> tryView <|> trySavedQuery <|> tryDB <|> trySchema
 >   keyword preposition
 >   roles <- commaSep1 role
->   pure $ constructor an permissions objects schemas roles
+>   pure $ constructor an permissions objects roles
 
 >  where
 >    tryTable = try $
 >      (,)
 >        <$> (commaSep1 tablePermissionAction <|> allPermissions)
->        <*> (keyword "on" *> ((keyword "table" *> fmap PrivTable (commaSep1 name)) <|> (keyword "all" *> keyword "tables" *> pure (PrivTable []))))
+>        <*> (keyword "on" *>
+>                ((keyword "table" *> fmap (Left . PrivTable) (commaSep1 name))
+>             <|> (keyword "all" *> keyword "tables" *> keyword "in" *> keyword "schema" *> (Right . (Tables,) <$> commaSep1 name))))
 >    tryView = try $
 >      (,)
 >        <$> (commaSep1 viewPermissionAction <|> allPermissions)
->        <*> (keyword "on" *> ((keyword "view" *> fmap PrivView (commaSep1 name)) <|> (keyword "all" *> keyword "views" *> pure (PrivView []))))
+>        <*> (keyword "on" *>
+>                ((keyword "view" *> fmap (Left . PrivView) (commaSep1 name))
+>             <|> (keyword "all" *> keyword "views" *> keyword "in" *> keyword "schema" *> (Right . (Views,) <$> commaSep1 name))))
+
+>    trySavedQuery = try $
+>      (,)
+>        <$> (commaSep1 sqPermissionAction <|> allPermissions)
+>        <*> (keyword "on" *> (keyword "saved_query" *> fmap (Left . PrivSavedQuery) (commaSep1 name)))
+>    tryDB = try $
+>      (,)
+>        <$> (commaSep1 dbPermissionAction <|> allPermissions)
+>        <*> (keyword "on" *> (keyword "database" *> fmap (Left . PrivDB) (commaSep1 name)))
+
+>    trySchema = try $
+>      (,)
+>        <$> (commaSep1 schemaPermissionAction <|> allPermissions)
+>        <*> (keyword "on" *> (keyword "schema" *> fmap (Left . PrivSchema) (commaSep1 name)))
+
+
 
 > tablePermissionAction :: SParser PermissionAction
 > tablePermissionAction =
@@ -759,36 +773,6 @@ grants and revokes
 >       (keyword "select" *> pure PrivSelect)
 >   <|> (keyword "ddl"    *> pure PrivDDL)
 
-
-> grantOrRevokeOn
->   :: Text
->   -> (Annotation
->      -> [PermissionAction]
->      -> PrivilegeObject
->      -> [RoleDescription]
->      -> Statement)
->   -> Annotation
->   -> SParser Statement
-> grantOrRevokeOn preposition constructor an = do
->   (permissions, objects) <- trySavedQuery <|> tryDB <|> trySchema
->   keyword preposition
->   roles <- commaSep1 role
->   pure $ constructor an permissions objects roles
-
->  where
->    trySavedQuery = try $
->      (,)
->        <$> (commaSep1 sqPermissionAction <|> allPermissions)
->        <*> (keyword "on" *> (keyword "saved_query" *> fmap PrivSavedQuery (commaSep1 name)))
->    tryDB = try $
->      (,)
->        <$> (commaSep1 dbPermissionAction <|> allPermissions)
->        <*> (keyword "on" *> (keyword "database" *> fmap PrivDB (commaSep1 name)))
-
->    trySchema = try $
->      (,)
->        <$> (commaSep1 schemaPermissionAction <|> allPermissions)
->        <*> (keyword "on" *> (keyword "schema" *> fmap PrivSchema (commaSep1 name)))
 
 > sqPermissionAction :: SParser PermissionAction
 > sqPermissionAction =
