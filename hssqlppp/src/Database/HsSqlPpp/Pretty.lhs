@@ -717,23 +717,23 @@ Alter Default
 >   grantOrRevoke se "revoke" "from" permissions onObjs roles
 
 
-> onObjects :: Either PrivilegeObject (PrivilegeObjectType, [Name]) -> Doc
+> onObjects :: PrivilegeObject -> Doc
 > onObjects = \case
->   Right (Tables, schemas) ->
+>   PrivAllTablesInSchema schemas ->
 >         text "all tables in schema"
 >     <+> hcat (punctuate (comma <> space) (map name schemas))
->   Right (Views, schemas) ->
+>   PrivAllViewsInSchema schemas ->
 >         text "all views in schema"
 >     <+> hcat (punctuate (comma <> space) (map name schemas))
->   Left (PrivTable ts) ->
+>   PrivTable ts ->
 >     text "table" <+> hcat (punctuate (comma <> space) (map name ts))
->   Left (PrivView vs) ->
+>   PrivView vs ->
 >     text "view" <+> hcat (punctuate (comma <> space) (map name vs))
->   Left (PrivSavedQuery sqs) ->
+>   PrivSavedQuery sqs ->
 >     text "saved_query" <+> hcat (punctuate (comma <> space) (map name sqs))
->   Left (PrivSchema ss) ->
+>   PrivSchema ss ->
 >     text "schema" <+> hcat (punctuate (comma <> space) (map name ss))
->   Left (PrivDB dbs) ->
+>   PrivDB dbs ->
 >     text "database"  <+> hcat (punctuate (comma <> space) (map name dbs))
 
 > grantOrRevoke
@@ -741,8 +741,8 @@ Alter Default
 >   -> String -- action
 >   -> String -- preposition
 >   -> [PermissionAction] -- permissions
->   -> Either PrivilegeObject (PrivilegeObjectType, [Name]) -- on which objects
->   -> [RoleDescription] -- for with roles
+>   -> PrivilegeObject    -- on which objects
+>   -> [RoleDescription]  -- for with roles
 >   -> Doc
 > grantOrRevoke se action preposition permissions onObjs roles =
 >      text action

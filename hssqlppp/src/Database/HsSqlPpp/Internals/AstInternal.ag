@@ -800,7 +800,7 @@ data Statement
     | GrantPermission
         ann :: Annotation
         permissions :: {[PermissionAction]}
-        onObjects :: {Either PrivilegeObject (PrivilegeObjectType, [Name])}
+        onObjects :: {PrivilegeObject}
         roles :: {[RoleDescription]}
 
     | GrantPermissionCluster
@@ -817,7 +817,7 @@ data Statement
     | RevokePermission
         ann :: Annotation
         permissions :: {[PermissionAction]}
-        onObjects :: {Either PrivilegeObject (PrivilegeObjectType, [Name])}
+        onObjects :: {PrivilegeObject}
         roles :: {[RoleDescription]}
 
     | RevokePermissionCluster
@@ -1086,6 +1086,8 @@ data PrivilegeObject
   | PrivSavedQuery [Name]
   | PrivSchema [Name]
   | PrivDB [Name]
+  | PrivAllTablesInSchema [Name]
+  | PrivAllViewsInSchema  [Name]
   deriving (Eq,Show,Data,Typeable)
 }
 

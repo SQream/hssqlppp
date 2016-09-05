@@ -720,7 +720,7 @@ grants and revokes
 >   :: Text
 >   -> (Annotation
 >      -> [PermissionAction]
->      -> Either PrivilegeObject (PrivilegeObjectType, [Name])
+>      -> PrivilegeObject
 >      -> [RoleDescription]
 >      -> Statement)
 >   -> Annotation
@@ -736,28 +736,28 @@ grants and revokes
 >      (,)
 >        <$> (commaSep1 tablePermissionAction <|> allPermissions)
 >        <*> (keyword "on" *>
->                ((keyword "table" *> fmap (Left . PrivTable) (commaSep1 name))
->             <|> (keyword "all" *> keyword "tables" *> keyword "in" *> keyword "schema" *> (Right . (Tables,) <$> commaSep1 name))))
+>                ((keyword "table" *> fmap PrivTable (commaSep1 name))
+>             <|> (keyword "all" *> keyword "tables" *> keyword "in" *> keyword "schema" *> (PrivAllTablesInSchema <$> commaSep1 name))))
 >    tryView = try $
 >      (,)
 >        <$> (commaSep1 viewPermissionAction <|> allPermissions)
 >        <*> (keyword "on" *>
->                ((keyword "view" *> fmap (Left . PrivView) (commaSep1 name))
->             <|> (keyword "all" *> keyword "views" *> keyword "in" *> keyword "schema" *> (Right . (Views,) <$> commaSep1 name))))
+>                ((keyword "view" *> fmap PrivView (commaSep1 name))
+>             <|> (keyword "all" *> keyword "views" *> keyword "in" *> keyword "schema" *> (PrivAllViewsInSchema <$> commaSep1 name))))
 
 >    trySavedQuery = try $
 >      (,)
 >        <$> (commaSep1 sqPermissionAction <|> allPermissions)
->        <*> (keyword "on" *> (keyword "saved_query" *> fmap (Left . PrivSavedQuery) (commaSep1 name)))
+>        <*> (keyword "on" *> (keyword "saved_query" *> fmap PrivSavedQuery (commaSep1 name)))
 >    tryDB = try $
 >      (,)
 >        <$> (commaSep1 dbPermissionAction <|> allPermissions)
->        <*> (keyword "on" *> (keyword "database" *> fmap (Left . PrivDB) (commaSep1 name)))
+>        <*> (keyword "on" *> (keyword "database" *> fmap PrivDB (commaSep1 name)))
 
 >    trySchema = try $
 >      (,)
 >        <$> (commaSep1 schemaPermissionAction <|> allPermissions)
->        <*> (keyword "on" *> (keyword "schema" *> fmap (Left . PrivSchema) (commaSep1 name)))
+>        <*> (keyword "on" *> (keyword "schema" *> fmap PrivSchema (commaSep1 name)))
 
 
 
