@@ -171,6 +171,12 @@ There are no tests for invalid syntax at the moment.
 >        (PrivDB [name "db1", name "db2", name "db3"])
 >        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
 >      ]
+>     ,Stmt "GRANT SUPERUSER ON DATABASE db1,db2,db3 TO role1, current_role, session_role;"
+>      [GrantPermission ea
+>        [PrivSuperUser]
+>        (PrivDB [name "db1", name "db2", name "db3"])
+>        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
+>      ]
 >     ]
 
 >   ,Group "Revoke Database"

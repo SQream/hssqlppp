@@ -688,7 +688,7 @@ grants and revokes
 >   pure $ RevokeRole an roles assignedRoles 
 
 > grantGlobal :: Annotation -> SParser Statement
-> grantGlobal an =
+> grantGlobal an = try $
 >   GrantPermissionCluster an
 >     <$> commaSep1 globalPermissionAction
 >     <*> (keyword "to" *> commaSep1 role)
