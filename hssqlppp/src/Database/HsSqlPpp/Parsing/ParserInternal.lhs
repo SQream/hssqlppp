@@ -703,7 +703,7 @@ grants and revokes
 
 
 > revokeGlobal :: Annotation -> SParser Statement
-> revokeGlobal an =
+> revokeGlobal an = try $
 >   RevokePermissionCluster an
 >     <$> commaSep1 globalPermissionActionRevoke
 >     <*> (keyword "from" *> commaSep1 role)
