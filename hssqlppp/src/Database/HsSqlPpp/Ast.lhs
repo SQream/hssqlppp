@@ -118,6 +118,7 @@
 >     ,PrivilegeObject(..)
 >     ,PermissionAction(..)
 >     ,RoleDescription(..)
+>     ,CreatorRoleOrRole(..)
 >     ,InheritOption(..)
 >     ) where
 >

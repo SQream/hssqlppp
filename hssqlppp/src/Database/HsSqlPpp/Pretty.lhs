@@ -661,19 +661,23 @@ Alter Default
 > statement _flg se _ (AlterCurrentDefaultSchema _ schema) =
 >   text "alter current default schema to" <+> name schema <> statementEnd se
 
-> statement _flg se _ (AlterDefaultPermissions _ creators schemas forObjects permissions grantedRoles) =
+> statement _flg se _ (AlterDefaultPermissions _ creators schemas forObjects permissions isGrant grantedRoles) =
 >      text "alter default permissions"
 >  <+> hcat (punctuate (comma <> space) (shove (text "for") $ map role creators))
->  <+> hcat (punctuate (comma <> space) (shove (text "in")  $ map name schemas))
+>  <+> (if null schemas then mempty else hcat (punctuate (comma <> space) (shove (text "in")  $ map name schemas)))
 >  <+> hcat (punctuate (comma <> space) (shove (text "for") $ map privilegeObject forObjects))
->  <+> hcat (punctuate (comma <> space) (shove (text "grant") $ map permissionAction permissions))
->  <+> hcat (punctuate (comma <> space) (shove (text "to") $ map role grantedRoles))
+>  <+> hcat (punctuate (comma <> space) (shove (text $ if isGrant then "grant" else "drop grant") $ map permissionAction permissions))
+>  <+> hcat (punctuate (comma <> space) (shove (text "to") $ map creatorRoleOrRole grantedRoles))
 >  <+> statementEnd se
 
 >    where
 >      shove d = \case
 >        [] -> []
 >        (x:xs) -> (d <+> x) : xs
+
+>      creatorRoleOrRole = \case
+>        CreatorRole -> text "creator_role"
+>        RoleDescription r -> role r
 
 > statement _flg se _ (GrantPermissionCluster _ permissions roles) =
 >      text "grant"

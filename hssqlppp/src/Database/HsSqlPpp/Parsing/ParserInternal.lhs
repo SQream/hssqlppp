@@ -1221,34 +1221,43 @@ alter defaults
 
 >     permissions = keyword "permissions" *>
 >       (permissionsDB <|> permissionsSchema)
->
+
 >     permissionsDB = do
 >       creatorRoles <-
->              try (keyword "for" *> keyword "databases" *> pure Nothing)
->          <|> try (optionMaybe (keyword "for" *> commaSep1 role) <* (keyword "for" *> keyword "databases"))
->       perms <- keyword "grant" *> commaSep1 privs
->       toRoles <- keyword "to" *> commaSep1 role
+>         try (keyword "for" *> commaSep1 role
+>            <* keyword "for"
+>            <* keyword "databases")
+>       isgrant <- True <$ keyword "grant" <|> False <$ (keyword "drop" *> keyword "grant")
+>       perms <- commaSep1 privs
+>       toRoles <- keyword "to" *> commaSep1 creatorRoleOrRole
 >       pure $ AlterDefaultPermissions
 >         an
->         (concat creatorRoles)
+>         creatorRoles
 >         []
 >         [Databases]
 >         perms
+>         isgrant
 >         toRoles
 
 >     permissionsSchema = do
->       creatorRoles <- optionMaybe (keyword "for" *> commaSep1 role)
+>       creatorRoles <- keyword "for" *> commaSep1 role
 >       schemas <- optionMaybe (keyword "in" *> commaSep1 name)
 >       forObjects <- (keyword "for" *> commaSep1 permObjects)
->       perms <- keyword "grant" *> commaSep1 privs
->       toRoles <- keyword "to" *> commaSep1 role
+>       isgrant <- True <$ keyword "grant" <|> False <$ (keyword "drop" *> keyword "grant")
+>       perms <- commaSep1 privs
+>       toRoles <- keyword "to" *> commaSep1 creatorRoleOrRole
 >       pure $ AlterDefaultPermissions
 >         an
->         (concat creatorRoles)
+>         creatorRoles
 >         (concat schemas)
 >         forObjects
 >         perms
+>         isgrant
 >         toRoles
+
+>     creatorRoleOrRole :: SParser CreatorRoleOrRole
+>     creatorRoleOrRole = CreatorRole <$ keyword "creator_role" <|> RoleDescription <$> role
+
 
 >     permObjects =
 >           (keyword "tables" *> pure Tables)

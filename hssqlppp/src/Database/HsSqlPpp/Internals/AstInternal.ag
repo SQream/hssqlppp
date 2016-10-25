@@ -92,6 +92,7 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,PrivilegeObject(..)
    ,PermissionAction(..)
    ,RoleDescription(..)
+   ,CreatorRoleOrRole(..)
    ,InheritOption(..)
    ,StatementList
    ,ScalarExprListStatementListTripleList
@@ -793,7 +794,8 @@ data Statement
         inSchemas    :: {[Name]}
         forObjects   :: {[PrivilegeObjectType]}
         permissions  :: {[PermissionAction]}
-        grantedRoles :: {[RoleDescription]}
+        isGrant      :: Bool
+        grantedRoles :: {[CreatorRoleOrRole]}
 
 -- grant
 
@@ -1069,6 +1071,11 @@ data RoleDescription
   = CurrentRole
   | SessionRole
   | RoleName NameComponent
+  deriving (Eq,Show,Data,Typeable)
+
+data CreatorRoleOrRole
+  = CreatorRole
+  | RoleDescription RoleDescription
   deriving (Eq,Show,Data,Typeable)
 
 data PrivilegeObjectType
