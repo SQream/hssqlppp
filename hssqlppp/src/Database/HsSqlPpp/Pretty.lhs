@@ -661,11 +661,11 @@ Alter Default
 > statement _flg se _ (AlterCurrentDefaultSchema _ schema) =
 >   text "alter current default schema to" <+> name schema <> statementEnd se
 
-> statement _flg se _ (AlterDefaultPermissions _ creators schemas forObjects permissions isGrant grantedRoles) =
+> statement _flg se _ (AlterDefaultPermissions _ creators schemas forObject permissions isGrant grantedRoles) =
 >      text "alter default permissions"
 >  <+> hcat (punctuate (comma <> space) (shove (text "for") $ map role creators))
 >  <+> (if null schemas then mempty else hcat (punctuate (comma <> space) (shove (text "in")  $ map name schemas)))
->  <+> hcat (punctuate (comma <> space) (shove (text "for") $ map privilegeObject forObjects))
+>  <+> text "for" <+> privilegeObject forObject
 >  <+> hcat (punctuate (comma <> space) (shove (text $ if isGrant then "grant" else "drop grant") $ map permissionAction permissions))
 >  <+> hcat (punctuate (comma <> space) (shove (text "to") $ map creatorRoleOrRole grantedRoles))
 >  <+> statementEnd se

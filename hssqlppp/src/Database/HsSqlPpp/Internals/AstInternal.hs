@@ -807,7 +807,7 @@ data TableOption =
 data InheritOption
   = Inherit
   | NoInherit
-  deriving (Eq,Show,Data,Typeable)
+  deriving (Eq,Ord,Show,Data,Typeable)
 {-# LINE 812 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
 
 {-# LINE 1068 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.ag" #-}
@@ -817,12 +817,12 @@ data RoleDescription
   = CurrentRole
   | SessionRole
   | RoleName NameComponent
-  deriving (Eq,Show,Data,Typeable)
+  deriving (Eq,Ord,Show,Data,Typeable)
 
 data CreatorRoleOrRole
   = CreatorRole
   | RoleDescription RoleDescription
-  deriving (Eq,Show,Data,Typeable)
+  deriving (Eq,Ord,Show,Data,Typeable)
 
 data PrivilegeObjectType
   = Tables
@@ -830,7 +830,7 @@ data PrivilegeObjectType
   | Views
   | SavedQueries
   | Databases
-  deriving (Eq,Show,Data,Typeable)
+  deriving (Eq,Ord,Show,Data,Typeable)
 
 
 data PrivilegeObject
@@ -861,7 +861,7 @@ data PermissionAction
   | PrivSetPermissions
   | PrivPassword String
   | PrivConnectionLimit Integer
-  deriving (Show,Eq,Typeable,Data)
+  deriving (Show,Eq,Ord,Typeable,Data)
 {-# LINE 866 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
 
 {-# LINE 1133 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.ag" #-}
@@ -19214,7 +19214,7 @@ _sem_SetClauseList_Nil =
          child ann            : Annotation 
          child creatorRoles   : {[RoleDescription]}
          child inSchemas      : {[Name]}
-         child forObjects     : {[PrivilegeObjectType]}
+         child forObjects     : {PrivilegeObjectType}
          child permissions    : {[PermissionAction]}
          child isGrant        : {Bool}
          child grantedRoles   : {[CreatorRoleOrRole]}
@@ -19553,7 +19553,7 @@ data Statement = QueryStatement (Annotation) (QueryExpr)
                | AlterDefaultRole (Annotation) (RoleDescription) (RoleDescription)
                | AlterDefaultSchema (Annotation) (RoleDescription) (Name)
                | AlterCurrentDefaultSchema (Annotation) (Name)
-               | AlterDefaultPermissions (Annotation) (([RoleDescription])) (([Name])) (([PrivilegeObjectType])) (([PermissionAction])) (Bool) (([CreatorRoleOrRole]))
+               | AlterDefaultPermissions (Annotation) (([RoleDescription])) (([Name])) (PrivilegeObjectType) (([PermissionAction])) (Bool) (([CreatorRoleOrRole]))
                | GrantPermission (Annotation) (([PermissionAction])) (PrivilegeObject) (([RoleDescription]))
                | GrantPermissionCluster (Annotation) (([PermissionAction])) (([RoleDescription]))
                | GrantRole (Annotation) (([RoleDescription])) (([RoleDescription])) (InheritOption)
@@ -22913,7 +22913,7 @@ _sem_Statement_AlterCurrentDefaultSchema ann_ defaultSchema_ =
 _sem_Statement_AlterDefaultPermissions :: T_Annotation ->
                                          ([RoleDescription]) ->
                                          ([Name]) ->
-                                         ([PrivilegeObjectType]) ->
+                                         PrivilegeObjectType ->
                                          ([PermissionAction]) ->
                                          Bool ->
                                          ([CreatorRoleOrRole]) ->

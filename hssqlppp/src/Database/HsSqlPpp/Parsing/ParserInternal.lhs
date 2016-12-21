@@ -1234,7 +1234,7 @@ alter defaults
 >         an
 >         creatorRoles
 >         []
->         [Databases]
+>         Databases
 >         perms
 >         isgrant
 >         toRoles
@@ -1242,7 +1242,7 @@ alter defaults
 >     permissionsSchema = do
 >       creatorRoles <- keyword "for" *> commaSep1 role
 >       schemas <- optionMaybe (keyword "in" *> commaSep1 name)
->       forObjects <- (keyword "for" *> commaSep1 permObjects)
+>       forObjects <- keyword "for" *> permObjects
 >       isgrant <- True <$ keyword "grant" <|> False <$ (keyword "drop" *> keyword "grant")
 >       perms <- commaSep1 privs
 >       toRoles <- keyword "to" *> commaSep1 creatorRoleOrRole
@@ -1273,6 +1273,7 @@ alter defaults
 >       <|> (keyword "ddl" *> pure PrivDDL)
 >       <|> (keyword "login" *> pure PrivLogin)
 >       <|> (keyword "usage" *> pure PrivUsage)
+>       <|> (keyword "create" *> pure PrivCreate)
 >       <|> (keyword "connect" *> pure PrivConnect)
 >       <|> (keyword "superuser" *> pure PrivSuperUser)
 >       <|> (keyword "roleadmin" *> pure PrivRoleAdmin)

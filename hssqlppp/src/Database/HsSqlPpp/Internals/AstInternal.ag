@@ -792,7 +792,7 @@ data Statement
         ann::Annotation
         creatorRoles :: {[RoleDescription]}
         inSchemas    :: {[Name]}
-        forObjects   :: {[PrivilegeObjectType]}
+        forObjects   :: PrivilegeObjectType
         permissions  :: {[PermissionAction]}
         isGrant      :: Bool
         grantedRoles :: {[CreatorRoleOrRole]}
@@ -1062,7 +1062,7 @@ data TableOption =
 data InheritOption
   = Inherit
   | NoInherit
-  deriving (Eq,Show,Data,Typeable)
+  deriving (Eq,Ord,Show,Data,Typeable)
 }
 
 {
@@ -1071,12 +1071,12 @@ data RoleDescription
   = CurrentRole
   | SessionRole
   | RoleName NameComponent
-  deriving (Eq,Show,Data,Typeable)
+  deriving (Eq,Ord,Show,Data,Typeable)
 
 data CreatorRoleOrRole
   = CreatorRole
   | RoleDescription RoleDescription
-  deriving (Eq,Show,Data,Typeable)
+  deriving (Eq,Ord,Show,Data,Typeable)
 
 data PrivilegeObjectType
   = Tables
@@ -1084,7 +1084,7 @@ data PrivilegeObjectType
   | Views
   | SavedQueries
   | Databases
-  deriving (Eq,Show,Data,Typeable)
+  deriving (Eq,Ord,Show,Data,Typeable)
 
 
 data PrivilegeObject
@@ -1114,7 +1114,7 @@ data PermissionAction
   | PrivSetPermissions
   | PrivPassword String
   | PrivConnectionLimit Integer
-  deriving (Show,Eq,Typeable,Data)
+  deriving (Show,Eq,Ord,Typeable,Data)
 }
 
 data TypeAttributeDef | TypeAttDef ann::Annotation

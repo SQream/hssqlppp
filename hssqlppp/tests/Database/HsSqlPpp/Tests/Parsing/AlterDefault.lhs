@@ -33,19 +33,19 @@ There are no tests for invalid syntax at the moment.
 
 >     ,Group "Alter Default Permissions"
 >       [Stmt "ALTER DEFAULT PERMISSIONS FOR public FOR DATABASES GRANT USAGE, SET_PERMISSIONS TO role1, role2, role3;"
->        [AlterDefaultPermissions ea [RoleName $ Nmc "public"] [] [Databases] [PrivUsage, PrivSetPermissions] True [RoleDescription $ RoleName $ Nmc "role1", RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
+>        [AlterDefaultPermissions ea [RoleName $ Nmc "public"] [] Databases [PrivUsage, PrivSetPermissions] True [RoleDescription $ RoleName $ Nmc "role1", RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
 
 >       ,Stmt "ALTER DEFAULT PERMISSIONS FOR public IN my_schema FOR VIEWS GRANT SELECT, INSERT, DDL TO role1, role2, role3;"
->        [AlterDefaultPermissions ea [RoleName $ Nmc "public"] [name "my_schema"] [Views] [PrivSelect, PrivInsert, PrivDDL] True [RoleDescription $ RoleName $ Nmc "role1", RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
+>        [AlterDefaultPermissions ea [RoleName $ Nmc "public"] [name "my_schema"] Views [PrivSelect, PrivInsert, PrivDDL] True [RoleDescription $ RoleName $ Nmc "role1", RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
 
 >       ,Stmt "ALTER DEFAULT PERMISSIONS FOR public IN my_schema FOR TABLES GRANT SELECT, INSERT, DDL TO CURRENT_ROLE, role2, role3;"
->        [AlterDefaultPermissions ea [RoleName $ Nmc "public"] [name "my_schema"] [Tables] [PrivSelect, PrivInsert, PrivDDL] True [RoleDescription CurrentRole, RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
+>        [AlterDefaultPermissions ea [RoleName $ Nmc "public"] [name "my_schema"] Tables [PrivSelect, PrivInsert, PrivDDL] True [RoleDescription CurrentRole, RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
 
 >       ,Stmt "ALTER DEFAULT PERMISSIONS FOR role1, role2 IN my_schema FOR TABLES GRANT SELECT, INSERT, DDL TO SESSION_ROLE, role2, role3;"
->        [AlterDefaultPermissions ea [RoleName $ Nmc "role1", RoleName $ Nmc "role2"] [name "my_schema"] [Tables] [PrivSelect, PrivInsert, PrivDDL] True [RoleDescription SessionRole, RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
+>        [AlterDefaultPermissions ea [RoleName $ Nmc "role1", RoleName $ Nmc "role2"] [name "my_schema"] Tables [PrivSelect, PrivInsert, PrivDDL] True [RoleDescription SessionRole, RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
 
 >       ,Stmt "ALTER DEFAULT PERMISSIONS FOR role1, role2 IN my_schema FOR TABLES DROP GRANT SELECT, INSERT, DDL TO CREATOR_ROLE, role2, role3;"
->        [AlterDefaultPermissions ea [RoleName $ Nmc "role1", RoleName $ Nmc "role2"] [name "my_schema"] [Tables] [PrivSelect, PrivInsert, PrivDDL] False [CreatorRole, RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
+>        [AlterDefaultPermissions ea [RoleName $ Nmc "role1", RoleName $ Nmc "role2"] [name "my_schema"] Tables [PrivSelect, PrivInsert, PrivDDL] False [CreatorRole, RoleDescription $ RoleName $ Nmc "role2", RoleDescription $ RoleName $ Nmc "role3"]]
 >       ]
 
 >    ]
