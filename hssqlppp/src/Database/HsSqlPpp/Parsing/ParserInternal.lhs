@@ -357,7 +357,10 @@ maybe it should still do this since it would probably be a lot clearer
 >                    <*> option [] groupBy
 >                    <*> optionMaybe having
 >                    <*> orderBy
->                    <*> option tp (Just <$> limit)
+>                    <*> ( if isJust tp
+>                            then return tp
+>                            else optionMaybe limit
+>                        )
 >                    <*> optionMaybe offset
 >                    <*> option [] hints
 >           return (case intoBit of
@@ -2609,6 +2612,7 @@ http://msdn.microsoft.com/en-us/library/ms189822.aspx
 >        ,"kill"
 >        ,"left"
 >        ,"like"
+>        ,"limit"
 >        ,"lineno"
 >        ,"load"
 >        ,"loop"
