@@ -2831,11 +2831,17 @@ Utility parsers
 > liftStringTok :: SParser String
 > liftStringTok = mytoken (\tok ->
 >                   case tok of
->                            Lex.SqlString _ s ->
+>                            Lex.SqlString q s ->
 >                               -- bit hacky, the lexer doesn't process quotes
 >                               -- but the parser expects them to have been replaced
->                               Just $ T.unpack $ T.replace "''" "'" $ T.replace "\'" "'" s
+>                               Just . T.unpack
+>                                 . (if q /= "$$" then doubleToSingle else id)
+>                                 . removeBackSlash
+>                                 $ s
 >                            _ -> Nothing)
+>  where
+>   doubleToSingle = T.replace "''" "'" 
+>   removeBackSlash = T.replace "\'" "'"
 
 > stringLit :: SParser ScalarExpr
 > stringLit = choice

@@ -26,6 +26,7 @@ try to parse, if parses, print and check equal to original string
 >     ,Lex PostgreSQLDialect "'normal '' quote'" [SqlString "'" "normal '' quote"]
 >     ,Lex PostgreSQLDialect "'normalendquote '''" [SqlString "'" "normalendquote ''"]
 >     ,Lex PostgreSQLDialect "$$dollar quoting$$" [SqlString "$$" "dollar quoting"]
+>     ,Lex PostgreSQLDialect "$$with '' quotes$$" [SqlString "$$" "with '' quotes"]
 >     ,Lex PostgreSQLDialect "$x$dollar $$ quoting$x$" [SqlString "$x$" "dollar $$ quoting"]
 
 identifiers
