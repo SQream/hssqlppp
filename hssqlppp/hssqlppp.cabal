@@ -145,6 +145,7 @@ Test-Suite Tests
                      Database.HsSqlPpp.Tests.Parsing.FunctionsDdl
                      Database.HsSqlPpp.Tests.Parsing.ScalarExprs
                      Database.HsSqlPpp.Tests.Parsing.SelectLists
+                     Database.HsSqlPpp.Tests.Parsing.QueryHints
                      Database.HsSqlPpp.Tests.Parsing.CombineQueryExprs
                      Database.HsSqlPpp.Tests.Parsing.Misc
                      Database.HsSqlPpp.Tests.Parsing.Joins

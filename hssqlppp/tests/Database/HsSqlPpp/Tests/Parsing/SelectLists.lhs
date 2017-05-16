@@ -91,10 +91,6 @@ aggregates, group by, having
 >                  ,sia (app "count" [ei "b"]) $ Nmc "cnt"]
 >              ,selGroupBy = [ei "a"]
 >              ,selHaving = Just $ binop  ">" (ei "cnt") (num "4")}
->    ,q "select a from tbl option (partition group);"
->       $ stbl {selOption = [QueryHintPartitionGroup]}
->    ,q "select a from tbl option (partition group,columnar host group);"
->       $ stbl {selOption = [QueryHintPartitionGroup,QueryHintColumnarHostGroup]}
 >    ,q "select a b from tbl;"
 >       $ stbl { selSelectList = sl [sia (ei "a") (Nmc "b")] }
 >    ,q "select a b, b c, c d from tbl;"

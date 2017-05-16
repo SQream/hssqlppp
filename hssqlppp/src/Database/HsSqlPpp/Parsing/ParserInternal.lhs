@@ -390,7 +390,21 @@ maybe it should still do this since it would probably be a lot clearer
 > queryHint :: SParser QueryHint
 > queryHint = choice
 >             [QueryHintPartitionGroup <$ keyword "partition" <* keyword "group"
->             ,QueryHintColumnarHostGroup <$ keyword "columnar" <* keyword "host" <* keyword "group"]
+>             ,QueryHintColumnarHostGroup <$ keyword "columnar" <* keyword "host" <* keyword "group"
+
+set in a query hint is more limited than regular options or regular set.
+it must be a single token for the set value
+
+>             ,QueryHintSet <$> (keyword "set" *> idString)
+>              <*> ((keyword "to" <|> symbol "=") *> sv)
+>             ]
+>   where -- todo: deduplicate with the set statement parser
+>     sv = choice
+>         [SetStr <$> pos <*> stringN
+>         ,SetId  <$> pos <*> idString
+>         ,SetNum <$> pos <*> (try (fromInteger <$> integer) <|> (read <$> numString))
+>         ]
+
 
 > orderBy :: SParser [(ScalarExpr,Direction, NullsOrder)]
 > orderBy = option []

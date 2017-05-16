@@ -30,6 +30,7 @@ There are no tests for invalid syntax at the moment.
 > import Database.HsSqlPpp.Tests.Parsing.TableRefs
 > import Database.HsSqlPpp.Tests.Parsing.Joins
 > import Database.HsSqlPpp.Tests.Parsing.Schemas
+> import Database.HsSqlPpp.Tests.Parsing.QueryHints
 
 > import Database.HsSqlPpp.Tests.Parsing.Dml
 > import Database.HsSqlPpp.Tests.Parsing.Misc
@@ -67,6 +68,7 @@ There are no tests for invalid syntax at the moment.
 >             ,selectLists
 >             ,tableRefs
 >             ,joins
+>             ,queryHints
 >             ,dml
 >             ,Group "ddl" [createTableTests
 >                          ,miscDdl

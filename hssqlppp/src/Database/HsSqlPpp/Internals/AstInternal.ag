@@ -1291,7 +1291,9 @@ data RaiseType = RNotice | RException | RError
 -}
 
 {
-data QueryHint = QueryHintPartitionGroup | QueryHintColumnarHostGroup
+data QueryHint = QueryHintPartitionGroup
+               | QueryHintColumnarHostGroup
+               | QueryHintSet String SetValue
                  deriving (Show,Eq,Typeable,Data)
 
 }

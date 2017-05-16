@@ -840,12 +840,19 @@ Statement components
 >   ,Just $ orderBy flg order
 >   ,if useTop then Nothing else flip fmap lim $ \lm -> text "limit" <+> scalExpr flg lm
 >   ,flip fmap off $ \offs -> text "offset" <+> scalExpr flg offs
->   ,if null hs then Nothing else Just $ text "option" $+$ parens (sepCsvMap (text . prettyQueryHint) hs)
+>   ,if null hs then Nothing else Just $ text "option" $+$ parens (sepCsvMap prettyQueryHint hs)
 >   ])
 >   where
 >     useTop = ppDialect flg == SQLServerDialect
->     prettyQueryHint QueryHintPartitionGroup = "partition group"
->     prettyQueryHint QueryHintColumnarHostGroup = "columnar host group"
+>     prettyQueryHint QueryHintPartitionGroup = text "partition group"
+>     prettyQueryHint QueryHintColumnarHostGroup = text "columnar host group"
+>     prettyQueryHint (QueryHintSet n v) = text "set" <+> text n <+> text "="
+>                                          <+> text (dv v)
+>     -- todo: deduplicate with set statement
+>     dv (SetStr _ s) = "'" ++ s ++ "'"
+>     dv (SetId _ i) = i
+>     dv (SetNum _ nm) = show nm
+
 >
 > queryExpr flg writeSelect topLev _ (CombineQueryExpr _ tp s1 s2) =
 >   let p = queryExpr flg writeSelect False Nothing  s1
