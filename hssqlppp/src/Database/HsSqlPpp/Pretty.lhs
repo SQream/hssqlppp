@@ -1282,9 +1282,7 @@ syntax maybe should error instead of silently breaking
 > scalExpr flg (Cast _ ex t) = text "cast" <> parens (scalExpr flg ex
 >                                              <+> text "as"
 >                                              <+> typeName t)
-> scalExpr flg (ImplicitCast _ ex te) = text "impl_cast" <> parens (scalExpr flg ex
->                                              <+> text "as"
->                                              <+> typeExtra te)
+> scalExpr flg (ImplicitCast _ ex _) = scalExpr flg ex
 > scalExpr flg (TypedStringLit a t s) =
 >   typeName t <+> scalExpr flg (StringLit a s)
 > scalExpr flg (Interval a v f p) =
