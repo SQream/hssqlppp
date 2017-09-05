@@ -23,25 +23,28 @@ select tbl.x from tbl t.
 >   Group "issues"
 >   [
 >   -- check that quoted select list aliases don't lose their quotes
->    let s = "select t.a as \"Quoted\" from t as t(a,b);"
->    in RewriteQueryExpr defaultTypeCheckingFlags
+>    RewriteQueryExpr defaultTypeCheckingFlags
 >         {tcfAddQualifiers = True
 >         ,tcfAddSelectItemAliases = True
 >         ,tcfExpandStars = True
->         ,tcfAddFullTablerefAliases = True} cat s s
+>         ,tcfAddFullTablerefAliases = True} cat
+>         "select t.a as \"Quoted\" from t as t(a,b);"
+>         "select \"t\".\"a\" as \"Quoted\" from t as t(a,b);"
 >    -- check bug with some uuagc code not adding the
 >    -- qualifiers for an identifier properly when
 >    -- the identifier appears on its own at the top level of a select list item
 >   ,r "select a from t as t(a,b);"
->      "select t.a as a from t as t(a,b);"
->   -- avoid some gratuitous case changes
->   ,r "select A from t as t(a,b);"
->      "select t.A as A from t as t(a,b);"
->   ,r "select T.A from t as t(a,b);"
->      "select T.A as A from t as t(a,b);"
+>      "select \"t\".\"a\" as a from t as t(a,b);"
+
+    -- avoid some gratuitous case changes
+    ,r "select A from t as t(a,b);"
+       "select t.A as A from t as t(a,b);"
+    ,r "select T.A from t as t(a,b);"
+       "select T.A as A from t as t(a,b);"
+
 >    -- check not using the alias correctly when qualifying ids
 >   ,r "select tbl.a as a from t as tbl(a,b);"
->      "select tbl.a as a from t as tbl(a,b);"
+>      "select \"tbl\".\"a\" as a from t as tbl(a,b);"
 
 >   --,r "select * from t u inner join t1 u1 on u.a=u1.c;"
 >   --   "select * from t u inner join t1 u1 on u.a=u1.c;"

@@ -25,32 +25,32 @@ item aliases
 >          [CatCreateTable ("public","t") [("a", mkCatNameExtra "int4")
 >                              ,("b", mkCatNameExtra "text")]]
 >    "select * from t"
->    "select t.a,t.b from t"
+>    "select \"t\".\"a\",\"t\".\"b\" from t"
 
 >   ,RewriteQueryExpr defaultTypeCheckingFlags {tcfAddQualifiers = True}
 >          [CatCreateTable ("public","t") [("a", mkCatNameExtra "int4")
 >                              ,("b", mkCatNameExtra "text")]]
 >    "select b,count(a) from t group by b"
->    "select t.b,count(t.a) from t group by t.b"
+>    "select \"t\".\"b\",count(\"t\".\"a\") from t group by \"t\".\"b\""
 
 >   ,RewriteQueryExpr defaultTypeCheckingFlags {tcfAddQualifiers = True}
 >          [CatCreateTable ("public","t") [("a", mkCatNameExtra "int4")
 >                              ,("b", mkCatNameExtra "text")]]
 >    "select * from t where a > 3"
->    "select * from t where t.a > 3"
+>    "select * from t where \"t\".\"a\" > 3"
 
 >   ,RewriteQueryExpr defaultTypeCheckingFlags {tcfAddQualifiers = True}
 >          [CatCreateTable ("public","t") [("a", mkCatNameExtra "int4")
 >                              ,("b", mkCatNameExtra "text")]]
 >    "select * from t u where a > 3"
->    "select * from t u where u.a > 3"
+>    "select * from t u where \"u\".\"a\" > 3"
 
 
 >   ,RewriteQueryExpr defaultTypeCheckingFlags {tcfAddQualifiers = True}
 >          [CatCreateTable ("public","t") [("a", mkCatNameExtra "int4")
 >                              ,("b", mkCatNameExtra "text")]]
 >    "select * from t order by a"
->    "select * from t order by t.a"
+>    "select * from t order by \"t\".\"a\""
 
 
 
@@ -92,7 +92,7 @@ item aliases
 >          [CatCreateTable ("public","t") [("a", mkCatNameExtra "int4")
 >                              ,("b", mkCatNameExtra "text")]]
 >    "select a,b from t"
->    "select t.a,t.b from t"
+>    "select \"t\".\"a\",\"t\".\"b\" from t"
 
 >   ,RewriteQueryExpr defaultTypeCheckingFlags {tcfAddQualifiers = True
 >                                              ,tcfAddSelectItemAliases = True
@@ -101,6 +101,6 @@ item aliases
 >          [CatCreateTable ("public","t") [("a", mkCatNameExtra "int4")
 >                              ,("b", mkCatNameExtra "text")]]
 >    "/*thisit*/select * from t"
->    "select t.a as a,t.b as b from t as t(a,b)"
+>    "select \"t\".\"a\" as \"a\",\"t\".\"b\" as \"b\" from t as t(a,b)"
 
 >   ]

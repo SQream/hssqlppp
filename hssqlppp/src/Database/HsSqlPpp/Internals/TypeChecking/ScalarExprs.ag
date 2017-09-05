@@ -347,7 +347,7 @@ identifiers
                         if q /= ""
                           then -- todo: quote identifiers if needed
                                return $ Identifier @ann.annotatedTree
-                                          (Name emptyAnnotation [Nmc $ T.unpack q, Nmc $ T.unpack i])
+                                          (Name emptyAnnotation [QNmc $ T.unpack q, QNmc $ T.unpack i])
                           else return t
          i.tpe = Left []
 

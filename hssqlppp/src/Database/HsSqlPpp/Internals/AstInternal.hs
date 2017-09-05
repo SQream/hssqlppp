@@ -10404,10 +10404,10 @@ _sem_ScalarExpr_NumberLit ann_ d_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -10529,10 +10529,10 @@ _sem_ScalarExpr_StringLit ann_ value_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -10645,10 +10645,10 @@ _sem_ScalarExpr_NullLit ann_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -10762,10 +10762,10 @@ _sem_ScalarExpr_BooleanLit ann_ b_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -10886,10 +10886,10 @@ _sem_ScalarExpr_TypedStringLit ann_ tn_ value_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -11025,10 +11025,10 @@ _sem_ScalarExpr_Interval ann_ value_ field_ prec_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -11155,10 +11155,10 @@ _sem_ScalarExpr_Extract ann_ field_ e_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -11330,10 +11330,10 @@ _sem_ScalarExpr_PositionalArg ann_ p_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -11446,10 +11446,10 @@ _sem_ScalarExpr_Placeholder ann_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -11582,10 +11582,10 @@ _sem_ScalarExpr_Cast ann_ expr_ tn_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -11784,10 +11784,10 @@ _sem_ScalarExpr_ImplicitCast ann_ expr_ te_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -11951,10 +11951,10 @@ _sem_ScalarExpr_Star ann_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -12082,10 +12082,10 @@ _sem_ScalarExpr_QStar ann_ q_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -12218,10 +12218,10 @@ _sem_ScalarExpr_Identifier ann_ i_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -12291,7 +12291,7 @@ _sem_ScalarExpr_Identifier ann_ i_ =
                                 if q /= ""
                                   then
                                        return $ Identifier _annIannotatedTree
-                                                  (Name emptyAnnotation [Nmc $ T.unpack q, Nmc $ T.unpack i])
+                                                  (Name emptyAnnotation [QNmc $ T.unpack q, QNmc $ T.unpack i])
                                   else return t
                    {-# LINE 12254 "hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs" #-}
                    )
@@ -12399,10 +12399,10 @@ _sem_ScalarExpr_Case ann_ cases_ els_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -12656,10 +12656,10 @@ _sem_ScalarExpr_CaseSimple ann_ value_ cases_ els_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -12938,10 +12938,10 @@ _sem_ScalarExpr_Exists ann_ sel_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -13112,10 +13112,10 @@ _sem_ScalarExpr_App ann_ funName_ args_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -13354,10 +13354,10 @@ _sem_ScalarExpr_PrefixOp ann_ opName_ arg_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -13576,10 +13576,10 @@ _sem_ScalarExpr_PostfixOp ann_ opName_ arg_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -13811,10 +13811,10 @@ _sem_ScalarExpr_BinaryOp ann_ opName_ arg0_ arg1_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -14077,10 +14077,10 @@ _sem_ScalarExpr_SpecialOp ann_ opName_ args_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -14290,10 +14290,10 @@ _sem_ScalarExpr_AggregateApp ann_ aggDistinct_ fn_ orderBy_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -14517,10 +14517,10 @@ _sem_ScalarExpr_WindowApp ann_ fn_ partitionBy_ orderBy_ frm_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -14778,10 +14778,10 @@ _sem_ScalarExpr_InPredicate ann_ expr_ i_ list_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -15012,10 +15012,10 @@ _sem_ScalarExpr_LiftApp ann_ oper_ flav_ args_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -15208,10 +15208,10 @@ _sem_ScalarExpr_ScalarSubQuery ann_ sel_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -15439,10 +15439,10 @@ _sem_ScalarExpr_Parens ann_ ex_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -15607,10 +15607,10 @@ _sem_ScalarExpr_OdbcLiteral ann_ olt_ val_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
@@ -15739,10 +15739,10 @@ _sem_ScalarExpr_OdbcFunc ann_ ex_ =
                        doStar is =
                          map (\((q,n),t) ->
                            let a' = a {anType = Just t}
-                           in (Nmc $ T.unpack n, Just t,
+                           in (QNmc $ T.unpack n, Just t,
                                Identifier a' $ Name a'
-                                             $ [Nmc q' | let q' = T.unpack q, not $ null q']
-                                               ++ [Nmc $ T.unpack n])
+                                             $ [QNmc q' | let q' = T.unpack q, not $ null q']
+                                               ++ [QNmc $ T.unpack n])
                            ) is
                    in case _originalTree of
                        Star _ | Right is <- E.envExpandStar Nothing _lhsIdownEnv ->
