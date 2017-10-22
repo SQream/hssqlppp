@@ -20,6 +20,7 @@
 >
 > import Text.PrettyPrint
 > import Data.Maybe
+> import Data.Word (Word8)
 >
 > import Database.HsSqlPpp.Ast hiding (ann)
 > import Database.HsSqlPpp.Annotation
@@ -971,6 +972,7 @@ syntax maybe should error instead of silently breaking
 >   ifNotEmpty (const $ "with" <+> sep (map po opts)) opts
 >   where
 >       po (CopyToFormat s) = text "format" <+> text s
+>       po (CopyToOctalDelimiter o) = text "delimiter" <+> ppOctalDelimiter o
 >       po (CopyToDelimiter s) = text "delimiter" <+> quotes (text s)
 >       po (CopyToErrorLog s) = text "error_log" <+> quotes (text s)
 >       po (CopyToErrorVerbosity s) = text "error_verbosity" <+> int s
@@ -980,6 +982,7 @@ syntax maybe should error instead of silently breaking
 >   ifNotEmpty (const $ "with" <+> sep (map po opts)) opts
 >   where
 >       po (CopyFromFormat s) = text "format" <+> text s
+>       po (CopyFromOctalDelimiter o) = text "delimiter" <+> ppOctalDelimiter o
 >       po (CopyFromDelimiter s) = text "delimiter" <+> quotes (text s)
 >       po (CopyFromErrorLog s) = text "error_log" <+> quotes (text s)
 >       po (CopyFromErrorVerbosity s) = text "error_verbosity" <+> int s
@@ -989,6 +992,12 @@ syntax maybe should error instead of silently breaking
 >       po (CopyFromLimit i) = text "limit" <+> integer i
 >       po (CopyFromErrorThreshold i) = text "stop after" <+> int i <+> text "errors"
 >       po (CopyFromNewlineFormat n) = text "record delimiter" <+> text n
+
+> ppOctalDelimiter :: Word8 -> Doc
+> ppOctalDelimiter i = "E" <> quotes (text $ "\\" ++ r)
+>   where
+>     r = show (i `div` 64) ++ show (i `mod` 64 `div` 8) ++ show (i `mod` 64 `mod` 8)
+
 > -- ddl
 >
 > constraint :: PrettyPrintFlags -> Constraint -> Doc

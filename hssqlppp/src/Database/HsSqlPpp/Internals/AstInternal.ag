@@ -153,6 +153,7 @@ module {Database.HsSqlPpp.Internals.AstInternal}
 --import Data.List
 --import Control.Applicative
 import Data.Data
+import Data.Word (Word8)
 --import Data.Char
 --import Control.Monad.State
 --import Control.Arrow
@@ -978,6 +979,7 @@ data CopyToSource = CopyTable Name [NameComponent]
 
 data CopyFromOption = CopyFromFormat String
                     | CopyFromDelimiter String
+                    | CopyFromOctalDelimiter Word8
                     | CopyFromErrorLog String
                     | CopyFromErrorVerbosity Int
                     | CopyFromParsers String
@@ -989,6 +991,7 @@ data CopyFromOption = CopyFromFormat String
                   deriving (Show,Eq,Typeable,Data)
 
 data CopyToOption = CopyToFormat String
+                  | CopyToOctalDelimiter Word8
                   | CopyToDelimiter String
                   | CopyToErrorLog String
                   | CopyToErrorVerbosity Int

@@ -13,6 +13,7 @@
 >     ,addImplicitCasts
 >     ,tcTreeInfo
 >     ,emacsShowErrors
+>     ,prettifyStatement
 >     ) where
 
 > import Data.Generics.Uniplate.Data
@@ -24,6 +25,7 @@
 > import Database.HsSqlPpp.Internals.TypesInternal
 > import Database.HsSqlPpp.Catalog
 > import Database.HsSqlPpp.Parser
+> import Database.HsSqlPpp.Pretty
 > --import Text.Parsec.Prim
 > --import Control.Monad.Identity
 > import qualified Data.Text.Lazy as L
@@ -75,3 +77,11 @@
 >          Nothing -> "unknown source"
 >          Just (fn,l,c) -> fn ++ ":" ++ show l ++ ":" ++ show c ++ ":")
 >       ++ " " ++ intercalate "\n" (map show es)
+
+
+> prettifyStatement :: String -> IO ()
+> prettifyStatement =
+>   putStrLn
+>   . either show (L.unpack . printStatements defaultPPFlags)
+>   . parseStatements defaultParseFlags "" Nothing
+>   . L.pack

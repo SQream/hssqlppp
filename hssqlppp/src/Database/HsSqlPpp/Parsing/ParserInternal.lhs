@@ -3,7 +3,7 @@ The main file for parsing sql, uses parsec. Not sure if parsec is the
 right choice, but it seems to do the job pretty well at the moment.
 
 > {-# LANGUAGE FlexibleContexts,ExplicitForAll,TupleSections,
->              NoMonomorphismRestriction,OverloadedStrings #-}
+>              NoMonomorphismRestriction,OverloadedStrings, LambdaCase #-}
 > -- | Functions to parse SQL.
 > module Database.HsSqlPpp.Parsing.ParserInternal
 >     (-- * Main
@@ -39,6 +39,7 @@ right choice, but it seems to do the job pretty well at the moment.
 > import Control.Monad.Identity
 > --import Control.Monad
 >
+> import Data.Word (Word8)
 > import Data.Maybe
 > import Data.Char hiding (Format)
 >
@@ -613,8 +614,11 @@ other dml-type stuff
 >       (a,b,c,d) <- permute ((,,,)
 >                             <$?> (Nothing,Just <$> CopyToFormat <$>
 >                                              (keyword "format" *> idString))
->                             <|?> (Nothing,Just <$> CopyToDelimiter <$>
->                                              (keyword "delimiter" *> stringN))
+>                             <|?> (Nothing,Just <$>
+>                                    (keyword "delimiter" *>
+>                                      delimiter CopyToOctalDelimiter (fmap CopyToDelimiter stringN)
+>                                    )
+>                                  )
 >                             <|?> (Nothing,Just <$> CopyToErrorLog <$>
 >                                              (keyword "error_log" *> stringN))
 >                             <|?> (Nothing,Just <$> CopyToErrorVerbosity <$>
@@ -626,8 +630,11 @@ other dml-type stuff
 >       (a,b,c,d,e,f,g,h,i,j) <- permute ((,,,,,,,,,)
 >                          <$?> (Nothing,Just <$> CopyFromFormat <$>
 >                                           (keyword "format" *> idString))
->                          <|?> (Nothing,Just <$> CopyFromDelimiter <$>
->                                           (keyword "delimiter" *> stringN))
+>                          <|?> (Nothing,Just <$>
+>                                 (keyword "delimiter" *>
+>                                   delimiter CopyFromOctalDelimiter (fmap CopyFromDelimiter stringN)
+>                                 )
+>                               )
 >                          <|?> (Nothing,Just <$> CopyFromErrorLog <$>
 >                                           (keyword "error_log" *> (stringN <?> "path wrapped in apostrophes. for example: 'file.csv'.")))
 >                          <|?> (Nothing,Just <$> CopyFromErrorVerbosity <$>
@@ -645,6 +652,21 @@ other dml-type stuff
 >                                           (keyword "record" *> keyword "delimiter" *> stringN))
 >                          )
 >       return $ catMaybes [a,b,c,d,e,f,g,h,i,j]
+
+> delimiter :: (Word8 -> a) -> SParser a -> SParser a
+> delimiter success alternative = do
+>   p <- fmap Just (lookAhead octalNumber) <|> pure Nothing
+>   case p of
+>     Just num@['\\',h,t,o]
+>       | all (`elem` ("01234567" :: String)) (tail num)
+>       -> do
+>       octalNumber
+>       pure $ success $ (read [h] * 64) + (read [t] * 8) + read [o]
+>     Just _ -> do
+>       fail $ "Invalid delimiter. Expecting E'\\ooo' where 'o' is an octal digit"
+>     Nothing ->
+>       alternative
+
 
 > copyData :: SParser Statement
 > copyData = CopyData <$> pos <*> mytoken (\tok ->
@@ -2869,6 +2891,12 @@ Utility parsers
 > stringN = mytoken (\tok ->
 >                   case tok of
 >                            Lex.SqlString _ s -> Just $ T.unpack s
+>                            _ -> Nothing)
+
+> octalNumber :: SParser String
+> octalNumber = mytoken (\tok ->
+>                   case tok of
+>                            Lex.SqlString "E'" w -> Just $ T.unpack w
 >                            _ -> Nothing)
 
 > extrStr :: ScalarExpr -> String
