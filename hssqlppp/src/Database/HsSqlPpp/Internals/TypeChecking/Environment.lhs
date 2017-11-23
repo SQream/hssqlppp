@@ -132,7 +132,7 @@ TODO: remove the create prefixes
 
 > envSelectListEnvironment :: [(Text,TypeExtra)] -> Either [TypeError] Environment
 > envSelectListEnvironment cols =
->   return $ SelectListEnv $ map (first $ T.map toLower) cols
+>   return $ SelectListEnv cols
 
 
 > -- | create an environment as two envs joined together

@@ -27,6 +27,7 @@
 > import Database.HsSqlPpp.Tests.TypeChecking.QueryExprs
 > import Database.HsSqlPpp.Tests.TypeChecking.Updates
 > import Database.HsSqlPpp.Tests.TypeChecking.DDL
+> import Database.HsSqlPpp.Tests.TypeChecking.Identifiers
 
 > typeCheckTestData :: Item
 > typeCheckTestData =
@@ -50,4 +51,5 @@
 >     ,ddl
 >     ,queryExprs
 >     ,updates
+>     ,identifiers
 >     ]

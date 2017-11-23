@@ -660,7 +660,7 @@ other dml-type stuff
 >     Just num@['\\',h,t,o]
 >       | all (`elem` ("01234567" :: String)) (tail num)
 >       -> do
->       octalNumber
+>       void $ octalNumber
 >       pure $ success $ (read [h] * 64) + (read [t] * 8) + read [o]
 >     Just _ -> do
 >       fail $ "Invalid delimiter. Expecting E'\\ooo' where 'o' is an octal digit"
