@@ -28,10 +28,10 @@ source-repository head
   location: https://github.com/JakeWheat/hssqlppp.git
 
 Library
-  Build-Depends:     base >= 4 && < 5,
+  Build-Depends:     base,
                      hssqlppp == 0.5.35,
                      split,
-                     postgresql-simple >= 0.4 && < 0.6,
+                     postgresql-simple,
                      template-haskell,
                      text,
                      bytestring

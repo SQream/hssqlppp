@@ -17,9 +17,9 @@ groomTypes: show anns as Type|TypeErrors
 > --groomAAnns = undefined
 
 > groomNoAnns :: Show a => a -> String
-> groomNoAnns = groomF $ const $ Con $ UnQual $ Ident "A"
+> groomNoAnns = groomF $ const $ Con () $ UnQual () $ Ident () "A"
 
-> groomF :: Show a => (Exp -> Exp) -> a -> String
+> groomF :: Show a => (Exp () -> Exp ()) -> a -> String
 > groomF f s =
 >   case parseExp (show s) of
 >     ParseOk ast -> prettyPrint (g ast)
@@ -27,24 +27,25 @@ groomTypes: show anns as Type|TypeErrors
 >   where
 >     g = transformBi $ \x ->
 >                case x of
->                  RecConstr (UnQual (Ident "Annotation")) _ ->
+>                  RecConstr () (UnQual () (Ident () "Annotation")) _ ->
 >                           f x
 >                  x' -> x'
 
 
 > groomTypes :: Show a => a -> String
 > groomTypes = groomF $ \x -> case x of
->   RecConstr (UnQual (Ident "Annotation"))
->    [FieldUpdate _ _,
->     FieldUpdate (UnQual (Ident "anType")) t,
->     FieldUpdate (UnQual (Ident "anErrs")) (List errs),
->     FieldUpdate _ _,
->     FieldUpdate _ _] -> case (t,errs) of
->                              (Con (UnQual (Ident "Nothing")),[]) ->
->                                  Con (UnQual (Ident "A"))
+>   RecConstr () (UnQual () (Ident () "Annotation"))
+>    [FieldUpdate () _ _,
+>     FieldUpdate () (UnQual () (Ident () "anType")) t,
+>     FieldUpdate () (UnQual () (Ident () "anErrs")) (List () errs),
+>     FieldUpdate () _ _,
+>     FieldUpdate () _ _] -> case (t,errs) of
+>                              (Con () (UnQual () (Ident () "Nothing")),[]) ->
+>                                  Con () (UnQual () (Ident () "A"))
 >                              (y,[]) -> y
->                              (_,z) -> List z
+>                              (_,z) -> List () z
 >   x' -> x'
+
 
 
 
