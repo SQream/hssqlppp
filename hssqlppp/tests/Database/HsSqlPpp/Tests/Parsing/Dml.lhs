@@ -173,6 +173,8 @@ copy, bit crap at the moment
 >                                          ,selTref = [tref "tbl"]})
 >        "file" [CopyToFormat "binary", CopyToOctalDelimiter 8]]
 >      ]
+>      ,s "copy tbl to 'file' with header;"
+>       [CopyTo ea (CopyTable (name "tbl") []) "file" [CopyToHeader]]
 >    ]
 >  where
 >    s = Stmt

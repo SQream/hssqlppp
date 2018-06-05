@@ -995,6 +995,7 @@ data CopyToOption = CopyToFormat String
                   | CopyToDelimiter String
                   | CopyToErrorLog String
                   | CopyToErrorVerbosity Int
+                  | CopyToHeader
                   deriving (Show,Eq,Typeable,Data)
 
 }

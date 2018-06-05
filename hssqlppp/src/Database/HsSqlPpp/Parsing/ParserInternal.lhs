@@ -611,7 +611,7 @@ other dml-type stuff
 >        return $ CopyTo p src fn opts
 
 >     copyToOptions = do
->       (a,b,c,d) <- permute ((,,,)
+>       (a,b,c,d,e) <- permute ((,,,,)
 >                             <$?> (Nothing,Just <$> CopyToFormat <$>
 >                                              (keyword "format" *> idString))
 >                             <|?> (Nothing,Just <$>
@@ -623,8 +623,9 @@ other dml-type stuff
 >                                              (keyword "error_log" *> stringN))
 >                             <|?> (Nothing,Just <$> CopyToErrorVerbosity <$>
 >                                              (keyword "error_verbosity" *> (fromIntegral <$> integer)))
+>                             <|?> (Nothing,Just <$> (CopyToHeader <$ keyword "header"))
 >                            )
->       return $ catMaybes [a,b,c,d]
+>       return $ catMaybes [a,b,c,d,e]
 
 >     copyFromOptions = do
 >       (a,b,c,d,e,f,g,h,i,j) <- permute ((,,,,,,,,,)

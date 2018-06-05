@@ -976,6 +976,7 @@ syntax maybe should error instead of silently breaking
 >       po (CopyToDelimiter s) = text "delimiter" <+> quotes (text s)
 >       po (CopyToErrorLog s) = text "error_log" <+> quotes (text s)
 >       po (CopyToErrorVerbosity s) = text "error_verbosity" <+> int s
+>       po (CopyToHeader) = text "header"
 
 > copyFromOpts :: [CopyFromOption] -> Doc
 > copyFromOpts opts =

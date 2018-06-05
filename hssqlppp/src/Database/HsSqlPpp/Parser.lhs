@@ -23,6 +23,16 @@ will need lots more to support the extensions/chaos stuff
 >     ,parseName
 >     ,parseNameComponent
 
+>     ,simpleParseStatements
 >     ) where
 >
 > import Database.HsSqlPpp.Parsing.ParserInternal
+> import Data.Text.Lazy (pack)
+> import Text.Show.Pretty
+
+> simpleParseStatements =
+>   either (error . ppShow) (putStrLn . ppShow)
+>   . parseStatements defaultParseFlags "simple" Nothing
+>   . pack
+
+
