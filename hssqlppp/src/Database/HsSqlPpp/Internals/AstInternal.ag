@@ -145,6 +145,9 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,emptyAnnotation
    ,makeSelect
    ,canonicalizeTypeNames
+   ,ExternalTableOptions(..)
+   ,ParquetOptions(..)
+   ,CsvOptions(..)
 }
 
 {
@@ -719,6 +722,12 @@ data Statement
                   partition :: MaybeTablePartitionDef
                   rep :: Replace
                   options :: {[TableOption]}
+    | CreateExternalTable
+        ann :: Annotation
+        name :: Name
+        atts :: AttributeDefList
+        rep :: Replace
+        options :: ExternalTableOptions
     | AlterTable ann::Annotation
                  name :: Name
                  operation :: AlterTableOperation
@@ -1421,4 +1430,27 @@ canonicalizeTypeNames =
      c (Name a [Nmc nc]) = Name a [Nmc $ T.unpack $ canonicalizeTypeName $ T.pack nc]
      c z = z
 
+}
+
+
+{
+-- External table
+data ExternalTableOptions
+  = EtParquetOptions ParquetOptions
+  | EtCsvOptions CsvOptions
+  deriving (Show,Eq,Typeable,Data)
+}
+
+{
+data ParquetOptions = ParquetOptions
+  { parFilePath :: FilePath
+  }
+  deriving (Show,Eq,Typeable,Data)
+}
+
+{
+data CsvOptions = CsvOptions
+  { csvFilePath :: FilePath
+  }
+  deriving (Show,Eq,Typeable,Data)
 }

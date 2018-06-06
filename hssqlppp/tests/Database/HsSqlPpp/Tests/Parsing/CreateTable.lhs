@@ -350,8 +350,54 @@ quick sanity check
 >       [createTable "t" [att "a" "int"]
 >        `setTableOpts` [TableOptionNumberVal ["yes"] "5.5"]]-}
 >      ]
-
->      ]
-
+>    ,Group "External tables" [
+>       s "create external table test (\n\
+>         \  fielda text,\n\
+>         \  fieldb int\n\
+>         \) using format parquet with options path 'filepath' ;"
+>       [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         NoReplace
+>         $ EtParquetOptions $ ParquetOptions "filepath"
+>       ]
+>      ,s "create external table test (\n\
+>         \  fielda text,\n\
+>         \  fieldb int\n\
+>         \) using format csv with options path 'filepath' ;"
+>       [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         NoReplace
+>         $ EtCsvOptions $ CsvOptions "filepath"
+>       ]
+>       ,s "create or replace external table test (\n\
+>         \  fielda text,\n\
+>         \  fieldb int\n\
+>         \) using format parquet with options path 'filepath' ;"
+>       [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtParquetOptions $ ParquetOptions "filepath"
+>       ]
+>      ,s "create or replace external table test (\n\
+>         \  fielda text,\n\
+>         \  fieldb int\n\
+>         \) using format csv with options path 'filepath' ;"
+>       [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtCsvOptions $ CsvOptions "filepath"
+>       ]
+>    ]
+>   ]
+>    
+>
 >  where
 >    s = Stmt

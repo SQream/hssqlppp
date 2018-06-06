@@ -163,6 +163,17 @@ Conversion routines - convert Sql asts into Docs
 >     $+$ tableOpts flg opts
 >     <> statementEnd se
 >
+> statement flg se ca (CreateExternalTable ann tbl atts rep opts) =
+>     annot ca ann <+>
+>     text ("create " ++ (case rep of
+>                          Replace -> "or replace "
+>                          _ -> "") ++ " external table")
+>     <+> name tbl <+> lparen
+>     $+$ nest 2 (vcat (csv (map (attrDef flg) atts)))
+>     $+$ rparen
+>     $+$ externalTableOpts flg opts
+>     <> statementEnd se
+> 
 > statement flg se ca (AlterTable ann tnm op) =
 >     annot ca ann <+>
 >     text "alter table" <+> name tnm
@@ -1080,13 +1091,28 @@ syntax maybe should error instead of silently breaking
 > tableOpts _ [] = empty
 > tableOpts flg as = text "with" <+> text "options"
 >                    <+> parens (nest 4 $ sep $ map to as)
+> 
 >   where
 >     to (TableOptionKeywords ks) = hsep (map text ks)
 >     to (TableOptionStringVal nm v) = tov nm [scalExpr flg (StringLit emptyAnnotation v)]
 >     to (TableOptionNameVal nm v) = tov nm $ map name v
 >     to (TableOptionNumberVal nm v) = tov nm [text v]
 >     tov nm x = hsep (map text nm ++ [text "="] ++ x)
-
+> 
+> externalTableOpts :: PrettyPrintFlags -> ExternalTableOptions -> Doc
+> externalTableOpts _ opts =
+>   text "using" <+> text "format"
+>     <+> text format <+> text "with"
+>     <+> text "options" <+> text "path"
+>     <+> quotes (text filePath)
+>
+>   where
+>     (format,filePath) =
+>       case opts of
+>         EtParquetOptions ParquetOptions{parFilePath = path} -> ("parquet",path)
+>         EtCsvOptions CsvOptions{csvFilePath = path} -> ("csv",path)
+>       
+> 
 > -- plpgsql
 >
 >

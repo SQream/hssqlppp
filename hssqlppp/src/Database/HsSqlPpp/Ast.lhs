@@ -120,6 +120,9 @@
 >     ,RoleDescription(..)
 >     ,CreatorRoleOrRole(..)
 >     ,InheritOption(..)
+>     ,ExternalTableOptions(..)
+>     ,ParquetOptions(..)
+>     ,CsvOptions(..)
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.AstInternal
