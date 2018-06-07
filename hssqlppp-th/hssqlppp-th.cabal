@@ -28,7 +28,7 @@ source-repository head
   location: https://github.com/JakeWheat/hssqlppp.git
 
 Library
-  Build-Depends:     base,
+  Build-Depends:     base >= 4 && < 5,
                      template-haskell,
                      hssqlppp,
                      syb,
@@ -48,7 +48,7 @@ Test-Suite TestsTh
     type:       exitcode-stdio-1.0
     main-is:    TestsTh.lhs
     hs-source-dirs:    src,tests
-    Build-Depends:     base,
+    Build-Depends:     base >= 4 && < 5,
                        syb,
                        template-haskell,
                        tasty,

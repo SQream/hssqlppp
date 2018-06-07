@@ -31,7 +31,7 @@ source-repository head
   location: https://github.com/JakeWheat/hssqlppp.git
 
 Library
-  Build-Depends:     base,
+  Build-Depends:     base >= 4 && < 5,
                      containers,
                      mtl,
                      parsec,
@@ -84,7 +84,7 @@ Test-Suite Tests
     type:       exitcode-stdio-1.0
     main-is:    Tests.lhs
     hs-source-dirs:    src,tests
-    Build-Depends:     base,
+    Build-Depends:     base >= 4 && < 5,
                        containers,
                        haskell-src-exts,
                        mtl,
