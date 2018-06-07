@@ -917,12 +917,10 @@ ddl
 >   keyword "with"
 >   opts <-
 >     case format of
->       ETFCsv -> do
->         csvOpts <- externalOptionsCsv
->         pure $ EtCsvOptions csvOpts
->       ETFParquet -> do
->         parOpts <- externalOptionsParquet
->         pure $ EtParquetOptions parOpts
+>       ETFCsv ->
+>         EtCsvOptions <$> externalOptionsCsv
+>       ETFParquet ->
+>         EtParquetOptions <$> externalOptionsParquet
 >   pure $ CreateExternalTable p etname atts rep opts
 
 > externalOptionsCsv :: SParser CsvOptions
@@ -3119,8 +3117,11 @@ be an array or subselect, etc)
 >     --right order into createtable
 > readAttsAndCons :: SParser ([AttributeDef],[Constraint])
 > readAttsAndCons =
->   parens (swap <$> multiPerm
->          (try tableConstraint)
->           tableAttribute
->           (symbol ","))
->   where swap (a,b) = (b,a)
+>   parens
+>     ( swap <$> multiPerm
+>       ( try tableConstraint)
+>         tableAttribute
+>         ( symbol ",")
+>     )
+>   where
+>     swap (a,b) = (b,a)

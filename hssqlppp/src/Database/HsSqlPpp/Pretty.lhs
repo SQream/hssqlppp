@@ -165,9 +165,12 @@ Conversion routines - convert Sql asts into Docs
 >
 > statement flg se ca (CreateExternalTable ann tbl atts rep opts) =
 >     annot ca ann <+>
->     text ("create " ++ (case rep of
->                          Replace -> "or replace "
->                          _ -> "") ++ "external table")
+>       text ( "create " ++
+>              ( case rep of
+>                  Replace -> "or replace "
+>                  _ -> ""
+>              ) ++ "external table"
+>            )
 >     <+> name tbl <+> lparen
 >     $+$ nest 2 (vcat (csv (map (attrDef flg) atts)))
 >     $+$ rparen
@@ -1113,13 +1116,21 @@ syntax maybe should error instead of silently breaking
 >
 > getOpts :: ExternalTableOptions -> Doc
 > getOpts = \case
->   EtParquetOptions ParquetOptions{parFilePath = path} -> text "path" <+> quotes (text path)
->   EtCsvOptions CsvOptions{csvFilePath = path , csvDelimiter = delimiter , csvRecordDelimiter = record} ->
->     let
->       ppDelimiter = maybe empty ppDel delimiter
->       ppRecord = maybe empty ppRec record
->     in
->       text "path" <+> quotes (text path) <+> ppDelimiter <+> ppRecord
+>   EtParquetOptions ParquetOptions{parFilePath = path} ->
+>     text "path" <+> quotes (text path)
+>   EtCsvOptions CsvOptions
+>     { csvFilePath = path
+>     , csvDelimiter = delimiter
+>     , csvRecordDelimiter = record
+>     } ->
+>       let
+>         ppDelimiter = maybe empty ppDel delimiter
+>         ppRecord = maybe empty ppRec record
+>       in
+>         text "path"
+>           <+> quotes (text path)
+>           <+> ppDelimiter
+>           <+> ppRecord
 >         
 > ppDel :: Delimiter -> Doc
 > ppDel del = (text "delimiter" <+>) $ case del of

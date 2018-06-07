@@ -351,10 +351,7 @@ quick sanity check
 >        `setTableOpts` [TableOptionNumberVal ["yes"] "5.5"]]-}
 >      ]
 >    ,Group "External tables" [
->       s "create external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format parquet with path 'filepath' ;"
+>       Stmt "create external table test (fielda text,fieldb int) using format parquet with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -362,10 +359,7 @@ quick sanity check
 >         NoReplace
 >         $ EtParquetOptions $ ParquetOptions "filepath"
 >       ]
->      ,s "create external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format csv with path 'filepath' ;"
+>      ,Stmt "create external table test (fielda text,fieldb int) using format csv with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -373,10 +367,7 @@ quick sanity check
 >         NoReplace
 >         $ EtCsvOptions $ CsvOptions "filepath" Nothing Nothing
 >       ]
->       ,s "create or replace external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format parquet with path 'filepath' ;"
+>       ,Stmt "create or replace external table test (fielda text,fieldb int) using format parquet with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -384,10 +375,7 @@ quick sanity check
 >         Replace
 >         $ EtParquetOptions $ ParquetOptions "filepath"
 >       ]
->      ,s "create or replace external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format csv with path 'filepath' ;"
+>      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -396,10 +384,7 @@ quick sanity check
 >         $ EtCsvOptions $ CsvOptions "filepath" Nothing Nothing
 >       ]
 >
->      ,s "create or replace external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format csv with path 'filepath' delimiter '|';"
+>      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' delimiter '|';"
 >      [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -407,10 +392,7 @@ quick sanity check
 >         Replace
 >         $ EtCsvOptions $ CsvOptions "filepath" (Just (StringDelimiter "|")) Nothing
 >      ]
->      ,s "create or replace external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format csv with path 'filepath' record delimiter '\n\r' ;"
+>      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' record delimiter '\n\r' ;"
 >      [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -418,10 +400,7 @@ quick sanity check
 >         Replace
 >         $ EtCsvOptions $ CsvOptions "filepath" Nothing $ Just "\n\r"
 >      ]
->      ,s "create or replace external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format csv with path 'filepath' delimiter '|' record delimiter '\n\r';"
+>      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' delimiter '|' record delimiter '\n\r';"
 >      [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -429,10 +408,7 @@ quick sanity check
 >         Replace
 >         $ EtCsvOptions $ CsvOptions "filepath" (Just (StringDelimiter "|")) $ Just "\n\r"
 >      ]
->      ,s "create or replace external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format csv with path 'filepath' record delimiter '\n\r' delimiter '|';"
+>      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' record delimiter '\n\r' delimiter '|';"
 >      [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -440,10 +416,7 @@ quick sanity check
 >         Replace
 >         $ EtCsvOptions $ CsvOptions "filepath" (Just (StringDelimiter "|")) $ Just "\n\r"
 >     ]
->     ,s "create or replace external table test (\n\
->         \  fielda text,\n\
->         \  fieldb int\n\
->         \) using format csv with path 'filepath' record delimiter '\n\r' delimiter E'\\111';"
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' record delimiter '\n\r' delimiter E'\\111';"
 >     [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
