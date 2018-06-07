@@ -42,7 +42,8 @@ right choice, but it seems to do the job pretty well at the moment.
 > import Data.Word (Word8)
 > import Data.Maybe
 > import Data.Char hiding (Format)
->
+> import Data.List (intercalate)
+
 > import Data.Generics.Uniplate.Data
 > import Data.Data hiding (Prefix,Infix)
 >
@@ -143,15 +144,14 @@ state is never updated during parsing
 >     }
 >     deriving (Show,Eq)
 
+> type ParseState = ParseFlags
+
 > defaultParseFlags :: ParseFlags
 > defaultParseFlags = ParseFlags {pfDialect = PostgreSQLDialect}
 
-
-> type ParseState = ParseFlags
-
 > isSqlServer :: SParser Bool
 > isSqlServer = do
->   ParseFlags {pfDialect = d} <- getState
+>   ParseFlags {pfDialect = d} <-  getState
 >   return $ d == SQLServerDialect
 
 > isOracle :: SParser Bool
@@ -229,6 +229,7 @@ Parsing top level statements
 >     ,keyword "create" *>
 >              choice [
 >                 try createTable
+>                ,try creatExternalTable
 >                ,createSequence
 >                ,createType
 >                ,createFunction
@@ -611,7 +612,7 @@ other dml-type stuff
 >        return $ CopyTo p src fn opts
 
 >     copyToOptions = do
->       (a,b,c,d) <- permute ((,,,)
+>       (a,b,c,d,e) <- permute ((,,,,)
 >                             <$?> (Nothing,Just <$> CopyToFormat <$>
 >                                              (keyword "format" *> idString))
 >                             <|?> (Nothing,Just <$>
@@ -623,8 +624,9 @@ other dml-type stuff
 >                                              (keyword "error_log" *> stringN))
 >                             <|?> (Nothing,Just <$> CopyToErrorVerbosity <$>
 >                                              (keyword "error_verbosity" *> (fromIntegral <$> integer)))
+>                             <|?> (Nothing,Just <$> (CopyToHeader <$ keyword "header"))
 >                            )
->       return $ catMaybes [a,b,c,d]
+>       return $ catMaybes [a,b,c,d,e]
 
 >     copyFromOptions = do
 >       (a,b,c,d,e,f,g,h,i,j) <- permute ((,,,,,,,,,)
@@ -883,19 +885,66 @@ ddl
 >      return $ CreateTable p tname atts cons pdata rep ts
 >     ]
 >   where
->     --parse the unordered list of attribute defs or constraints, for
->     --each line want to try the constraint parser first, then the
->     --attribute parser, so you need the swap to feed them in the
->     --right order into createtable
->     readAttsAndCons =
->               parens (swap <$> multiPerm
->                                  (try tableConstraint)
->                                  tableAttribute
->                                  (symbol ","))
->               where swap (a,b) = (b,a)
 >     readPartition = tryOptionMaybe (tablePartition)
 
->
+> creatExternalTable :: SParser Statement
+> creatExternalTable = do
+>   p <- pos
+>   rep <- choice
+>     [ NoReplace <$ mapM_ keyword ["external", "table"]
+>     , Replace <$ mapM_ keyword ["or", "replace", "external", "table"]
+>     ]
+>   etname <- name
+>   (atts, constraints) <- readAttsAndCons
+>   unless (null constraints)
+>     $ fail $ unlines
+>       [ "CREATE EXTERNAL TABLE does not support table constraints."
+>       ]
+>   keyword "using"
+>   format <- do
+>     keyword "format"
+>     let
+>       formats =
+>         [ (ETFCsv, "csv")
+>         , (ETFParquet, "parquet")
+>         ]
+>     choice $
+>       map (\(constructor, format) -> constructor <$ keyword format) formats
+>       ++
+>         [ fail $ "Unexpected external table format. Expecting one of: "
+>           ++ intercalate ", " (map snd formats)
+>         ]
+>   keyword "with"
+>   opts <-
+>     case format of
+>       ETFCsv ->
+>         EtCsvOptions <$> externalOptionsCsv
+>       ETFParquet ->
+>         EtParquetOptions <$> externalOptionsParquet
+>   pure $ CreateExternalTable p etname atts rep opts
+
+> externalOptionsCsv :: SParser CsvOptions
+> externalOptionsCsv =
+>   permute $ CsvOptions
+>     <$$> (keyword "path" *> (extrStr <$> stringLit))
+>     <|?>
+>       ( Nothing
+>       , Just <$> (keyword "delimiter" *> delimiter OctalDelimiter (fmap StringDelimiter stringN))
+>       )
+>     <|?>
+>       ( Nothing
+>       , Just <$> (keyword "record" *> keyword "delimiter" *> stringN)
+>       )
+
+> externalOptionsParquet :: SParser ParquetOptions
+> externalOptionsParquet =
+>   permute $ ParquetOptions
+>     <$$> (keyword "path" *> (extrStr <$> stringLit))
+
+> data ExternalTableFormat
+>   = ETFCsv
+>   | ETFParquet
+
 > tableAttribute :: SParser AttributeDef
 > tableAttribute = AttributeDef
 >                <$> pos
@@ -3060,3 +3109,19 @@ be an array or subselect, etc)
 >                                  _ -> Nothing
 >                -> LiftApp an op flav ([expr1,expr2s] ++ expr3s)
 >              x1 -> x1
+
+
+>     --parse the unordered list of attribute defs or constraints, for
+>     --each line want to try the constraint parser first, then the
+>     --attribute parser, so you need the swap to feed them in the
+>     --right order into createtable
+> readAttsAndCons :: SParser ([AttributeDef],[Constraint])
+> readAttsAndCons =
+>   parens
+>     ( swap <$> multiPerm
+>       ( try tableConstraint)
+>         tableAttribute
+>         ( symbol ",")
+>     )
+>   where
+>     swap (a,b) = (b,a)

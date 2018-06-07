@@ -163,6 +163,20 @@ Conversion routines - convert Sql asts into Docs
 >     $+$ tableOpts flg opts
 >     <> statementEnd se
 >
+> statement flg se ca (CreateExternalTable ann tbl atts rep opts) =
+>     annot ca ann <+>
+>       text ( "create " ++
+>              ( case rep of
+>                  Replace -> "or replace "
+>                  _ -> ""
+>              ) ++ "external table"
+>            )
+>     <+> name tbl <+> lparen
+>     $+$ nest 2 (vcat (csv (map (attrDef flg) atts)))
+>     $+$ rparen
+>     $+$ externalTableOpts flg opts
+>     <> statementEnd se
+> 
 > statement flg se ca (AlterTable ann tnm op) =
 >     annot ca ann <+>
 >     text "alter table" <+> name tnm
@@ -976,6 +990,7 @@ syntax maybe should error instead of silently breaking
 >       po (CopyToDelimiter s) = text "delimiter" <+> quotes (text s)
 >       po (CopyToErrorLog s) = text "error_log" <+> quotes (text s)
 >       po (CopyToErrorVerbosity s) = text "error_verbosity" <+> int s
+>       po (CopyToHeader) = text "header"
 
 > copyFromOpts :: [CopyFromOption] -> Doc
 > copyFromOpts opts =
@@ -1079,12 +1094,51 @@ syntax maybe should error instead of silently breaking
 > tableOpts _ [] = empty
 > tableOpts flg as = text "with" <+> text "options"
 >                    <+> parens (nest 4 $ sep $ map to as)
+> 
 >   where
 >     to (TableOptionKeywords ks) = hsep (map text ks)
 >     to (TableOptionStringVal nm v) = tov nm [scalExpr flg (StringLit emptyAnnotation v)]
 >     to (TableOptionNameVal nm v) = tov nm $ map name v
 >     to (TableOptionNumberVal nm v) = tov nm [text v]
 >     tov nm x = hsep (map text nm ++ [text "="] ++ x)
+> 
+> externalTableOpts :: PrettyPrintFlags -> ExternalTableOptions -> Doc
+> externalTableOpts _ opts =
+>   text "using" <+> text "format" <+> text format
+>     <+> text "with" <+> getOpts opts
+>
+>   where
+>     format =
+>       case opts of
+>         EtParquetOptions {} -> "parquet"
+>         EtCsvOptions {} -> "csv"
+>       
+>
+> getOpts :: ExternalTableOptions -> Doc
+> getOpts = \case
+>   EtParquetOptions ParquetOptions{parFilePath = path} ->
+>     text "path" <+> quotes (text path)
+>   EtCsvOptions CsvOptions
+>     { csvFilePath = path
+>     , csvDelimiter = delimiter
+>     , csvRecordDelimiter = record
+>     } ->
+>       let
+>         ppDelimiter = maybe empty ppDel delimiter
+>         ppRecord = maybe empty ppRec record
+>       in
+>         text "path"
+>           <+> quotes (text path)
+>           <+> ppDelimiter
+>           <+> ppRecord
+>         
+> ppDel :: Delimiter -> Doc
+> ppDel del = (text "delimiter" <+>) $ case del of
+>   OctalDelimiter num -> ppOctalDelimiter num
+>   StringDelimiter str -> quotes (text str)
+>
+> ppRec :: String -> Doc
+> ppRec recordDelim = text "record" <+> text "delimiter" <+> quotes (text recordDelim)
 
 > -- plpgsql
 >
