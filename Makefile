@@ -43,6 +43,9 @@ test : hssqlppp
 test-hssqlppp : hssqlppp
 	stack test hssqlppp --test-arguments --hide-successes
 
+.PHONY : bump-version
+bump-version:
+	sed -i -e 's/'${FROM}'/'${TO}'/g' **/*.cabal
 
 # if you need some other combination of targets please add them to the
 # makefile
