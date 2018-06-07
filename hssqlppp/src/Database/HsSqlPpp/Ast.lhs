@@ -123,6 +123,7 @@
 >     ,ExternalTableOptions(..)
 >     ,ParquetOptions(..)
 >     ,CsvOptions(..)
+>     ,Delimiter(..)
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.AstInternal

@@ -148,6 +148,7 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,ExternalTableOptions(..)
    ,ParquetOptions(..)
    ,CsvOptions(..)
+   ,Delimiter(..)
 }
 
 {
@@ -1451,6 +1452,13 @@ data ParquetOptions = ParquetOptions
 {
 data CsvOptions = CsvOptions
   { csvFilePath :: FilePath
+  , csvDelimiter :: Maybe Delimiter
+  , csvRecordDelimiter :: Maybe String
   }
+  deriving (Show,Eq,Typeable,Data)
+
+data Delimiter
+  = OctalDelimiter Word8
+  | StringDelimiter String
   deriving (Show,Eq,Typeable,Data)
 }

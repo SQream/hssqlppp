@@ -929,12 +929,19 @@ ddl
 > externalOptionsCsv =
 >   permute $ CsvOptions
 >     <$$> (keyword "path" *> (extrStr <$> stringLit))
+>     <|?>
+>       ( Nothing
+>       , Just <$> (keyword "delimiter" *> delimiter OctalDelimiter (fmap StringDelimiter stringN))
+>       )
+>     <|?>
+>       ( Nothing
+>       , Just <$> (keyword "record" *> keyword "delimiter" *> stringN)
+>       )
 
 > externalOptionsParquet :: SParser ParquetOptions
 > externalOptionsParquet =
 >   permute $ ParquetOptions
 >     <$$> (keyword "path" *> (extrStr <$> stringLit))
-
 
 > data ExternalTableFormat
 >   = ETFCsv
