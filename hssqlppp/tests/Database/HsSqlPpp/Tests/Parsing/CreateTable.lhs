@@ -354,7 +354,7 @@ quick sanity check
 >       s "create external table test (\n\
 >         \  fielda text,\n\
 >         \  fieldb int\n\
->         \) using format parquet with options path 'filepath' ;"
+>         \) using format parquet with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -365,7 +365,7 @@ quick sanity check
 >      ,s "create external table test (\n\
 >         \  fielda text,\n\
 >         \  fieldb int\n\
->         \) using format csv with options path 'filepath' ;"
+>         \) using format csv with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -376,7 +376,7 @@ quick sanity check
 >       ,s "create or replace external table test (\n\
 >         \  fielda text,\n\
 >         \  fieldb int\n\
->         \) using format parquet with options path 'filepath' ;"
+>         \) using format parquet with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -387,7 +387,7 @@ quick sanity check
 >      ,s "create or replace external table test (\n\
 >         \  fielda text,\n\
 >         \  fieldb int\n\
->         \) using format csv with options path 'filepath' ;"
+>         \) using format csv with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"

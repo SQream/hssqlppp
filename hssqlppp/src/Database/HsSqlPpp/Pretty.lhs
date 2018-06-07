@@ -1103,7 +1103,7 @@ syntax maybe should error instead of silently breaking
 > externalTableOpts _ opts =
 >   text "using" <+> text "format"
 >     <+> text format <+> text "with"
->     <+> text "options" <+> text "path"
+>     <+> text "path"
 >     <+> quotes (text filePath)
 >
 >   where

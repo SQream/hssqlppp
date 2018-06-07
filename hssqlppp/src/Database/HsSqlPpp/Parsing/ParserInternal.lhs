@@ -914,7 +914,7 @@ ddl
 >         [ fail $ "Unexpected external table format. Expecting one of: "
 >           ++ intercalate ", " (map snd formats)
 >         ]
->   keyword "with" *> keyword "options"
+>   keyword "with"
 >   opts <-
 >     case format of
 >       ETFCsv -> do
