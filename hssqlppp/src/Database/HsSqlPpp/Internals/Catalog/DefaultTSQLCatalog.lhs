@@ -64,6 +64,8 @@
 >         ,CatCreateFunction "datepart" ["int4","date"] False "int4"
 >         ,CatCreateFunction "datepart" ["int4","timestamp"] False "int4"
 >         ,CatCreateFunction "trunc" ["timestamp"] False "timestamp"
+>         ,CatCreateFunction "trunc" ["timestamp","int4"] False "timestamp"
+>         ,CatCreateFunction "trunc" ["date","int4"] False "date"
 >         ,CatCreateCast "char" "varchar" ImplicitCastContext
 
 postponed until we have better design

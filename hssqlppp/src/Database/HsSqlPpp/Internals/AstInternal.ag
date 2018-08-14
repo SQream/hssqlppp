@@ -1262,12 +1262,13 @@ data Volatility = Volatile | Stable | Immutable
 -- just as as string for now
 -- probably change Language to be a string also
 
-data Language = Sql | Plpgsql
+data Language = Sql | Plpgsql | Python
                 deriving (Show,Eq,Typeable,Data)
 }
 
 data FnBody | SqlFnBody ann::Annotation sts :: StatementList
             | PlpgsqlFnBody ann::Annotation blk :: Statement
+            | PythonFnBody ann::Annotation body::String
 
 {-
 
@@ -1447,6 +1448,8 @@ data ParquetOptions = ParquetOptions
   { parFilePath :: FilePath
   }
   deriving (Show,Eq,Typeable,Data)
+
+
 }
 
 {

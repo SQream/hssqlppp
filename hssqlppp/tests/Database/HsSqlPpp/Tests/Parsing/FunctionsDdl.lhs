@@ -8,11 +8,21 @@
 > import Database.HsSqlPpp.Tests.Parsing.Utils
 > import Database.HsSqlPpp.Tests.TestTypes
 
-> functionsDdl:: Item
+> functionsDdl :: Item
 > functionsDdl =
 >    Group "functionsddl" [
 >      Group "basics" [
->       s "create function t1(text) returns text as $$\n\
+>       s "create function t1(x int) returns int as $$ return x+2 $$ language python;"
+>       [CreateFunction ea (name "t1") [ParamDef ea (Nmc "x")  $ st "int"]
+>        (st "int") NoReplace Python
+>        (PythonFnBody ea " return x+2 ")
+>        Volatile]
+>       ,s "create or replace function t1(x int) returns int as $$ return x+2 $$ language python;"
+>       [CreateFunction ea (name "t1") [ParamDef ea (Nmc "x")  $ st "int"]
+>        (st "int") Replace Python
+>        (PythonFnBody ea " return x+2 ")
+>        Volatile]
+>       ,s "create function t1(text) returns text as $$\n\
 >         \select a from t1 where b = $1;\n\
 >         \$$ language sql stable;"
 >       [CreateFunction ea (name "t1") [ParamDefTp ea $ st "text"]

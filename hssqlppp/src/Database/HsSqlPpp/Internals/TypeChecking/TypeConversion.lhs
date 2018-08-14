@@ -49,7 +49,6 @@ should all be in one place.
 > import Database.HsSqlPpp.Internals.Catalog.CatalogInternal
 > import Database.HsSqlPpp.Utils.Utils
 > import Control.Monad
-> import Control.Applicative
 > import Control.Arrow
 
 > import Database.HsSqlPpp.Internals.TypeChecking.OldTypeConversion
@@ -58,7 +57,7 @@ should all be in one place.
 > import Data.Text ()
 > import qualified Data.Text as T
 > import Text.Printf
-> --import Debug.Trace
+> -- import Debug.Trace
 
 ******************************************************************
 
@@ -89,6 +88,7 @@ This needs a lot more tests
 >       -- first is identifier from list
 >       -- other two are date types
 >       Right ([typeInt,typeDate,typeDate], typeInt)
+
 >     matchApp' SQLServerDialect [Nmc dd] [_,ScalarType "date"]
 >       | map toLower dd == "datepart" =
 >       Right ([typeInt,typeDate], typeInt)
@@ -96,6 +96,14 @@ This needs a lot more tests
 >     matchApp' SQLServerDialect [Nmc dd] [_,ScalarType "timestamp"]
 >       | map toLower dd == "datepart" =
 >       Right ([typeInt,(ScalarType "timestamp")], typeInt)
+
+>     matchApp' SQLServerDialect [Nmc dd] [_,ScalarType "date"]
+>       | map toLower dd == "trunc" =
+>       Right ([typeDate, typeInt], typeDate)
+
+>     matchApp' SQLServerDialect [Nmc dd] [_,ScalarType "timestamp"]
+>       | map toLower dd == "trunc" =
+>       Right ([ScalarType "timestamp", typeInt], ScalarType "timestamp")
 
 
 >     matchApp' SQLServerDialect [Nmc dd] [_,_,ScalarType "date"]
@@ -264,6 +272,8 @@ precision and nullability of the result
 >           -- the first argument doesn't influence
 >         | appName `elem` ["datepart","datediff"]
 >           -> drop 1 tes
+>         | appName `elem` ["trunc"]
+>           -> take 1 tes
 >           -- the first two arguments don't influence
 >         | appName `elem` ["dateadd"]
 >           -> drop 2 tes
@@ -354,7 +364,7 @@ What the is this function doing? What is it for?
 >             -- functions whose arguments are independent
 >             --  instead of splitting into partitions, just return the original list
 >         _ | appName `elem`
->               ( ["datepart","dateadd"]
+>               ( ["datepart","dateadd", "trunc"]
 >                 ++ ["substr","substring","left","right","ltrim","rtrim"]
 >                 ++ ["replicate","like","notlike","rlike"]
 >                 ++ ["strpos","position","replace"]
@@ -382,7 +392,7 @@ What the is this function doing? What is it for?
 >               ( ["coalesce","greatest","least"]
 >                     -- ImplicitCastToDo: think how to handle this properly
 >                 ++ ["isnull" | length as == 2]
->               )
+>               ) 
 >             -> (concat, [as])
 >           | otherwise -> partitionArgs as
 >     partitionNull as = return $ case () of

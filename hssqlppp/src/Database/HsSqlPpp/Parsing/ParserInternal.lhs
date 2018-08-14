@@ -229,7 +229,7 @@ Parsing top level statements
 >     ,keyword "create" *>
 >              choice [
 >                 try createTable
->                ,try creatExternalTable
+>                ,try createExternalTable
 >                ,createSequence
 >                ,createType
 >                ,createFunction
@@ -887,8 +887,8 @@ ddl
 >   where
 >     readPartition = tryOptionMaybe (tablePartition)
 
-> creatExternalTable :: SParser Statement
-> creatExternalTable = do
+> createExternalTable :: SParser Statement
+> createExternalTable = do
 >   p <- pos
 >   rep <- choice
 >     [ NoReplace <$ mapM_ keyword ["external", "table"]
@@ -1188,12 +1188,12 @@ parse it
 >   fnName <- name
 >   params <- parens $ commaSep param
 >   retType <- keyword "returns" *> typeName
->   ((bodypos,body), lang,vol) <-
+>   ((bodypos,body,ann), lang,vol) <-
 >     permute ((,,) <$$> parseAs
 >                   <||> readLang
 >                   <|?> (Volatile,pVol))
 >   flg <- getState
->   case parseBody flg lang body bodypos of
+>   case parseBody flg lang body bodypos ann of
 >        Left er -> fail er
 >        Right b ->
 >          return $ CreateFunction p fnName params retType rep lang b vol
@@ -1201,16 +1201,26 @@ parse it
 >         parseAs = do
 >                    keyword "as"
 >                    bodypos <- toMySp <$> getPosition
+>                    p <- pos
 >                    body <- stringLit
->                    return (bodypos,body)
+>                    return (bodypos,body,p)
 >         pVol = matchAKeyword [("volatile", Volatile)
 >                              ,("stable", Stable)
 >                              ,("immutable", Immutable)]
->         readLang = keyword "language" *> matchAKeyword [("plpgsql", Plpgsql)
->                                                        ,("sql",Sql)]
->         parseBody :: ParseFlags -> Language -> ScalarExpr -> MySourcePos
+>         readLang = do
+>           keyword "language"
+>           matchAKeyword
+>             [ ("plpgsql", Plpgsql)
+>             , ("sql",Sql)
+>             , ("python",Python)
+>             ]
+>         parseBody :: ParseFlags -> Language -> ScalarExpr -> MySourcePos -> Annotation
 >                   -> Either String FnBody
->         parseBody flg lang body (fileName,line,col) =
+>         parseBody _ Python body _ ann = case body of
+>           StringLit _ value -> do
+>             pure $ PythonFnBody ann value
+>           _ -> Left $ "Unexpected value for python user defined function body. Expecting a string literal."
+>         parseBody flg lang body (fileName,line,col) _ =
 >             case parseIt'
 >                   (functionBody lang)
 >                   flg
