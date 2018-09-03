@@ -148,7 +148,11 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,ExternalTableOptions(..)
    ,ParquetOptions(..)
    ,CsvOptions(..)
+   ,CopyFromCsvOptions(..)
+   ,OldCopyFromOptionList(..)
    ,Delimiter(..)
+   ,ErrorOptions(..)
+   ,ReportSkippedRows(..)
 }
 
 {
@@ -702,7 +706,7 @@ data Statement
                table :: Name
                targetCols :: {[NameComponent]}
                source :: CopyFromSource
-               opts :: {[CopyFromOption]}
+               opts :: {CopyFromCsvOptions}
     --represents inline data for copy statement
     | CopyData ann::Annotation insData :: String
     | CopyTo ann :: Annotation
@@ -981,7 +985,6 @@ data Statement
 
 {
 data CopyFromSource = CopyFilename String
-                    | Stdin
                       deriving (Show,Eq,Typeable,Data)
 data CopyToSource = CopyTable Name [NameComponent]
                   | CopyQuery QueryExpr
@@ -1453,15 +1456,38 @@ data ParquetOptions = ParquetOptions
 }
 
 {
-data CsvOptions = CsvOptions
+data CsvOptions = NewCsvOptions
   { csvFilePath :: FilePath
-  , csvDelimiter :: Maybe Delimiter
+  , csvFieldDelimiter :: Maybe Delimiter
   , csvRecordDelimiter :: Maybe String
+  , csvTextQualifier :: Maybe Delimiter
+  , csvNullMarker :: Maybe String
+  , csvErrorOptions :: Maybe ErrorOptions
+  , csvLimit :: Maybe Integer
+  , csvOffset :: Maybe Integer
+  , csvParsers :: Maybe String
   }
+  deriving (Show,Eq,Typeable,Data)
+
+type OldCopyFromOptionList = [CopyFromOption]
+
+data CopyFromCsvOptions
+  = OldCopyFromOptions OldCopyFromOptionList
+  | NewCopyFromOptions CsvOptions
   deriving (Show,Eq,Typeable,Data)
 
 data Delimiter
   = OctalDelimiter Word8
   | StringDelimiter String
+  deriving (Show,Eq,Typeable,Data)
+
+data ErrorOptions
+  = EOAbort
+  | EOSkipRowLimit Integer ReportSkippedRows
+  deriving (Show,Eq,Typeable,Data)
+
+data ReportSkippedRows
+  = NoReportSkippedRows
+  | ReportSkippedRows
   deriving (Show,Eq,Typeable,Data)
 }

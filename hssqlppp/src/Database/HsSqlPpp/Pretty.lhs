@@ -536,12 +536,12 @@ Conversion routines - convert Sql asts into Docs
 >                                    <+> copyFromOpts opts
 >                                    <> statementEnd se
 
->                  Stdin -> text "stdin"
->                           <+> copyFromOpts opts
->                           -- put statement end without new line
->                           -- so that the copydata follows immediately after
->                           -- without an extra blank line inbetween
->                           <> statementEndNNL se
+                   Stdin -> text "stdin"
+                            <+> copyFromOpts opts
+                            -- put statement end without new line
+                            -- so that the copydata follows immediately after
+                            -- without an extra blank line inbetween
+                            <> statementEndNNL se
 
 > statement flg se ca (CopyTo ann src fn opts) =
 >     annot ca ann <+>
@@ -826,10 +826,10 @@ Alter Default
 >                  then semi <> newline
 >                  else empty
 
-> statementEndNNL :: Bool -> Doc
-> statementEndNNL b = if b
->                     then semi
->                     else empty
+  statementEndNNL :: Bool -> Doc
+  statementEndNNL b = if b
+                      then semi
+                      else empty
 
 
 -------------------------------------------------------------------------------
@@ -1003,8 +1003,14 @@ syntax maybe should error instead of silently breaking
 >       po (CopyToErrorVerbosity s) = text "error_verbosity" <+> int s
 >       po (CopyToHeader) = text "header"
 
-> copyFromOpts :: [CopyFromOption] -> Doc
-> copyFromOpts opts =
+> copyFromOpts :: CopyFromCsvOptions -> Doc
+> copyFromOpts = \case
+>   OldCopyFromOptions oldOpts -> copyFromOldOpts oldOpts
+>   NewCopyFromOptions newOpts ->
+>     text "with" <+> text "options" <+> ppCsvOpts newOpts
+
+> copyFromOldOpts :: [CopyFromOption] -> Doc
+> copyFromOldOpts opts =
 >   ifNotEmpty (const $ "with" <+> sep (map po opts)) opts
 >   where
 >       po (CopyFromFormat s) = text "format" <+> text s
@@ -1129,27 +1135,84 @@ syntax maybe should error instead of silently breaking
 > getOpts = \case
 >   EtParquetOptions ParquetOptions{parFilePath = path} ->
 >     text "path" <+> quotes (text path)
->   EtCsvOptions CsvOptions
->     { csvFilePath = path
->     , csvDelimiter = delimiter
->     , csvRecordDelimiter = record
->     } ->
->       let
->         ppDelimiter = maybe empty ppDel delimiter
->         ppRecord = maybe empty ppRec record
->       in
->         text "path"
->           <+> quotes (text path)
->           <+> ppDelimiter
->           <+> ppRecord
->         
+>   EtCsvOptions csvOpts@(NewCsvOptions{csvFilePath=path}) ->
+>     text "path" <+> quotes (text path) <+> ppCsvOpts csvOpts
+
+> ppCsvOpts :: CsvOptions -> Doc
+> ppCsvOpts NewCsvOptions
+>   { csvFilePath = path
+>   , csvFieldDelimiter = delimiter
+>   , csvRecordDelimiter = record
+>   , csvTextQualifier = textQualifier
+>   , csvNullMarker = nullMarker
+>   , csvErrorOptions = errorOpts
+>   , csvLimit = limit
+>   , csvOffset = offset
+>   , csvParsers = parsers
+>   } =
+>   let
+>     ppDelimiter = maybe empty ppDel delimiter
+>     ppRecord = maybe empty ppRec record
+>     ppTextQualifier = maybe empty ppTxtQual textQualifier
+>     ppNullMarker = maybe empty ppNullMark nullMarker
+>     ppErrorOptions = maybe empty ppErrOpts errorOpts
+>     ppLimit = maybe empty ppLim limit
+>     ppOffset = maybe empty ppOff offset
+>     ppParsers = maybe empty ppParse parsers
+>   in
+>     ppDelimiter
+>       <+> ppRecord
+>       <+> ppTextQualifier
+>       <+> ppNullMarker
+>       <+> ppErrorOptions
+>       <+> ppLimit
+>       <+> ppOffset
+>       <+> ppParsers
+
 > ppDel :: Delimiter -> Doc
-> ppDel del = (text "delimiter" <+>) $ case del of
+> ppDel del = 
+>   text "field" <+>
+>   text "delimiter" <+>
+>   case del of
+>     OctalDelimiter num -> ppOctalDelimiter num
+>     StringDelimiter str -> quotes (text str)
+
+> ppTxtQual :: Delimiter -> Doc
+> ppTxtQual del = (text "text" <+> text "qualifier" <+>) $ case del of
 >   OctalDelimiter num -> ppOctalDelimiter num
 >   StringDelimiter str -> quotes (text str)
->
+
 > ppRec :: String -> Doc
 > ppRec recordDelim = text "record" <+> text "delimiter" <+> quotes (text recordDelim)
+
+> ppNullMark :: String -> Doc
+> ppNullMark nullMarker = text "null" <+> text "marker" <+> quotes (text nullMarker)
+
+> ppErrOpts :: ErrorOptions -> Doc
+> ppErrOpts eo =
+>   text "on error" <+> case eo of
+>   EOAbort ->
+>     text "abort"
+>   EOSkipRowLimit num isReport ->
+>     text "skip"
+>       <+> text "row"
+>       <+> text (show num)
+>       <+> case isReport of
+>         ReportSkippedRows ->
+>           text "report"
+>             <+> text "skipped"
+>             <+> text "rows"
+>         NoReportSkippedRows ->
+>           empty
+
+> ppLim :: Integer -> Doc
+> ppLim num = text "limit" <+> text (show num)
+
+> ppOff :: Integer -> Doc
+> ppOff num = text "offset" <+> text (show num)
+
+> ppParse :: String -> Doc
+> ppParse p = text "parsers" <+> quotes (text p)
 
 > -- plpgsql
 >
@@ -1164,7 +1227,7 @@ syntax maybe should error instead of silently breaking
 > typeName (ArrayTypeName _ t) = typeName t <> text "[]"
 > typeName (SetOfTypeName _ t) = text "setof" <+> typeName t
 >
-> ppType:: Type -> Doc
+> ppType :: Type -> Doc
 > ppType (ScalarType t) = text "scalar type" <> parens (text $ T.unpack t)
 > ppType (DomainType t) = text "domain type" <> parens (text $ T.unpack t)
 > ppType (EnumType t) = text "enum type" <> parens (text $ T.unpack t)
