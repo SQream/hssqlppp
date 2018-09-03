@@ -122,8 +122,12 @@
 >     ,InheritOption(..)
 >     ,ExternalTableOptions(..)
 >     ,ParquetOptions(..)
+>     ,CopyFromCsvOptions(..)
+>     ,OldCopyFromOptionList
 >     ,CsvOptions(..)
 >     ,Delimiter(..)
+>     ,ErrorOptions(..)
+>     ,ReportSkippedRows(..)
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.AstInternal

@@ -43,6 +43,7 @@ right choice, but it seems to do the job pretty well at the moment.
 > import Data.Maybe
 > import Data.Char hiding (Format)
 > import Data.List (intercalate)
+> import Data.Functor
 
 > import Data.Generics.Uniplate.Data
 > import Data.Data hiding (Prefix,Infix)
@@ -198,7 +199,7 @@ Parsing top level statements
 >     ,update
 >     ,delete
 >     ,truncateSt
->     ,copy
+>     ,copy reqSemi
 >     ,--do
 >      --not <$> isSqlServer >>= guard
 >      do an <- pos
@@ -580,8 +581,8 @@ other dml-type stuff
 >                                                     <* keyword "identity")])
 >            <*> cascade
 >
-> copy :: SParser Statement
-> copy = do
+> copy :: Bool -> SParser Statement
+> copy reqSemi = do
 >        p <- pos
 >        keyword "copy"
 >        -- todo: factor this a bit better
@@ -598,12 +599,17 @@ other dml-type stuff
 >   where
 >     from p tableName cols = do
 >        keyword "from"
->        src <- choice [
->                CopyFilename <$> extrStr <$> stringLit
->               ,Stdin <$ keyword "stdin"]
->        opts <- option [] $ do
->                  keyword "with" *> copyFromOptions
->        return $ CopyFrom p tableName cols src opts
+>        src <- extrStr <$> stringLit
+>        let
+>          newCopyFromOptions =
+>            fmap NewCopyFromOptions $ optionsCsv $ pure src
+
+>        opts <-
+>          choice
+>            [ lookAhead (stmtEnd $ not reqSemi) $> OldCopyFromOptions []
+>            , keyword "with" *> ((keyword "options" *> newCopyFromOptions) <|> oldCopyFromOptions)
+>            ]
+>        return $ CopyFrom p tableName cols (CopyFilename src) opts
 >     to p src = do
 >        keyword "to"
 >        fn <- extrStr <$> stringLit
@@ -628,7 +634,8 @@ other dml-type stuff
 >                            )
 >       return $ catMaybes [a,b,c,d,e]
 
->     copyFromOptions = do
+>     oldCopyFromOptions :: SParser CopyFromCsvOptions
+>     oldCopyFromOptions = do
 >       (a,b,c,d,e,f,g,h,i,j) <- permute ((,,,,,,,,,)
 >                          <$?> (Nothing,Just <$> CopyFromFormat <$>
 >                                           (keyword "format" *> idString))
@@ -653,7 +660,7 @@ other dml-type stuff
 >                          <|?> (Nothing,Just <$> CopyFromNewlineFormat <$>
 >                                           (keyword "record" *> keyword "delimiter" *> stringN))
 >                          )
->       return $ catMaybes [a,b,c,d,e,f,g,h,i,j]
+>       return $ OldCopyFromOptions $ catMaybes [a,b,c,d,e,f,g,h,i,j]
 
 > delimiter :: (Word8 -> a) -> SParser a -> SParser a
 > delimiter success alternative = do
@@ -915,26 +922,58 @@ ddl
 >           ++ intercalate ", " (map snd formats)
 >         ]
 >   keyword "with"
+>   let
+>     pathParser = keyword "path" *> (extrStr <$> stringLit)
 >   opts <-
 >     case format of
 >       ETFCsv ->
->         EtCsvOptions <$> externalOptionsCsv
+>         EtCsvOptions <$> optionsCsv pathParser
 >       ETFParquet ->
 >         EtParquetOptions <$> externalOptionsParquet
 >   pure $ CreateExternalTable p etname atts rep opts
 
-> externalOptionsCsv :: SParser CsvOptions
-> externalOptionsCsv =
->   permute $ CsvOptions
->     <$$> (keyword "path" *> (extrStr <$> stringLit))
->     <|?>
->       ( Nothing
->       , Just <$> (keyword "delimiter" *> delimiter OctalDelimiter (fmap StringDelimiter stringN))
->       )
->     <|?>
->       ( Nothing
->       , Just <$> (keyword "record" *> keyword "delimiter" *> stringN)
->       )
+> optionsCsv :: SParser FilePath -> SParser CsvOptions
+> optionsCsv path =
+>   permute $ NewCsvOptions
+>     <$$> path
+>     <|?> withDefNothing fieldDelimiter
+>     <|?> withDefNothing recordDelimiter
+>     <|?> withDefNothing textQualifier
+>     <|?> withDefNothing nullMarker
+>     <|?> withDefNothing errorMode
+>     <|?> withDefNothing limit
+>     <|?> withDefNothing offset
+>     <|?> withDefNothing parsers
+
+>  where
+>    withDefNothing = (Nothing, ) . fmap Just
+>    fieldDelimiter =
+>      (mapM_ keyword ["field","delimiter"] *> delimiter OctalDelimiter (fmap StringDelimiter stringN) <?> "field delimiter")
+>    recordDelimiter =
+>      keyword "record" *> keyword "delimiter" *> (stringN <?> "record delimiter")
+>    textQualifier =
+>      (mapM_ keyword ["text","qualifier"] *> delimiter OctalDelimiter (fmap StringDelimiter stringN) <?> "text qualifier")
+>    nullMarker =
+>      mapM_ keyword ["null","marker"] *> (stringN <?> "null marker")
+>    limit =
+>      (keyword "limit" *> (integer <?> "positive integer") <?> "limit with integer")
+>    offset =
+>      (keyword "offset" *> (integer <?> "positive integer") <?> "offset with integer")
+>    parsers =
+>      (keyword "parsers" *> stringN <?> "list of parsers")
+>    errorMode =
+>      let
+>        abort = keyword "abort" $> EOAbort
+>        skip = do
+>          mapM_ keyword ["skip","row"]
+>          num <- (integer <?> "positive integer")
+>          report <-
+>            (mapM_ keyword ["report","skipped","rows"] $> ReportSkippedRows)
+>            <|> pure NoReportSkippedRows
+>          pure $ EOSkipRowLimit num report
+>      in do
+>        mapM_ keyword ["on","error"]
+>        skip <|> abort
 
 > externalOptionsParquet :: SParser ParquetOptions
 > externalOptionsParquet =
@@ -966,7 +1005,7 @@ ddl
 >          ,IdentityConstraint p cn <$> (keyword "identity" *>
 >                                        tryOptionMaybe (parens $ (,) <$>
 >                                          signedInteger <*> (symbol "," *> signedInteger)))
->          ,RowReferenceConstraint p cn
+>          ,RowReferenceConstraint p cn 
 >          <$> (keyword "references" *> name)
 >          <*> option Nothing (try $ parens $ Just <$> nameComponent)
 >          <*> onDelete

@@ -113,55 +113,149 @@ App ea "=" [App ea "rowctor" [Identifier ea "x",Identifier ea "y"],App ea "rowct
 copy, bit crap at the moment
 
 >     ,Group "copy" [
->       s "copy tbl(a,b) from stdin;\n\
->         \bat\tt\n\
->         \bear\tf\n\
->         \\\.\n"
->       [CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"] Stdin []
->        ,CopyData ea "\
->         \bat\tt\n\
->         \bear\tf\n"]
->      ,s "copy tbl (a,b) from 'filename' with delimiter '|';"
->       [CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"]
->       (CopyFilename "filename")
->        [CopyFromDelimiter "|"]]
->      ,s "copy tbl (a,b) from 'filename' with delimiter '|' parsers 'b=oracle';"
->       [CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"]
->       (CopyFilename "filename")
->        [CopyFromDelimiter "|",CopyFromParsers "b=oracle"]]
->      ,s "copy tbl (a,b) from 'filename' with delimiter '|' error_log 'errors.log';"
->       [CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"]
->       (CopyFilename "filename")
->        [CopyFromDelimiter "|",CopyFromErrorLog "errors.log"]]
->      ,s "copy tbl (a,b) from 'filename' with delimiter '|' error_log 'errors.log' error_verbosity 1;"
->       [CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"]
->       (CopyFilename "filename")
->        [CopyFromDelimiter "|", CopyFromErrorLog "errors.log", CopyFromErrorVerbosity 1]]
->      ,s "copy tbl (a,b) from 'filename' with delimiter '|' error_log 'errors.log' error_verbosity 1 parsers 'b=oracle';"
->       [CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"]
->       (CopyFilename "filename")
->        [CopyFromDelimiter "|", CopyFromErrorLog "errors.log", CopyFromErrorVerbosity 1, CopyFromParsers "b=oracle"]]
 
+-- old copy from options
+
+        s "copy tbl(a,b) from stdin;\n\
+          \bat\tt\n\
+          \bear\tf\n\
+          \\\.\n"
+        [ CopyFrom ea (name "tbl")
+          [ Nmc "a", Nmc "b" ]
+          Stdin
+          ( OldCopyFromOptions
+            [
+            ]
+          )
+        , CopyData ea "\
+          \bat\tt\n\
+          \bear\tf\n"
+        ]
+
+>        s "copy tbl (a,b) from 'filename' with delimiter '|';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filename")
+>          ( OldCopyFromOptions
+>            [ CopyFromDelimiter "|"
+>            ]
+>          )
+>        ]
+>      , s "copy tbl (a,b) from 'filename' with delimiter '|' parsers 'b=oracle';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filename" )
+>          ( OldCopyFromOptions
+>            [ CopyFromDelimiter "|"
+>            , CopyFromParsers "b=oracle"
+>            ]
+>          )
+>        ]
+>      , s "copy tbl (a,b) from 'filename' with delimiter '|' error_log 'errors.log';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filename" )
+>          ( OldCopyFromOptions
+>            [ CopyFromDelimiter "|"
+>            , CopyFromErrorLog "errors.log"
+>            ]
+>          )
+>        ]
+>      , s "copy tbl (a,b) from 'filename' with delimiter '|' error_log 'errors.log' error_verbosity 1;"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filename" )
+>          ( OldCopyFromOptions
+>            [ CopyFromDelimiter "|"
+>            , CopyFromErrorLog "errors.log"
+>            , CopyFromErrorVerbosity 1
+>            ]
+>          )
+>        ]
+>      , s "copy tbl (a,b) from 'filename' with delimiter '|' error_log 'errors.log' error_verbosity 1 parsers 'b=oracle';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filename" )
+>          ( OldCopyFromOptions
+>            [ CopyFromDelimiter "|"
+>            , CopyFromErrorLog "errors.log"
+>            , CopyFromErrorVerbosity 1
+>            , CopyFromParsers "b=oracle"
+>            ]
+>          )
+>        ]
 >      , s "copy tbl (a,b) from 'filename' with delimiter E'\\001';"
->        [ CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"]
->            (CopyFilename "filename")
->              [CopyFromOctalDelimiter 1]
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filename" )
+>          ( OldCopyFromOptions
+>            [ CopyFromOctalDelimiter 1
+>            ]
+>          )
+>        ]
+>      , s "copy tbl (a,b) from 'filename' with delimiter E'\\111' error_log 'errors.log' error_verbosity 1 parsers 'b=oracle';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filename" )
+>          ( OldCopyFromOptions
+>            [ CopyFromOctalDelimiter 73
+>            , CopyFromErrorLog "errors.log"
+>            , CopyFromErrorVerbosity 1
+>            , CopyFromParsers "b=oracle"
+>            ]
+>          )
+>        ]
+>      , s "copy tbl (a,b) from 'filename' with error_log 'errors.log' error_verbosity 1 delimiter E'\\111' parsers 'b=oracle';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filename" )
+>          ( OldCopyFromOptions
+>            [ CopyFromOctalDelimiter 73
+>            , CopyFromErrorLog "errors.log"
+>            , CopyFromErrorVerbosity 1
+>            , CopyFromParsers "b=oracle"
+>            ]
+>          )
 >        ]
 
+-- new copy from options
 
->      ,s "copy tbl (a,b) from 'filename' with delimiter E'\\111' error_log 'errors.log' error_verbosity 1 parsers 'b=oracle';"
->       [CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"]
->       (CopyFilename "filename")
->        [CopyFromOctalDelimiter 73, CopyFromErrorLog "errors.log", CopyFromErrorVerbosity 1,CopyFromParsers "b=oracle"]]
-
->      ,s "copy tbl (a,b) from 'filename' with error_log 'errors.log' error_verbosity 1 delimiter E'\\111' parsers 'b=oracle';"
->       [CopyFrom ea (name "tbl") [Nmc "a", Nmc "b"]
->       (CopyFilename "filename")
->        [CopyFromOctalDelimiter 73, CopyFromErrorLog "errors.log", CopyFromErrorVerbosity 1, CopyFromParsers "b=oracle"]]
-
-
->      ,s "copy tbl to 'file';"
->       [CopyTo ea (CopyTable (name "tbl") []) "file" []]
+>      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error abort offset 1 limit 10 parsers 'b=oracle';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filepath" )
+>          ( NewCopyFromOptions $ NewCsvOptions
+>            { csvFilePath = "filepath"
+>            , csvFieldDelimiter = Just (StringDelimiter "|")
+>            , csvRecordDelimiter = Nothing
+>            , csvTextQualifier = Just (StringDelimiter "?")
+>            , csvNullMarker = Just "null"
+>            , csvErrorOptions = Just EOAbort
+>            , csvLimit = Just 10
+>            , csvOffset = Just 1
+>            , csvParsers = Just "b=oracle"
+>            }
+>          )
+>        ]
+>      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error skip row 100 offset 1 limit 10 parsers 'b=oracle';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filepath" )
+>          ( NewCopyFromOptions $ NewCsvOptions
+>            { csvFilePath = "filepath"
+>            , csvFieldDelimiter = Just (StringDelimiter "|")
+>            , csvRecordDelimiter = Nothing
+>            , csvTextQualifier = Just (StringDelimiter "?")
+>            , csvNullMarker = Just "null"
+>            , csvErrorOptions = Just (EOSkipRowLimit 100 NoReportSkippedRows)
+>            , csvLimit = Just 10
+>            , csvOffset = Just 1
+>            , csvParsers = Just "b=oracle"
+>            }
+>          )
+>        ]
+>      , s "copy tbl to 'file';"
+>        [ CopyTo ea (CopyTable (name "tbl") []) "file" []]
 >      ,s "copy tbl(a,b) to 'file';"
 >       [CopyTo ea (CopyTable (name "tbl") [Nmc "a", Nmc "b"]) "file" []]
 >      ,s "copy (select * from tbl) to 'file' with format binary;"

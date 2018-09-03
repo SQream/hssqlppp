@@ -365,7 +365,17 @@ quick sanity check
 >         , att "fieldb" "int"
 >         ]
 >         NoReplace
->         $ EtCsvOptions $ CsvOptions "filepath" Nothing Nothing
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter =  Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
 >       ]
 >       ,Stmt "create or replace external table test (fielda text,fieldb int) using format parquet with path 'filepath' ;"
 >       [CreateExternalTable ea (name "test")
@@ -381,16 +391,36 @@ quick sanity check
 >         , att "fieldb" "int"
 >         ]
 >         Replace
->         $ EtCsvOptions $ CsvOptions "filepath" Nothing Nothing
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter =  Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
 >       ]
 >
->      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' delimiter '|';"
+>      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' field delimiter '|';"
 >      [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
 >         ]
 >         Replace
->         $ EtCsvOptions $ CsvOptions "filepath" (Just (StringDelimiter "|")) Nothing
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter = Just (StringDelimiter "|")
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
 >      ]
 >      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' record delimiter '\n\r' ;"
 >      [CreateExternalTable ea (name "test")
@@ -398,31 +428,197 @@ quick sanity check
 >         , att "fieldb" "int"
 >         ]
 >         Replace
->         $ EtCsvOptions $ CsvOptions "filepath" Nothing $ Just "\n\r"
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter = Nothing
+>           , csvRecordDelimiter = Just "\n\r"
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
 >      ]
->      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' delimiter '|' record delimiter '\n\r';"
+>      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' field delimiter '|' record delimiter '\n\r';"
 >      [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
 >         ]
 >         Replace
->         $ EtCsvOptions $ CsvOptions "filepath" (Just (StringDelimiter "|")) $ Just "\n\r"
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter = Just (StringDelimiter "|")
+>           , csvRecordDelimiter = Just "\n\r"
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
 >      ]
->      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' record delimiter '\n\r' delimiter '|';"
+>      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' record delimiter '\n\r' field delimiter '|';"
 >      [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
 >         ]
 >         Replace
->         $ EtCsvOptions $ CsvOptions "filepath" (Just (StringDelimiter "|")) $ Just "\n\r"
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter = Just (StringDelimiter "|")
+>           , csvRecordDelimiter = Just "\n\r"
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
 >     ]
->     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' record delimiter '\n\r' delimiter E'\\111';"
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' record delimiter '\n\r' field delimiter E'\\111';"
 >     [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
 >         ]
 >         Replace
->         $ EtCsvOptions $ CsvOptions "filepath" (Just (OctalDelimiter 73)) $ Just "\n\r"
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter = Just (OctalDelimiter 73)
+>           , csvRecordDelimiter = Just "\n\r"
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
+>     ]
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' null marker 'null';"
+>     [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter = Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Just "null"
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
+>     ]
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' null marker 'null' text qualifier '|';"
+>     [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter = Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Just (StringDelimiter "|")
+>           , csvNullMarker = Just "null"
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
+>     ]
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' null marker 'null' text qualifier E'\\111';"
+>     [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath ="filepath"
+>           , csvFieldDelimiter = Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Just (OctalDelimiter 73)
+>           , csvNullMarker = Just "null"
+>           , csvErrorOptions = Nothing
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
+>     ]
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error abort;"
+>     [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath = "filepath"
+>           , csvFieldDelimiter = Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Just EOAbort
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
+>     ]
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50;"
+>     [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath = "filepath"
+>           , csvFieldDelimiter = Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Just (EOSkipRowLimit 50 NoReportSkippedRows)
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
+>     ]  
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50 report skipped rows;"
+>     [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath = "filepath"
+>           , csvFieldDelimiter = Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Just (EOSkipRowLimit 50 ReportSkippedRows)
+>           , csvLimit = Nothing
+>           , csvOffset = Nothing
+>           , csvParsers = Nothing
+>           }
+>     ]
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50 limit 40 offset 1 parsers 'b=oracle';"
+>     [CreateExternalTable ea (name "test")
+>         [ att "fielda" "text"
+>         , att "fieldb" "int"
+>         ]
+>         Replace
+>         $ EtCsvOptions $ NewCsvOptions
+>           { csvFilePath = "filepath"
+>           , csvFieldDelimiter = Nothing
+>           , csvRecordDelimiter = Nothing
+>           , csvTextQualifier = Nothing
+>           , csvNullMarker = Nothing
+>           , csvErrorOptions = Just (EOSkipRowLimit 50 NoReportSkippedRows)
+>           , csvLimit = Just 40
+>           , csvOffset = Just 1
+>           , csvParsers = Just "b=oracle"
+>           }
 >     ]
 >    ]
 >   ]
@@ -430,3 +626,5 @@ quick sanity check
 >
 >  where
 >    s = Stmt
+
+
