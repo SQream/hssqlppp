@@ -47,6 +47,7 @@ Forward the public part of CatalogInternal.
 >      -- * Functions
 >     ,updateCatalog
 >     ,deconstructCatalog
+>     ,catLookupFns
 >      -- * testing support
 >     ,Environment
 >     ,brokeEnvironment

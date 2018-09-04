@@ -255,12 +255,17 @@ Conversion routines - convert Sql asts into Docs
 >                          _ -> "") ++ "function")
 >     <+> name nm
 >     <+> parens (sepCsvMap paramDefn args)
->     <+> text "returns" <+> typeName retType <+> text "as" <+> text "$$"
->     $+$ functionBody body
->     $+$ text "$$" <+> text "language"
+>     <+> text "returns" <+> typeName retType <+> text "as"
+>     $+$ text "$$"
+>     <> functionBody body
+>     <> text "$$"
+>     $+$ text "language"
 >     <+> text (case lang of
 >                         Sql -> "sql"
->                         Plpgsql -> "plpgsql")
+>                         Plpgsql -> "plpgsql"
+>                         Python -> "python"  
+>              )
+>                            
 >     <+> text (case vol of
 >                        Volatile -> "volatile"
 >                        Stable -> "stable"
@@ -270,9 +275,15 @@ Conversion routines - convert Sql asts into Docs
 >       functionBody (SqlFnBody ann1 sts) =
 >         annot ca ann1 <+>
 >         nestedStatements flg ca sts
+
+>       functionBody (PythonFnBody ann1 fBody) =
+>         annot ca ann1 <+>
+>         text fBody
+>    
 >       functionBody (PlpgsqlFnBody ann1 blk) =
 >           annot ca ann1 <+>
 >           statement flg True ca blk
+> 
 >       paramDefn (ParamDef _ n t) = nmc n <+> typeName t
 >       paramDefn (ParamDefTp _ t) = typeName t
 >

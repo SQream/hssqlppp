@@ -483,6 +483,13 @@ tcAppLike d cat anm@(Name _ [Nmc dd]) types [_,a0]
       lits = getMaybeIntsFromLiterals types
   (ats,rt) <- matchAppExtra d cat ns lits (mkTypeExtraNN typeInt : tys)
   return (ats,rt)
+tcAppLike d cat anm@(Name _ [Nmc dd]) types [a0,_]
+    | map toLower dd == "trunc" = do
+  tys <- mapM (maybe (Left []) Right) [a0]
+  let Name _ ns = anm
+      lits = getMaybeIntsFromLiterals types
+  (ats,rt) <- matchAppExtra d cat ns lits (tys ++ [mkTypeExtraNN typeInt])
+  return (ats,rt)
 tcAppLike d cat anm@(Name _ [Nmc dd]) types [_,a0,a1]
     | map toLower dd == "dateadd" = do
   tys <- mapM (maybe (Left []) Right) [a0,a1]

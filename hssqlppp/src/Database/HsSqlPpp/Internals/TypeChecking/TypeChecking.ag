@@ -285,6 +285,10 @@ fixMssqlDates = transformBi $ \x -> case x of
     , map toLower tnn `elem` dateparts ->
       App aa nm [Identifier (nai ai) tn,a]
   App aa nm@(Name _ [Nmc fn]) [a,Identifier ai tn@(Name _ [Nmc tnn])]
+    | map toLower fn `elem` ["trunc"]
+    , map toLower tnn `elem` dateparts ->
+      App aa nm [a, Identifier (nai ai) tn]
+  App aa nm@(Name _ [Nmc fn]) [a,Identifier ai tn@(Name _ [Nmc tnn])]
     | map toLower fn == "convert"
     , map toLower tnn `elem` map fst odbcConvertTypes ->
       App aa nm [a,Identifier (nai ai) tn]
