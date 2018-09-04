@@ -163,15 +163,6 @@ check-packdeps :
 	@echo please make sure you have run 'cabal update' recently
 	stack exec packdeps -- `find . -name '*.cabal' -a ! -name 'h7c*'`
 
-# check the basic libraries with ghc-7.8.4
-# Maybe this needs improving since it will only check with
-# the curated stack packages. On the other hand, most of the issues
-# this finds are when we use 7.10 only features in the source, and
-# aren't related to the package versions
-.PHONY : ghc-78
-ghc-78 :
-	stack --resolver lts-2 test
-
 
 ##############################################################################
 
@@ -222,7 +213,7 @@ website-haddock : $(shell find hssqlppp hssqlppp-th -iname '*hs')
 	-mkdir -p build/website/haddock
 	stack install hscolour
 	stack haddock hssqlppp hssqlppp-th
-	cp -R .stack-work/install/x86_64-linux/lts-3.14/7.10.2/doc/* build/website/haddock/
+	cp -R .stack-work/install/x86_64-linux/lts-10.4/8.2.2/doc/* build/website/haddock/
 
 
 # generate a diagram of the hssqlppp package internal module dependencies

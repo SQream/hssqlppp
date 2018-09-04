@@ -19,3 +19,4 @@
 /make-website/cabal.sandbox.config
 /make-website/dist/
 .stack-work
+hssqlppp/src/Database/HsSqlPpp/Internals/AstInternal.hs
