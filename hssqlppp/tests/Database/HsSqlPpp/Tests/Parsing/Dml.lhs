@@ -141,13 +141,13 @@ copy, bit crap at the moment
 >            ]
 >          )
 >        ]
->      , s "copy tbl (a,b) from 'filename' with delimiter '|' parsers 'b=oracle';"
+>      , s "copy tbl (a,b) from 'filename' with delimiter '|' parsers 'ISO8601';"
 >        [ CopyFrom ea (name "tbl")
 >          [ Nmc "a", Nmc "b" ]
 >          ( CopyFilename "filename" )
 >          ( OldCopyFromOptions
 >            [ CopyFromDelimiter "|"
->            , CopyFromParsers "b=oracle"
+>            , CopyFromParsers "ISO8601"
 >            ]
 >          )
 >        ]
@@ -172,7 +172,7 @@ copy, bit crap at the moment
 >            ]
 >          )
 >        ]
->      , s "copy tbl (a,b) from 'filename' with delimiter '|' error_log 'errors.log' error_verbosity 1 parsers 'b=oracle';"
+>      , s "copy tbl (a,b) from 'filename' with delimiter '|' error_log 'errors.log' error_verbosity 1 parsers 'ISO8601';"
 >        [ CopyFrom ea (name "tbl")
 >          [ Nmc "a", Nmc "b" ]
 >          ( CopyFilename "filename" )
@@ -180,7 +180,7 @@ copy, bit crap at the moment
 >            [ CopyFromDelimiter "|"
 >            , CopyFromErrorLog "errors.log"
 >            , CopyFromErrorVerbosity 1
->            , CopyFromParsers "b=oracle"
+>            , CopyFromParsers "ISO8601"
 >            ]
 >          )
 >        ]
@@ -193,7 +193,7 @@ copy, bit crap at the moment
 >            ]
 >          )
 >        ]
->      , s "copy tbl (a,b) from 'filename' with delimiter E'\\111' error_log 'errors.log' error_verbosity 1 parsers 'b=oracle';"
+>      , s "copy tbl (a,b) from 'filename' with delimiter E'\\111' error_log 'errors.log' error_verbosity 1 parsers 'ISO8601';"
 >        [ CopyFrom ea (name "tbl")
 >          [ Nmc "a", Nmc "b" ]
 >          ( CopyFilename "filename" )
@@ -201,11 +201,11 @@ copy, bit crap at the moment
 >            [ CopyFromOctalDelimiter 73
 >            , CopyFromErrorLog "errors.log"
 >            , CopyFromErrorVerbosity 1
->            , CopyFromParsers "b=oracle"
+>            , CopyFromParsers "ISO8601"
 >            ]
 >          )
 >        ]
->      , s "copy tbl (a,b) from 'filename' with error_log 'errors.log' error_verbosity 1 delimiter E'\\111' parsers 'b=oracle';"
+>      , s "copy tbl (a,b) from 'filename' with error_log 'errors.log' error_verbosity 1 delimiter E'\\111' parsers 'ISO8601';"
 >        [ CopyFrom ea (name "tbl")
 >          [ Nmc "a", Nmc "b" ]
 >          ( CopyFilename "filename" )
@@ -213,14 +213,14 @@ copy, bit crap at the moment
 >            [ CopyFromOctalDelimiter 73
 >            , CopyFromErrorLog "errors.log"
 >            , CopyFromErrorVerbosity 1
->            , CopyFromParsers "b=oracle"
+>            , CopyFromParsers "ISO8601"
 >            ]
 >          )
 >        ]
 
 -- new copy from options
 
->      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error abort offset 1 limit 10 parsers 'b=oracle';"
+>      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error abort offset 1 limit 10 date format 'ISO8601';"
 >        [ CopyFrom ea (name "tbl")
 >          [ Nmc "a", Nmc "b" ]
 >          ( CopyFilename "filepath" )
@@ -233,11 +233,11 @@ copy, bit crap at the moment
 >            , csvErrorOptions = Just EOAbort
 >            , csvLimit = Just 10
 >            , csvOffset = Just 1
->            , csvParsers = Just "b=oracle"
+>            , csvDateFormat = Just "ISO8601"
 >            }
 >          )
 >        ]
->      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error skip row 100 offset 1 limit 10 parsers 'b=oracle';"
+>      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error skip row 100 offset 1 limit 10 date format 'ISO8601';"
 >        [ CopyFrom ea (name "tbl")
 >          [ Nmc "a", Nmc "b" ]
 >          ( CopyFilename "filepath" )
@@ -250,7 +250,7 @@ copy, bit crap at the moment
 >            , csvErrorOptions = Just (EOSkipRowLimit 100 NoReportSkippedRows)
 >            , csvLimit = Just 10
 >            , csvOffset = Just 1
->            , csvParsers = Just "b=oracle"
+>            , csvDateFormat = Just "ISO8601"
 >            }
 >          )
 >        ]
