@@ -4,7 +4,7 @@
 >
 >    Some effort is made produce human readable output.
 > -}
-> {-# LANGUAGE PatternGuards,OverloadedStrings,TypeSynonymInstances,FlexibleInstances, LambdaCase #-}
+> {-# LANGUAGE RecordWildCards,PatternGuards,OverloadedStrings,TypeSynonymInstances,FlexibleInstances, LambdaCase #-}
 > module Database.HsSqlPpp.Pretty
 >     (--convert a sql ast to text
 >      printStatements
@@ -1139,26 +1139,16 @@ syntax maybe should error instead of silently breaking
 >     text "path" <+> quotes (text path) <+> ppCsvOpts csvOpts
 
 > ppCsvOpts :: CsvOptions -> Doc
-> ppCsvOpts NewCsvOptions
->   { csvFilePath = path
->   , csvFieldDelimiter = delimiter
->   , csvRecordDelimiter = record
->   , csvTextQualifier = textQualifier
->   , csvNullMarker = nullMarker
->   , csvErrorOptions = errorOpts
->   , csvLimit = limit
->   , csvOffset = offset
->   , csvParsers = parsers
->   } =
+> ppCsvOpts NewCsvOptions{..} =
 >   let
->     ppDelimiter = maybe empty ppDel delimiter
->     ppRecord = maybe empty ppRec record
->     ppTextQualifier = maybe empty ppTxtQual textQualifier
->     ppNullMarker = maybe empty ppNullMark nullMarker
->     ppErrorOptions = maybe empty ppErrOpts errorOpts
->     ppLimit = maybe empty ppLim limit
->     ppOffset = maybe empty ppOff offset
->     ppParsers = maybe empty ppParse parsers
+>     ppDelimiter = maybe empty ppDel csvFieldDelimiter
+>     ppRecord = maybe empty ppRec csvRecordDelimiter
+>     ppTextQualifier = maybe empty ppTxtQual csvTextQualifier
+>     ppNullMarker = maybe empty ppNullMark csvNullMarker
+>     ppErrorOptions = maybe empty ppErrOpts csvErrorOptions
+>     ppLimit = maybe empty ppLim csvLimit
+>     ppOffset = maybe empty ppOff csvOffset
+>     ppDateFormat = maybe empty ppDateForm csvDateFormat
 >   in
 >     ppDelimiter
 >       <+> ppRecord
@@ -1167,7 +1157,7 @@ syntax maybe should error instead of silently breaking
 >       <+> ppErrorOptions
 >       <+> ppLimit
 >       <+> ppOffset
->       <+> ppParsers
+>       <+> ppDateFormat
 
 > ppDel :: Delimiter -> Doc
 > ppDel del = 
@@ -1211,8 +1201,8 @@ syntax maybe should error instead of silently breaking
 > ppOff :: Integer -> Doc
 > ppOff num = text "offset" <+> text (show num)
 
-> ppParse :: String -> Doc
-> ppParse p = text "parsers" <+> quotes (text p)
+> ppDateForm :: String -> Doc
+> ppDateForm p = text "date format" <+> quotes (text p)
 
 > -- plpgsql
 >

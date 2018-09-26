@@ -1465,7 +1465,7 @@ data CsvOptions = NewCsvOptions
   , csvErrorOptions :: Maybe ErrorOptions
   , csvLimit :: Maybe Integer
   , csvOffset :: Maybe Integer
-  , csvParsers :: Maybe String
+  , csvDateFormat :: Maybe String
   }
   deriving (Show,Eq,Typeable,Data)
 

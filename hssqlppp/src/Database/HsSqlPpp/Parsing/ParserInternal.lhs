@@ -943,7 +943,7 @@ ddl
 >     <|?> withDefNothing errorMode
 >     <|?> withDefNothing limit
 >     <|?> withDefNothing offset
->     <|?> withDefNothing parsers
+>     <|?> withDefNothing dateFormat
 
 >  where
 >    withDefNothing = (Nothing, ) . fmap Just
@@ -959,8 +959,8 @@ ddl
 >      (keyword "limit" *> (integer <?> "positive integer") <?> "limit with integer")
 >    offset =
 >      (keyword "offset" *> (integer <?> "positive integer") <?> "offset with integer")
->    parsers =
->      (keyword "parsers" *> stringN <?> "list of parsers")
+>    dateFormat =
+>      (keyword "date" *> keyword "format" *> stringN <?> "date format")
 >    errorMode =
 >      let
 >        abort = keyword "abort" $> EOAbort
@@ -1227,12 +1227,12 @@ parse it
 >   fnName <- name
 >   params <- parens $ commaSep param
 >   retType <- keyword "returns" *> typeName
->   ((bodypos,body,ann), lang,vol) <-
+>   ((bodypos,body,ann'), lang,vol) <-
 >     permute ((,,) <$$> parseAs
 >                   <||> readLang
 >                   <|?> (Volatile,pVol))
 >   flg <- getState
->   case parseBody flg lang body bodypos ann of
+>   case parseBody flg lang body bodypos ann' of
 >        Left er -> fail er
 >        Right b ->
 >          return $ CreateFunction p fnName params retType rep lang b vol
@@ -1255,11 +1255,11 @@ parse it
 >             ]
 >         parseBody :: ParseFlags -> Language -> ScalarExpr -> MySourcePos -> Annotation
 >                   -> Either String FnBody
->         parseBody _ Python body _ ann = case body of
+>         parseBody _ Python body _ ann' = case body of
 >           StringLit _ value -> do
->             pure $ PythonFnBody ann value
+>             pure $ PythonFnBody ann' value
 >           _ -> Left $ "Unexpected value for python user defined function body. Expecting a string literal."
->         parseBody flg lang body (fileName,line,col) _ =
+>         parseBody flg lang body (fileName,line,col) _ = do
 >             case parseIt'
 >                   (functionBody lang)
 >                   flg
@@ -1284,6 +1284,8 @@ parse it
 >                    p <- pos
 >                    l <- label
 >                    block p l <* optional (symbol ";") <* eof
+>         functionBody Python =
+>             fail $ "Internal error: unexpected input to function 'functionBody'."
 
 params to a function
 

@@ -374,7 +374,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >       ]
 >       ,Stmt "create or replace external table test (fielda text,fieldb int) using format parquet with path 'filepath' ;"
@@ -400,7 +400,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >       ]
 >
@@ -419,7 +419,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >      ]
 >      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' record delimiter '\n\r' ;"
@@ -437,7 +437,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >      ]
 >      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' field delimiter '|' record delimiter '\n\r';"
@@ -455,7 +455,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >      ]
 >      ,Stmt "create or replace external table test (fielda text,fieldb int) using format csv with path 'filepath' record delimiter '\n\r' field delimiter '|';"
@@ -473,7 +473,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >     ]
 >     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' record delimiter '\n\r' field delimiter E'\\111';"
@@ -491,7 +491,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >     ]
 >     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' null marker 'null';"
@@ -509,7 +509,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >     ]
 >     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' null marker 'null' text qualifier '|';"
@@ -527,7 +527,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >     ]
 >     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' null marker 'null' text qualifier E'\\111';"
@@ -545,7 +545,7 @@ quick sanity check
 >           , csvErrorOptions = Nothing
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >     ]
 >     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error abort;"
@@ -563,7 +563,7 @@ quick sanity check
 >           , csvErrorOptions = Just EOAbort
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >     ]
 >     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50;"
@@ -581,7 +581,7 @@ quick sanity check
 >           , csvErrorOptions = Just (EOSkipRowLimit 50 NoReportSkippedRows)
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >     ]  
 >     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50 report skipped rows;"
@@ -599,10 +599,10 @@ quick sanity check
 >           , csvErrorOptions = Just (EOSkipRowLimit 50 ReportSkippedRows)
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
->           , csvParsers = Nothing
+>           , csvDateFormat = Nothing
 >           }
 >     ]
->     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50 limit 40 offset 1 parsers 'b=oracle';"
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50 limit 40 offset 1 date format 'ISO8601C';"
 >     [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -617,7 +617,7 @@ quick sanity check
 >           , csvErrorOptions = Just (EOSkipRowLimit 50 NoReportSkippedRows)
 >           , csvLimit = Just 40
 >           , csvOffset = Just 1
->           , csvParsers = Just "b=oracle"
+>           , csvDateFormat = Just "ISO8601C"
 >           }
 >     ]
 >    ]
