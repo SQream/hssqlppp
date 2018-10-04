@@ -566,7 +566,7 @@ quick sanity check
 >           , csvDateFormat = Nothing
 >           }
 >     ]
->     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50;"
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row max 50;"
 >     [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -578,13 +578,13 @@ quick sanity check
 >           , csvRecordDelimiter = Nothing
 >           , csvTextQualifier = Nothing
 >           , csvNullMarker = Nothing
->           , csvErrorOptions = Just (EOSkipRowLimit 50 NoReportSkippedRows)
+>           , csvErrorOptions = Just (EOSkipRow (RowMaxNum 50) NoReportSkippedRows)
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
 >           , csvDateFormat = Nothing
 >           }
 >     ]  
->     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50 report skipped rows;"
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row max 50 report skipped rows;"
 >     [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -596,13 +596,13 @@ quick sanity check
 >           , csvRecordDelimiter = Nothing
 >           , csvTextQualifier = Nothing
 >           , csvNullMarker = Nothing
->           , csvErrorOptions = Just (EOSkipRowLimit 50 ReportSkippedRows)
+>           , csvErrorOptions = Just (EOSkipRow (RowMaxNum 50) ReportSkippedRows)
 >           , csvLimit = Nothing
 >           , csvOffset = Nothing
 >           , csvDateFormat = Nothing
 >           }
 >     ]
->     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row 50 limit 40 offset 1 date format 'ISO8601C';"
+>     ,Stmt "create or replace external table test (fielda text, fieldb int) using format csv with path 'filepath' on error skip row max 50 limit 40 offset 1 date format 'ISO8601C';"
 >     [CreateExternalTable ea (name "test")
 >         [ att "fielda" "text"
 >         , att "fieldb" "int"
@@ -614,7 +614,7 @@ quick sanity check
 >           , csvRecordDelimiter = Nothing
 >           , csvTextQualifier = Nothing
 >           , csvNullMarker = Nothing
->           , csvErrorOptions = Just (EOSkipRowLimit 50 NoReportSkippedRows)
+>           , csvErrorOptions = Just (EOSkipRow (RowMaxNum 50) NoReportSkippedRows)
 >           , csvLimit = Just 40
 >           , csvOffset = Just 1
 >           , csvDateFormat = Just "ISO8601C"

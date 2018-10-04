@@ -1183,10 +1183,15 @@ syntax maybe should error instead of silently breaking
 >   text "on error" <+> case eo of
 >   EOAbort ->
 >     text "abort"
->   EOSkipRowLimit num isReport ->
+>   EOSkipRow limit isReport ->
 >     text "skip"
 >       <+> text "row"
->       <+> text (show num)
+>       <+> case limit of
+>         RowMaxNum num ->
+>           text "max"
+>             <+> text (show num)
+>         NoRowMax ->
+>           empty
 >       <+> case isReport of
 >         ReportSkippedRows ->
 >           text "report"

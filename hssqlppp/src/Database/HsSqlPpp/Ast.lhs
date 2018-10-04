@@ -128,6 +128,7 @@
 >     ,Delimiter(..)
 >     ,ErrorOptions(..)
 >     ,ReportSkippedRows(..)
+>     ,RowMax(..)
 >     ) where
 >
 > import Database.HsSqlPpp.Internals.AstInternal

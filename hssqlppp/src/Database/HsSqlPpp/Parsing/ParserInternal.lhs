@@ -966,11 +966,16 @@ ddl
 >        abort = keyword "abort" $> EOAbort
 >        skip = do
 >          mapM_ keyword ["skip","row"]
->          num <- (integer <?> "positive integer")
+>          let
+>            rowLimitNum = do
+>              keyword "max"
+>              num <- (integer <?> "positive integer")
+>              pure $ RowMaxNum num
+>          rowLimit <- rowLimitNum <|> pure NoRowMax
 >          report <-
 >            (mapM_ keyword ["report","skipped","rows"] $> ReportSkippedRows)
 >            <|> pure NoReportSkippedRows
->          pure $ EOSkipRowLimit num report
+>          pure $ EOSkipRow rowLimit report
 >      in do
 >        mapM_ keyword ["on","error"]
 >        skip <|> abort

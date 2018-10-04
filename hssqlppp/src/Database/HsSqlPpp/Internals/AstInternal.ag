@@ -153,6 +153,7 @@ module {Database.HsSqlPpp.Internals.AstInternal}
    ,Delimiter(..)
    ,ErrorOptions(..)
    ,ReportSkippedRows(..)
+   ,RowMax(..)
 }
 
 {
@@ -1483,11 +1484,17 @@ data Delimiter
 
 data ErrorOptions
   = EOAbort
-  | EOSkipRowLimit Integer ReportSkippedRows
+  | EOSkipRow RowMax ReportSkippedRows
   deriving (Show,Eq,Typeable,Data)
 
 data ReportSkippedRows
   = NoReportSkippedRows
   | ReportSkippedRows
   deriving (Show,Eq,Typeable,Data)
+
+data RowMax
+  = NoRowMax
+  | RowMaxNum Integer
+  deriving (Show,Eq,Typeable,Data)
 }
+ 
