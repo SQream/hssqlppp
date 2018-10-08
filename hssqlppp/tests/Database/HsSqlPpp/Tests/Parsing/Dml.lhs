@@ -237,7 +237,7 @@ copy, bit crap at the moment
 >            }
 >          )
 >        ]
->      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error skip row 100 offset 1 limit 10 date format 'ISO8601';"
+>      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error skip row max 100 offset 1 limit 10 date format 'ISO8601';"
 >        [ CopyFrom ea (name "tbl")
 >          [ Nmc "a", Nmc "b" ]
 >          ( CopyFilename "filepath" )
@@ -247,7 +247,24 @@ copy, bit crap at the moment
 >            , csvRecordDelimiter = Nothing
 >            , csvTextQualifier = Just (StringDelimiter "?")
 >            , csvNullMarker = Just "null"
->            , csvErrorOptions = Just (EOSkipRowLimit 100 NoReportSkippedRows)
+>            , csvErrorOptions = Just (EOSkipRow (RowMaxNum 100) NoReportSkippedRows)
+>            , csvLimit = Just 10
+>            , csvOffset = Just 1
+>            , csvDateFormat = Just "ISO8601"
+>            }
+>          )
+>        ]
+>      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error skip row offset 1 limit 10 date format 'ISO8601';"
+>        [ CopyFrom ea (name "tbl")
+>          [ Nmc "a", Nmc "b" ]
+>          ( CopyFilename "filepath" )
+>          ( NewCopyFromOptions $ NewCsvOptions
+>            { csvFilePath = "filepath"
+>            , csvFieldDelimiter = Just (StringDelimiter "|")
+>            , csvRecordDelimiter = Nothing
+>            , csvTextQualifier = Just (StringDelimiter "?")
+>            , csvNullMarker = Just "null"
+>            , csvErrorOptions = Just (EOSkipRow NoRowMax NoReportSkippedRows)
 >            , csvLimit = Just 10
 >            , csvOffset = Just 1
 >            , csvDateFormat = Just "ISO8601"
