@@ -600,15 +600,13 @@ other dml-type stuff
 >     from p tableName cols = do
 >        keyword "from"
 >        src <- extrStr <$> stringLit
->        let
->          newCopyFromOptions =
->            fmap NewCopyFromOptions $ optionsCsv $ pure src
 
->        opts <-
->          choice
->            [ lookAhead (stmtEnd $ not reqSemi) $> OldCopyFromOptions []
->            , keyword "with" *> ((keyword "options" *> newCopyFromOptions) <|> oldCopyFromOptions)
->            ]
+         let
+           newCopyFromOptions =
+             fmap NewCopyFromOptions $ optionsCsv $ pure src
+
+>        opts <- option (OldCopyFromOptions []) $ do
+>          keyword "with" *> oldCopyFromOptions
 >        return $ CopyFrom p tableName cols (CopyFilename src) opts
 >     to p src = do
 >        keyword "to"

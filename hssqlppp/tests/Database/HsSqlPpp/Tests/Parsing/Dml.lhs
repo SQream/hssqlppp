@@ -218,6 +218,9 @@ copy, bit crap at the moment
 >          )
 >        ]
 
+
+> {-
+
 -- new copy from options
 
 >      , s "copy tbl (a,b) from 'filepath' with options field delimiter '|' text qualifier '?' null marker 'null' on error abort offset 1 limit 10 date format 'ISO8601';"
@@ -271,6 +274,9 @@ copy, bit crap at the moment
 >            }
 >          )
 >        ]
+> -}
+
+
 >      , s "copy tbl to 'file';"
 >        [ CopyTo ea (CopyTable (name "tbl") []) "file" []]
 >      ,s "copy tbl(a,b) to 'file';"
