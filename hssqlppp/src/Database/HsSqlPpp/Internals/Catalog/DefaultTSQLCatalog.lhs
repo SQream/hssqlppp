@@ -39,33 +39,33 @@
 >         int12fns ++
 >         [CatCreateScalarType "nvarchar"
 >         ,CatCreateTypeCategoryEntry "nvarchar" ("S", False)
->         ,CatCreateBinaryOp "+" "varchar" "varchar" "varchar"
->         ,CatCreateFunction "getdate" [] False "timestamp"
->         ,CatCreateFunction "isnumeric" ["anyelement"] False "int4"
->         ,CatCreateFunction "grt_lengthconv" ["int4"] False "int4"
->         ,CatCreateFunction "isnull" ["anyelement","anyelement"] False "anyelement"
+>         ,CatCreateBinaryOp "+" "varchar" "varchar" "varchar" True
+>         ,CatCreateFunction "getdate" [] False "timestamp" True
+>         ,CatCreateFunction "isnumeric" ["anyelement"] False "int4" True
+>         ,CatCreateFunction "grt_lengthconv" ["int4"] False "int4" True
+>         ,CatCreateFunction "isnull" ["anyelement","anyelement"] False "anyelement" True
 >         -- put these in to stop use the text only version and a bunch of casts
->         ,CatCreateFunction "replace" ["char", "char", "char"] False "char"
->         ,CatCreateFunction "replace" ["varchar", "varchar", "varchar"] False "varchar"
->         ,CatCreateFunction "replace" ["nvarchar", "nvarchar", "nvarchar"] False "nvarchar"
->         ,CatCreateFunction "patindex" ["char","char"] False "int4"
->         ,CatCreateFunction "patindex" ["varchar","varchar"] False "int4"
->         ,CatCreateFunction "patindex" ["nvarchar","nvarchar"] False "int4"
->         ,CatCreateFunction "isdate" ["varchar"] False "bool"
->         ,CatCreateFunction "isdate" ["char"] False "int4"
->         ,CatCreateFunction "isdate" ["nvarchar"] False "int4"
->         ,CatCreateFunction "len" ["nvarchar"] False "int4"
->         ,CatCreateFunction "len" ["varchar"] False "int4"
+>         ,CatCreateFunction "replace" ["char", "char", "char"] False "char" True
+>         ,CatCreateFunction "replace" ["varchar", "varchar", "varchar"] False "varchar" True
+>         ,CatCreateFunction "replace" ["nvarchar", "nvarchar", "nvarchar"] False "nvarchar" True
+>         ,CatCreateFunction "patindex" ["char","char"] False "int4" True
+>         ,CatCreateFunction "patindex" ["varchar","varchar"] False "int4" True
+>         ,CatCreateFunction "patindex" ["nvarchar","nvarchar"] False "int4" True
+>         ,CatCreateFunction "isdate" ["varchar"] False "bool" True
+>         ,CatCreateFunction "isdate" ["char"] False "int4" True
+>         ,CatCreateFunction "isdate" ["nvarchar"] False "int4" True
+>         ,CatCreateFunction "len" ["nvarchar"] False "int4" True
+>         ,CatCreateFunction "len" ["varchar"] False "int4" True
 >         ,CatCreateAggregate "count_big" ["any"] "int8"
->         ,CatCreateFunction "datediff" ["int4","date","date"] False "int4"
->         ,CatCreateFunction "datediff" ["int4","timestamp","timestamp"] False "int4"
->         ,CatCreateFunction "dateadd" ["int4","int4","date"] False "date"
->         ,CatCreateFunction "dateadd" ["int4","int4","timestamp"] False "timestamp"
->         ,CatCreateFunction "datepart" ["int4","date"] False "int4"
->         ,CatCreateFunction "datepart" ["int4","timestamp"] False "int4"
->         ,CatCreateFunction "trunc" ["timestamp"] False "timestamp"
->         ,CatCreateFunction "trunc" ["timestamp","int4"] False "timestamp"
->         ,CatCreateFunction "trunc" ["date","int4"] False "date"
+>         ,CatCreateFunction "datediff" ["int4","date","date"] False "int4" True
+>         ,CatCreateFunction "datediff" ["int4","timestamp","timestamp"] False "int4" True
+>         ,CatCreateFunction "dateadd" ["int4","int4","date"] False "date" True
+>         ,CatCreateFunction "dateadd" ["int4","int4","timestamp"] False "timestamp" True
+>         ,CatCreateFunction "datepart" ["int4","date"] False "int4" True
+>         ,CatCreateFunction "datepart" ["int4","timestamp"] False "int4" True
+>         ,CatCreateFunction "trunc" ["timestamp"] False "timestamp" True
+>         ,CatCreateFunction "trunc" ["timestamp","int4"] False "timestamp" True
+>         ,CatCreateFunction "trunc" ["date","int4"] False "date" True
 >         ,CatCreateCast "char" "varchar" ImplicitCastContext
 
 postponed until we have better design
@@ -108,7 +108,7 @@ postponed until we have better design
 >                      CatCreateArrayType {} -> True
 >                      CatCreatePrefixOp {} -> True
 >                      CatCreateBinaryOp {} -> True
->                      CatCreateFunction f _ _ _ | f `elem` ["abs","float4","float8","int2","int4","mod","numeric"] -> True
+>                      CatCreateFunction f _ _ _ _ | f `elem` ["abs","float4","float8","int2","int4","mod","numeric"] -> True
 >                      CatCreateAggregate f _ _ | f `elem` ["avg","max","min","sum"] -> True
 >                      CatCreateCast a b _ | a == "int2" || b == "int2" -> True
 >                      CatCreateTypeCategoryEntry {} -> True

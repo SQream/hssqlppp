@@ -6,7 +6,6 @@ This file contains some generic utility stuff
 > module Database.HsSqlPpp.Utils.Utils where
 >
 > import Control.Arrow
-> import Control.Applicative
 > import Data.List
 > import Data.Char
 

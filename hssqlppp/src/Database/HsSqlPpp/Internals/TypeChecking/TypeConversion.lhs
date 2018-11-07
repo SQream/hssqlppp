@@ -56,6 +56,7 @@ should all be in one place.
 > import qualified Database.HsSqlPpp.Internals.TypeChecking.SqlTypeConversion as TSQL
 > import Data.Text ()
 > import qualified Data.Text as T
+> import qualified Data.Set as S
 > import Text.Printf
 > -- import Debug.Trace
 
@@ -198,7 +199,7 @@ uses matchApp for inferring basic types
 >                 -> Either [TypeError] ([TypeExtra],TypeExtra)
 > matchAppExtra dialect cat nmcs lits tes = {-trace ("mae" ++ show (nmcs,tes)) $ -} do
 >     (ts',t') <- matchApp dialect cat nmcs $ map teType tes
->     tes' <- joinArgsExtra appName tes $ zipWith addArgExtra tes ts'
+>     tes' <- joinArgsExtra cat appName tes $ zipWith addArgExtra tes ts'
 >     return (tes', addResultExtra appName tes' t' lits)
 >   where
 >     addArgExtra te t = te {teType = t}
@@ -311,12 +312,12 @@ Additionaly:
 
 What the is this function doing? What is it for?
 
-> joinArgsExtra:: String -> [TypeExtra] -> [TypeExtra] -> Either [TypeError] [TypeExtra]
-> joinArgsExtra "!odbc-left" _t0 t1 = Right t1
-> joinArgsExtra "!odbc-timestampdiff" _t0 t1 = Right t1
-> joinArgsExtra "!odbc-timestampadd" _t0 t1 = Right t1
+> joinArgsExtra :: Catalog -> String -> [TypeExtra] -> [TypeExtra] -> Either [TypeError] [TypeExtra]
+> joinArgsExtra _ "!odbc-left" _t0 t1 = Right t1
+> joinArgsExtra _ "!odbc-timestampdiff" _t0 t1 = Right t1
+> joinArgsExtra _ "!odbc-timestampadd" _t0 t1 = Right t1
 
-> joinArgsExtra appName tes0 tes1
+> joinArgsExtra catalog appName tes0 tes1
 >     = liftM (uncurry $ zipWith3 combine tes) $ uncurry (liftM2 (,))
 >       $ (joinDim joinPrec partitionPrec &&& joinDim joinNull partitionNull) tes
 >   where
@@ -363,16 +364,20 @@ What the is this function doing? What is it for?
 >     partitionArgs as = case () of
 >             -- functions whose arguments are independent
 >             --  instead of splitting into partitions, just return the original list
->         _ | appName `elem`
->               ( ["datepart","dateadd", "trunc"]
->                 ++ ["substr","substring","left","right","ltrim","rtrim"]
->                 ++ ["replicate","like","notlike","rlike"]
->                 ++ ["strpos","position","replace"]
->                     -- Oracle joins the datatypes (needed for the comparison)
->                 ++ ["nullif"]
->                 -- SQream specific regex functions
->                 ++ ["regexp_substr","regexp_count","regexp_instr"]
->                 ++ ["string_agg"]
+>         _ | T.pack appName `S.member`
+>               ( S.union
+>                 ( S.fromList $ map T.pack $
+>                   ["datepart","dateadd", "trunc"]
+>                   ++ ["substr","substring","left","right","ltrim","rtrim"]
+>                   ++ ["replicate","like","notlike","rlike"]
+>                   ++ ["strpos","position","replace"]
+>                       -- Oracle joins the datatypes (needed for the comparison)
+>                   ++ ["nullif"]
+>                   -- SQream specific regex functions
+>                   ++ ["regexp_substr","regexp_count","regexp_instr"]
+>                   ++ ["string_agg"]
+>                 )
+>                 (catDon'tPartitionFunctions catalog)
 >               )
 >             -> (const as, [])
 >             -- first argument is special, the rest are processed together

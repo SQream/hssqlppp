@@ -70,6 +70,7 @@ sequences
 >     ,catLookupType
 >     ,catLookupTableAndAttrs
 >     ,catGetOpsMatchingName
+>     ,catDon'tPartitionFunctions
 >      -- temp stuff for old typeconversion
 >     ,OperatorPrototype
 
@@ -210,6 +211,7 @@ catalog values
 >     ,catPostfixOps :: M.Map CatName [OperatorPrototype]
 >     ,catBinaryOps :: M.Map CatName [OperatorPrototype]
 >     ,catFunctions :: M.Map CatName [OperatorPrototype]
+>     ,catDon'tPartitionFunctions :: S.Set CatName
 >     ,catAggregateFunctions :: M.Map CatName [OperatorPrototype]
 >     ,catWindowFunctions :: M.Map CatName [OperatorPrototype]
 >     ,catTables :: M.Map (CatName,CatName)
@@ -231,7 +233,7 @@ catalog values
 > emptyCatalog :: Catalog
 > emptyCatalog = Catalog S.empty S.empty M.empty M.empty M.empty
 >                        M.empty M.empty
->                        M.empty M.empty M.empty M.empty M.empty
+>                        M.empty M.empty S.empty M.empty M.empty M.empty
 >                        S.empty M.empty
 >                        []
 >
@@ -392,14 +394,14 @@ todo: use left or something instead of error
 >   | CatCreateDomainType CatName CatName
 >     -- | register an array type with name and base type
 >   | CatCreateArrayType CatName CatName
->     -- | register a prefix op, opname, param type, return type
->   | CatCreatePrefixOp CatName CatName CatName
->     -- | register a postfix op, opname, param type, return type
->   | CatCreatePostfixOp CatName CatName CatName
->     -- | register a binary op, opname, the two param types, return type
->   | CatCreateBinaryOp CatName CatName CatName CatName
->     -- | register a function: name, param types, retsetof, return type
->   | CatCreateFunction CatName [CatName] Bool CatName
+>     -- | register a prefix op, opname, param type, return type, don't partition (precision class)
+>   | CatCreatePrefixOp CatName CatName CatName Bool
+>     -- | register a postfix op, opname, param type, return type, don't partition (precision class)
+>   | CatCreatePostfixOp CatName CatName CatName Bool
+>     -- | register a binary op, opname, the two param types, return type, don't partition (precision class)
+>   | CatCreateBinaryOp CatName CatName CatName CatName Bool
+>     -- | register a function: name, param types, retsetof, return type, don't partition (precision class)
+>   | CatCreateFunction CatName [CatName] Bool CatName Bool
 >     -- | register a aggregate: name, param types, return type
 >   | CatCreateAggregate CatName [CatName] CatName
 >     -- | register a table only: name, (colname,typename) pairs
@@ -445,34 +447,54 @@ todo: use left or something instead of error
 >       -- todo: check the uniqueness of operator names (can overload by type)
 >       -- also check the name of the operator is a valid operator name
 >       -- and that the op has the correct number of args (1 or 2 resp.)
->       CatCreatePrefixOp n lt ret -> do
+>       CatCreatePrefixOp n lt ret doPartition -> do
 >         ltt <- catLookupType cat [QNmc $ T.unpack lt]
 >         rett <- catLookupType cat [QNmc $ T.unpack ret]
->         Right $ cat {catPrefixOps = insertOperators
->                                     [(n,(n,[ltt],rett,False))]
->                                     (catPrefixOps cat)}
->       CatCreatePostfixOp n rt ret -> do
+>         Right $ cat
+>           { catPrefixOps =
+>             insertOperators [(n,(n,[ltt],rett,False))] (catPrefixOps cat)
+>           , catDon'tPartitionFunctions =
+>             if not doPartition
+>               then S.insert n (catDon'tPartitionFunctions cat)
+>               else catDon'tPartitionFunctions cat
+>           }
+>       CatCreatePostfixOp n rt ret doPartition -> do
 >         rtt <- catLookupType cat [QNmc $ T.unpack rt]
 >         rett <- catLookupType cat [QNmc $ T.unpack ret]
->         Right $ cat {catPostfixOps = insertOperators
->                                      [(n,(n,[rtt],rett,False))]
->                                      (catPostfixOps cat)}
->       CatCreateBinaryOp n lt rt ret -> do
+>         Right $ cat
+>           { catPostfixOps = insertOperators [(n,(n,[rtt],rett,False))] (catPostfixOps cat)
+>           , catDon'tPartitionFunctions =
+>             if not doPartition
+>               then S.insert n (catDon'tPartitionFunctions cat)
+>               else catDon'tPartitionFunctions cat
+>           }
+>       CatCreateBinaryOp n lt rt ret doPartition -> do
 >         ltt <- catLookupType cat [QNmc $ T.unpack lt]
 >         rtt <- catLookupType cat [QNmc $ T.unpack rt]
 >         rett <- catLookupType cat [QNmc $ T.unpack ret]
->         Right $ cat {catBinaryOps = insertOperators
->                                     [(n,(n,[ltt,rtt],rett,False))]
->                                     (catBinaryOps cat)}
->       CatCreateFunction n ps rs ret -> do
+>         Right $ cat
+>           { catBinaryOps =
+>             insertOperators
+>              [(n,(n,[ltt,rtt],rett,False))]
+>              (catBinaryOps cat)
+>           , catDon'tPartitionFunctions =
+>             if not doPartition
+>               then S.insert n (catDon'tPartitionFunctions cat)
+>               else catDon'tPartitionFunctions cat
+>           }
+>       CatCreateFunction n ps rs ret doPartition -> do
 >         pst <- mapM (\nc -> catLookupType cat [QNmc $ T.unpack nc]) ps
 >         rett <- catLookupType cat [QNmc $ T.unpack ret]
 >         let rett' = if rs
 >                     then Pseudo $ SetOfType rett
 >                     else rett
->         Right $ cat {catFunctions = insertOperators
->                                     [(n,(n,pst,rett',False))]
->                                     (catFunctions cat)}
+>         Right $ cat
+>           { catFunctions = insertOperators [(n,(n,pst,rett',False))] (catFunctions cat)
+>           , catDon'tPartitionFunctions =
+>             if not doPartition
+>               then S.insert n (catDon'tPartitionFunctions cat)
+>               else catDon'tPartitionFunctions cat
+>           }
 >       CatCreateAggregate n ps ret -> do
 >         pst <- mapM (\nc -> catLookupType cat [QNmc $ T.unpack nc]) ps
 >         rett <- catLookupType cat [QNmc $ T.unpack ret]
