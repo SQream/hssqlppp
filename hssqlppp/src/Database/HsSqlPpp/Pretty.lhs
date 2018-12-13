@@ -813,6 +813,7 @@ Alter Default
 >   PrivSetPermissions -> text "set_permissions"
 >   PrivPassword pass -> text "password '" <> ttext pass <> text "'"
 >   PrivConnectionLimit limit -> text "connection_limit" <+> ttext (show limit)
+>   PrivCreateFunction -> text "create" <+> text "function"
 
 > permissionActionRevoke :: PermissionAction -> Doc
 > permissionActionRevoke = \case

@@ -42,11 +42,11 @@ There are no tests for invalid syntax at the moment.
 
 >   ,Group "Grant attrs"
 
->     [Stmt "GRANT SUPERUSER, ROLEADMIN, LOGIN, PASSWORD 'pass1234', CONNECTION_LIMIT 555 TO role3, current_role, session_role;"
->      [GrantPermissionCluster ea [PrivSuperUser, PrivRoleAdmin, PrivLogin, PrivPassword "pass1234", PrivConnectionLimit 555] [RoleName $ Nmc "role3", CurrentRole, SessionRole]]
+>     [Stmt "GRANT SUPERUSER, ROLEADMIN, LOGIN, PASSWORD 'pass1234', CONNECTION_LIMIT 555, CREATE FUNCTION TO role3, current_role, session_role;"
+>      [GrantPermissionCluster ea [PrivSuperUser, PrivRoleAdmin, PrivLogin, PrivPassword "pass1234", PrivConnectionLimit 555, PrivCreateFunction] [RoleName $ Nmc "role3", CurrentRole, SessionRole]]
 
->     ,Stmt "REVOKE SUPERUSER, ROLEADMIN, LOGIN, PASSWORD, CONNECTION_LIMIT FROM role3, current_role, session_role;"
->      [RevokePermissionCluster ea [PrivSuperUser, PrivRoleAdmin, PrivLogin, PrivPassword "", PrivConnectionLimit 0] [RoleName $ Nmc "role3", CurrentRole, SessionRole]]
+>     ,Stmt "REVOKE SUPERUSER, ROLEADMIN, LOGIN, PASSWORD, CONNECTION_LIMIT, CREATE FUNCTION FROM role3, current_role, session_role;"
+>      [RevokePermissionCluster ea [PrivSuperUser, PrivRoleAdmin, PrivLogin, PrivPassword "", PrivConnectionLimit 0, PrivCreateFunction] [RoleName $ Nmc "role3", CurrentRole, SessionRole]]
 
 >     ]
 

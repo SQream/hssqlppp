@@ -1132,6 +1132,7 @@ data PermissionAction
   | PrivSetPermissions
   | PrivPassword String
   | PrivConnectionLimit Integer
+  | PrivCreateFunction
   deriving (Show,Eq,Ord,Typeable,Data)
 }
 
