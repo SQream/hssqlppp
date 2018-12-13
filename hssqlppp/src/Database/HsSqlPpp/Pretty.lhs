@@ -765,6 +765,10 @@ Alter Default
 >     text "schema" <+> hcat (punctuate (comma <> space) (map name ss))
 >   PrivDB dbs ->
 >     text "database"  <+> hcat (punctuate (comma <> space) (map name dbs))
+>   PrivFunction fs ->
+>     text "function"  <+> hcat (punctuate (comma <> space) (map name fs))
+>   PrivAllFunctions ->
+>     text "all functions"
 
 > grantOrRevoke
 >   :: Bool -- se
@@ -814,6 +818,7 @@ Alter Default
 >   PrivPassword pass -> text "password '" <> ttext pass <> text "'"
 >   PrivConnectionLimit limit -> text "connection_limit" <+> ttext (show limit)
 >   PrivCreateFunction -> text "create" <+> text "function"
+>   PrivExecute -> text "execute"
 
 > permissionActionRevoke :: PermissionAction -> Doc
 > permissionActionRevoke = \case

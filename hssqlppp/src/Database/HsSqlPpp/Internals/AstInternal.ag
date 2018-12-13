@@ -1113,6 +1113,8 @@ data PrivilegeObject
   | PrivDB [Name]
   | PrivAllTablesInSchema [Name]
   | PrivAllViewsInSchema  [Name]
+  | PrivFunction [Name]
+  | PrivAllFunctions
   deriving (Eq,Show,Data,Typeable)
 }
 
@@ -1127,6 +1129,7 @@ data PermissionAction
   | PrivUsage
   | PrivCreate
   | PrivConnect
+  | PrivExecute
   | PrivSuperUser
   | PrivRoleAdmin
   | PrivSetPermissions

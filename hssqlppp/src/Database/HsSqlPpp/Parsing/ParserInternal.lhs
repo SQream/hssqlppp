@@ -774,7 +774,8 @@ grants and revokes
 >   -> Annotation
 >   -> SParser Statement
 > grantOrRevoke preposition constructor an = do
->   (permissions, objects) <- tryTable <|> tryView <|> trySavedQuery <|> tryDB <|> trySchema
+>   (permissions, objects) <-
+>     tryTable <|> tryView <|> trySavedQuery <|> tryDB <|> trySchema <|> tryFunction
 >   keyword preposition
 >   roles <- commaSep1 role
 >   pure $ constructor an permissions objects roles
@@ -807,6 +808,12 @@ grants and revokes
 >        <$> (commaSep1 schemaPermissionAction <|> allPermissions)
 >        <*> (keyword "on" *> (keyword "schema" *> fmap PrivSchema (commaSep1 name)))
 
+>    tryFunction = try $
+>      (,)
+>        <$> (commaSep1 functionPermissionAction <|> allPermissions)
+>        <*> (keyword "on" *>
+>                ((keyword "function" *> fmap PrivFunction (commaSep1 name))
+>             <|> (keyword "all" *> keyword "functions" *> pure PrivAllFunctions)))
 
 
 > tablePermissionAction :: SParser PermissionAction
@@ -842,6 +849,11 @@ grants and revokes
 >   <|> (keyword "usage"           *> pure PrivUsage)
 >   <|> (keyword "set_permissions" *> pure PrivSetPermissions)
 >   <|> (keyword "superuser"       *> pure PrivSuperUser)
+
+> functionPermissionAction :: SParser PermissionAction
+> functionPermissionAction =
+>       (keyword "execute"         *> pure PrivExecute)
+>   <|> (keyword "ddl"             *> pure PrivDDL)
 
 > allPermissions :: SParser [PermissionAction]
 > allPermissions =

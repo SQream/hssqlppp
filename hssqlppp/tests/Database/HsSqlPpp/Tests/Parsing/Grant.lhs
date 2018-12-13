@@ -246,6 +246,29 @@ There are no tests for invalid syntax at the moment.
 >      ]
 >     ]
 
+>   ,Group "Grant Function"
+
+>     [Stmt "GRANT ALL ON FUNCTION f1,f2 TO role1;"
+>      [GrantPermission ea
+>        [PrivAll]
+>        (PrivFunction [name "f1",name "f2"])
+>        [RoleName $ Nmc "role1"]
+>      ]
+>     ,Stmt "GRANT EXECUTE ON ALL FUNCTIONS TO role1;"
+>      [GrantPermission ea
+>        [PrivExecute]
+>        PrivAllFunctions
+>        [RoleName $ Nmc "role1"]
+>      ]
+>     ,Stmt "REVOKE DDL,EXECUTE ON FUNCTION f1 FROM role1,current_role;"
+>      [RevokePermission ea
+>        [PrivDDL,PrivExecute]
+>        (PrivFunction [name "f1"])
+>        [RoleName $ Nmc "role1", CurrentRole]
+>      ]
+>     ]
+
+
 
 >   ]
 
