@@ -746,8 +746,6 @@ grants and revokes
 >   <|> (keyword "login" *> pure PrivLogin)
 >   <|> (keyword "password" *> (PrivPassword <$> stringN))
 >   <|> (keyword "connection_limit" *> (PrivConnectionLimit <$> integer))
->   <|> (keyword "create" *> keyword "function" *> pure PrivCreateFunction)
-
 
 > revokeGlobal :: Annotation -> SParser Statement
 > revokeGlobal an = try $
@@ -762,7 +760,6 @@ grants and revokes
 >   <|> (keyword "login" *> pure PrivLogin)
 >   <|> (keyword "password" *> pure (PrivPassword ""))
 >   <|> (keyword "connection_limit" *> pure (PrivConnectionLimit 0))
->   <|> (keyword "create" *> keyword "function" *> pure PrivCreateFunction)
 
 > grantOrRevoke
 >   :: Text
@@ -836,7 +833,9 @@ grants and revokes
 
 > dbPermissionAction :: SParser PermissionAction
 > dbPermissionAction =
->       (keyword "create"          *> pure PrivCreate)
+>       (keyword "create"          *>
+>         ((keyword "function"     *> pure PrivCreateFunction)
+>       <|> pure PrivCreate))
 >   <|> (keyword "connect"         *> pure PrivConnect)
 >   <|> (keyword "ddl"             *> pure PrivDDL)
 >   <|> (keyword "set_permissions" *> pure PrivSetPermissions)

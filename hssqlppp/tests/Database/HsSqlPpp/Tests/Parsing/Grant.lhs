@@ -42,11 +42,11 @@ There are no tests for invalid syntax at the moment.
 
 >   ,Group "Grant attrs"
 
->     [Stmt "GRANT SUPERUSER, ROLEADMIN, LOGIN, PASSWORD 'pass1234', CONNECTION_LIMIT 555, CREATE FUNCTION TO role3, current_role, session_role;"
->      [GrantPermissionCluster ea [PrivSuperUser, PrivRoleAdmin, PrivLogin, PrivPassword "pass1234", PrivConnectionLimit 555, PrivCreateFunction] [RoleName $ Nmc "role3", CurrentRole, SessionRole]]
+>     [Stmt "GRANT SUPERUSER, ROLEADMIN, LOGIN, PASSWORD 'pass1234', CONNECTION_LIMIT 555 TO role3, current_role, session_role;"
+>      [GrantPermissionCluster ea [PrivSuperUser, PrivRoleAdmin, PrivLogin, PrivPassword "pass1234", PrivConnectionLimit 555] [RoleName $ Nmc "role3", CurrentRole, SessionRole]]
 
->     ,Stmt "REVOKE SUPERUSER, ROLEADMIN, LOGIN, PASSWORD, CONNECTION_LIMIT, CREATE FUNCTION FROM role3, current_role, session_role;"
->      [RevokePermissionCluster ea [PrivSuperUser, PrivRoleAdmin, PrivLogin, PrivPassword "", PrivConnectionLimit 0, PrivCreateFunction] [RoleName $ Nmc "role3", CurrentRole, SessionRole]]
+>     ,Stmt "REVOKE SUPERUSER, ROLEADMIN, LOGIN, PASSWORD, CONNECTION_LIMIT FROM role3, current_role, session_role;"
+>      [RevokePermissionCluster ea [PrivSuperUser, PrivRoleAdmin, PrivLogin, PrivPassword "", PrivConnectionLimit 0] [RoleName $ Nmc "role3", CurrentRole, SessionRole]]
 
 >     ]
 
@@ -159,9 +159,21 @@ There are no tests for invalid syntax at the moment.
 
 >   ,Group "Grant Database"
 
->     [Stmt "GRANT CREATE, CONNECT, DDL, SET_PERMISSIONS, SUPERUSER ON DATABASE db1,db2,db3 TO role1, current_role, session_role;"
+>     [Stmt "GRANT CREATE FUNCTION ON DATABASE db1 TO role1;"
 >      [GrantPermission ea
->        [PrivCreate, PrivConnect, PrivDDL, PrivSetPermissions, PrivSuperUser]
+>        [PrivCreateFunction]
+>        (PrivDB [name "db1"])
+>        [RoleName $ Nmc "role1"]
+>      ]
+>     ,Stmt "REVOKE CREATE FUNCTION ON DATABASE db1 FROM role1;"
+>      [RevokePermission ea
+>        [PrivCreateFunction]
+>        (PrivDB [name "db1"])
+>        [RoleName $ Nmc "role1"]
+>      ]
+>     ,Stmt "GRANT CREATE, CONNECT, DDL, SET_PERMISSIONS, SUPERUSER, CREATE FUNCTION ON DATABASE db1,db2,db3 TO role1, current_role, session_role;"
+>      [GrantPermission ea
+>        [PrivCreate, PrivConnect, PrivDDL, PrivSetPermissions, PrivSuperUser, PrivCreateFunction]
 >        (PrivDB [name "db1", name "db2", name "db3"])
 >        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
 >      ]
@@ -187,9 +199,9 @@ There are no tests for invalid syntax at the moment.
 
 >   ,Group "Revoke Database"
 
->     [Stmt "REVOKE CREATE, CONNECT, DDL, SET_PERMISSIONS, SUPERUSER ON DATABASE db1,db2,db3 FROM role1, current_role, session_role;"
+>     [Stmt "REVOKE CREATE, CONNECT, DDL, SET_PERMISSIONS, SUPERUSER, CREATE FUNCTION ON DATABASE db1,db2,db3 FROM role1, current_role, session_role;"
 >      [RevokePermission ea
->        [PrivCreate, PrivConnect, PrivDDL, PrivSetPermissions, PrivSuperUser]
+>        [PrivCreate, PrivConnect, PrivDDL, PrivSetPermissions, PrivSuperUser, PrivCreateFunction]
 >        (PrivDB [name "db1", name "db2", name "db3"])
 >        [RoleName $ Nmc "role1", CurrentRole, SessionRole]
 >      ]
