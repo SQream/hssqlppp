@@ -2356,7 +2356,7 @@ a special case for them
 >   guard (iskfs i)
 >   functionCallSuffix (Identifier p (Name p [i]))
 >   where
->     kfs = ["any","all","isnull","left","right","convert"]
+>     kfs = ["any","all","isnull","left","right","convert","truncate"]
 >     iskfs (Nmc n) | map toLower n `elem` kfs = True
 >     iskfs _ = False
 

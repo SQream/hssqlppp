@@ -324,7 +324,7 @@ Returns the tangent of float_exp, where float_exp is an angle expressed in radia
 TRUNCATE(numeric_exp, integer_exp) (ODBC 2.0)
 Returns numeric_exp truncated to integer_exp places right of the decimal point. If integer_exp is negative, numeric_exp is truncated to |integer_exp| places to the left of the decimal point.
 
->        ++ [CatCreateFunction "!odbc-log10" [n,m] False n True | n <- numTypes, m <- intTypes]
+>        ++ [CatCreateFunction "!odbc-truncate" [n,m] False n True | n <- numTypes, m <- intTypes]
 
 >        ++ [
 

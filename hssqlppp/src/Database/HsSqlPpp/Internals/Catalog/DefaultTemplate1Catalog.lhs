@@ -4059,6 +4059,9 @@ installed to do this.
 >         CatCreateFunction "trunc" ["float8"] False "float8" True,
 >         CatCreateFunction "trunc" ["numeric", "int4"] False "numeric" True,
 >         CatCreateFunction "trunc" ["numeric"] False "numeric" True,
+>         CatCreateFunction "truncate" ["float8"] False "float8" True,
+>         CatCreateFunction "truncate" ["numeric", "int4"] False "numeric" True,
+>         CatCreateFunction "truncate" ["numeric"] False "numeric" True,
 >         CatCreateFunction "ts_debug" ["regconfig", "text"] True "record" True,
 >         CatCreateFunction "ts_debug" ["text"] True "record" True,
 >         CatCreateFunction "ts_headline"
